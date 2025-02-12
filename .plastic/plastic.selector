@@ -1,4 +1,0 @@
-repository "Hellslayer/Hellslayer@5772734367323@cloud"
-  path "/"
-    br "/main"
-    co "/main"
