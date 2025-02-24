@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    private Transform PlayerCharacter;
     public float sensitivity = 1f;
     private float totalXRot;
     private float totalYRot;
