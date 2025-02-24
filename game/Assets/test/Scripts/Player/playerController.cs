@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
         isOnFloor = controller.isGrounded;
 
         if (isOnFloor)
-        {   
+        {
             playerVelocityY = 0;
             if (GetInput.JumpInput) // Handle jumping
             {
@@ -97,8 +97,9 @@ public class PlayerController : MonoBehaviour
         }
         else if (isCrouching && canUnCrouch)
         {   // Return player to standing
-            controller.height = controller.height > playerStandingHeight - 0.1f ? controller.height = playerStandingHeight : Mathf.Lerp(controller.height, playerStandingHeight, playerStandingHeight / 100);
+            controller.height = controller.height > playerStandingHeight - 0.1f ? controller.height = playerStandingHeight : Mathf.Lerp(controller.height, playerStandingHeight, playerStandingHeight / 200);
             controller.center = controller.center.y < playerStandingCenter.y + 0.05f ? controller.center = playerStandingCenter : Vector3.Lerp(controller.center, playerStandingCenter, playerCrouchingCenter.y / 100);
+
             if (controller.height == playerStandingHeight && controller.center.y == playerStandingCenter.y)
             {
                 isCrouching = false;
