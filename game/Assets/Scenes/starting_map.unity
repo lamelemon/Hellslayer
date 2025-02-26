@@ -382,6 +382,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1526964690268444965, guid: b4200b27c627ae74caeb62900edf2ec7, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 3cb0ba65adf4f4848a4e27bb09e63228, type: 2}
     - target: {fileID: 919132149155446097, guid: b4200b27c627ae74caeb62900edf2ec7, type: 3}
       propertyPath: m_Name
       value: model
@@ -899,6 +903,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b18a8e0b70031b542a3693999dfb69c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCrouching: 0
   GetInput: {fileID: 0}
 --- !u!95 &774600897
 Animator:

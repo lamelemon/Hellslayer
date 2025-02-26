@@ -6,15 +6,43 @@ public class animation_player : MonoBehaviour
     public PlayerController PlayerController_script;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] PlayerInputSubscription GetInput;
+    private PlayerController playerController;
     void Start()
     {
         animator = GetComponent<Animator>();
         GetInput = GetComponent<PlayerInputSubscription>();
+        GameObject player = GameObject.Find("Player"); // Make sure this matches the actual GameObject name
+        if (player != null)
+        {
+            playerController = player.GetComponent<PlayerController>();
+        }
+        else
+        {
+            Debug.LogError("Player GameObject not found!");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+        
+        bool isCrouching = false; // declare isCrouching here
+
+        if (playerController != null)
+        {
+            // Access the isCrouching variable
+            isCrouching = playerController.isCrouching;
+        }
+        if (isCrouching)
+        {
+            animator.SetBool("is_crouching", true); // Set animation to crouching
+        }
+        else
+        {
+            animator.SetBool("is_crouching", false); // Set animation to standing
+        }
+
+
         // walking
         if (Input.GetKey(KeyCode.W))
         {
