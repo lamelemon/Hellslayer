@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     private readonly float playerCrouchingHeight = 3.5f;
     private Vector3 playerStandingCenter;
     private Vector3 playerCrouchingCenter;
-    private bool isCrouching;
+    public bool isCrouching;
     private bool canUnCrouch = true;
     private bool isOnFloor;
     private float playerCameraY;
