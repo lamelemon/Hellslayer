@@ -7,11 +7,20 @@ public class animation_player : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     [SerializeField] PlayerInputSubscription GetInput;
     private PlayerController playerController;
+    private GameObject model; // declare model variable here // changed 1
+    private bool isCrouching = false; // declare isCrouching here
+
+    private bool isGrounded = false;
+    private CharacterController characterController; // reference to CharacterController
     void Start()
     {
         animator = GetComponent<Animator>();
         GetInput = GetComponent<PlayerInputSubscription>();
         GameObject player = GameObject.Find("Player"); // Make sure this matches the actual GameObject name
+
+        //model = transform.Find("model").gameObject; // get reference for y chance in crouch
+        characterController = GetComponent<CharacterController>();
+
         if (player != null)
         {
             playerController = player.GetComponent<PlayerController>();
@@ -25,22 +34,31 @@ public class animation_player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        bool isCrouching = false; // declare isCrouching here
+        // Use CharacterController.isGrounded to check if the player is on the ground
+        isGrounded = characterController.isGrounded;
 
+        // Pass the isGrounded status to the Animator
+        animator.SetBool("isGrounded", isGrounded);
+        
         if (playerController != null)
         {
             // Access the isCrouching variable
             isCrouching = playerController.isCrouching;
         }
+
         if (isCrouching)
         {
+            //model.transform.localPosition = new Vector3(0, 0-1f, 0);
             animator.SetBool("is_crouching", true); // Set animation to crouching
+            
+
         }
         else
         {
+            
             animator.SetBool("is_crouching", false); // Set animation to standing
-        }
+            //model.transform.localPosition = new Vector3(0, -2.5f, 0);
+        } //--
 
 
         // walking
@@ -49,7 +67,7 @@ public class animation_player : MonoBehaviour
             animator.SetBool("is_walking", true);
         }
 
-        if (!Input.GetKey(KeyCode.W))
+        else//if (!Input.GetKey(KeyCode.W))
         {
             animator.SetBool("is_walking", false);
         }
@@ -61,7 +79,7 @@ public class animation_player : MonoBehaviour
             animator.SetBool("is_moving_backwards", true);
         }
 
-        if (!Input.GetKey(KeyCode.S))
+        else //if (!Input.GetKey(KeyCode.S))
         {
             animator.SetBool("is_moving_backwards", false);
         }
@@ -97,15 +115,19 @@ public class animation_player : MonoBehaviour
         else
         {
             animator.SetBool("is_running", false);
+            //audio_manager.Instance.sfxSource.Stop();
         }
 
 
         //jumping
         if (GetInput.JumpInput)
         {
-            animator.SetBool("is_jumping", true);
+            if (isGrounded)
+            {
+                animator.SetBool("is_jumping", true);
+            }
+            
         }
-
         else
         {
             animator.SetBool("is_jumping", false);
