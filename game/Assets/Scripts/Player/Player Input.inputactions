@@ -15,7 +15,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Mouse",
+                    "name": "MouseInput",
                     "type": "Value",
                     "id": "502ba441-8c2b-4c9a-8cd3-08e57b6c2511",
                     "expectedControlType": "Vector2",
@@ -145,7 +145,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mouse",
+                    "action": "MouseInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -156,18 +156,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Mouse",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "07322af8-58c6-47a8-a994-f2ca2dcde10d",
-                    "path": "<Joystick>/{Hatswitch}",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Mouse",
+                    "action": "MouseInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
