@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    public float sensitivity = 0.1f;
+    private float sensitivity = 0.1f;
     private float totalXRot;
     public float TotalYRot { get; private set; }
     [SerializeField] PlayerInputManager GetInput;
