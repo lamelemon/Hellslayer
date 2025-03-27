@@ -5,7 +5,7 @@ public class hp_system : MonoBehaviour
 {
     public int max_hp = 100;
     public int current_hp = 0;
-    public Animator anim;
+    //public Animator anim;
 
     public hp_bar_ui hp_bar; // reference to hp_bar_ui script
 
