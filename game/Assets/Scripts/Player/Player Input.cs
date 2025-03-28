@@ -80,6 +80,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""AttackInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""15a946ab-d6d9-44bd-ba6e-cce831b30fb3"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -225,6 +234,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""CrouchInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d383597c-c9c9-4269-bc43-45033cc228b1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttackInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -239,6 +259,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_JumpInput = m_Player.FindAction("JumpInput", throwIfNotFound: true);
         m_Player_SprintInput = m_Player.FindAction("SprintInput", throwIfNotFound: true);
         m_Player_CrouchInput = m_Player.FindAction("CrouchInput", throwIfNotFound: true);
+        m_Player_AttackInput = m_Player.FindAction("AttackInput", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -311,6 +332,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_JumpInput;
     private readonly InputAction m_Player_SprintInput;
     private readonly InputAction m_Player_CrouchInput;
+    private readonly InputAction m_Player_AttackInput;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -321,6 +343,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @JumpInput => m_Wrapper.m_Player_JumpInput;
         public InputAction @SprintInput => m_Wrapper.m_Player_SprintInput;
         public InputAction @CrouchInput => m_Wrapper.m_Player_CrouchInput;
+        public InputAction @AttackInput => m_Wrapper.m_Player_AttackInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -348,6 +371,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CrouchInput.started += instance.OnCrouchInput;
             @CrouchInput.performed += instance.OnCrouchInput;
             @CrouchInput.canceled += instance.OnCrouchInput;
+            @AttackInput.started += instance.OnAttackInput;
+            @AttackInput.performed += instance.OnAttackInput;
+            @AttackInput.canceled += instance.OnAttackInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -370,6 +396,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CrouchInput.started -= instance.OnCrouchInput;
             @CrouchInput.performed -= instance.OnCrouchInput;
             @CrouchInput.canceled -= instance.OnCrouchInput;
+            @AttackInput.started -= instance.OnAttackInput;
+            @AttackInput.performed -= instance.OnAttackInput;
+            @AttackInput.canceled -= instance.OnAttackInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -395,5 +424,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnJumpInput(InputAction.CallbackContext context);
         void OnSprintInput(InputAction.CallbackContext context);
         void OnCrouchInput(InputAction.CallbackContext context);
+        void OnAttackInput(InputAction.CallbackContext context);
     }
 }
