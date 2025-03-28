@@ -9,6 +9,7 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction SprintInput { get; private set; }
     public InputAction CrouchInput { get; private set; }
     public InputAction MouseInput { get; private set; }
+    public InputAction SlideInput { get; private set; }
     public Vector2 MoveValue { get; private set; }
     public Vector2 MouseValue { get; private set; }
 
@@ -20,6 +21,7 @@ public class PlayerInputManager : MonoBehaviour
         SprintInput = InputSystem.actions.FindAction("SprintInput");
         CrouchInput = InputSystem.actions.FindAction("CrouchInput");
         MouseInput = InputSystem.actions.FindAction("MouseInput");
+        SlideInput = InputSystem.actions.FindAction("SlideInput");
     }
 
     private void Update()
@@ -36,6 +38,7 @@ public class PlayerInputManager : MonoBehaviour
         SprintInput.Enable();
         CrouchInput.Enable();
         MouseInput.Enable();
+        SlideInput.Enable();
     }
 
     private void OnDisable()
@@ -46,5 +49,6 @@ public class PlayerInputManager : MonoBehaviour
         SprintInput.Disable();
         CrouchInput.Disable();
         MouseInput.Disable();
+        SlideInput.Disable();
     }
 }

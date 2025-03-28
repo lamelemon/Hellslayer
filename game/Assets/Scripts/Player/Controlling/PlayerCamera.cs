@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
-    private float sensitivity = 0.1f;
+    [SerializeField] float sensitivity = 0.1f;
     private float totalXRot;
     public float TotalYRot { get; private set; }
     [SerializeField] PlayerInputManager GetInput;
@@ -25,7 +25,7 @@ public class PlayerCamera : MonoBehaviour
 
         totalXRot = Mathf.Clamp(GetInput.MouseValue.y * -sensitivity + totalXRot, -90f, 90f);
 
-        transform.rotation = Quaternion.Euler(totalXRot, TotalYRot, 0);
+        transform.localRotation = Quaternion.Euler(totalXRot, 0, 0);
     }
 
 }
