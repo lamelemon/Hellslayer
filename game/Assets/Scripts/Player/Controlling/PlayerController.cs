@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour
     private readonly float playerWalkSpeed = 10.0f; // Walking speed constant
     private readonly float playerRunMultiplier = 1.5f; // Multiplier for running speed
     private readonly float playerCrouchSpeedMultiplier = 0.5f; // Multiplier for crouch speed
-    private readonly float standingFloorHeight = -1.8f;
     private Vector3 inputMovement;
     private Vector3 externalForces;
 
@@ -38,22 +37,16 @@ public class PlayerController : MonoBehaviour
     // Crouching
     private float playerStandingHeight; // Player height when standing
     private readonly float playerCrouchingHeight = 3.5f; // Player height when crouching
-    private Vector3 playerStandingCenter; // Center offset when standing
-    private Vector3 playerCrouchingCenter = new(0, 1.5f, 0); // Center offset when crouching
     public bool IsCrouching { get; private set; } // Boolean indicating if the player is crouching
-    private readonly float crouchingFloorHeight = 0.6f;
 
     // Sliding
     private readonly float playerSlidingHeight = 2.5f;
-    private Vector3 playerSlidingCenter;
     private bool isSliding;
-    private readonly float slidingFloorHeight;
 
     // Buffers
     private readonly Collider[] overlapResults = new Collider[10]; // Used for checking collisions when standing up from crouch
     public bool IsOnFloor { get; private set; } 
     private readonly List<Collider> floorContacts = new();
-    private float floorHeight;
 
     // Model position
     private Vector3 modelStartPosition; // Store the initial position of the player model (for crouch animations)
@@ -76,10 +69,8 @@ public class PlayerController : MonoBehaviour
     {
         // Set the initial player height and center offsets
         playerStandingHeight = playerHitbox.height;
-        playerStandingCenter = playerHitbox.center;
-        modelStartPosition = model.transform.localPosition; // Store the starting position of the model for crouching
+        modelStartPosition = playerStandingHeight / 2 * Vector3.down; // Store the starting position of the model for crouching
         coyoteTime = maxCoyoteTime;
-        floorHeight = standingFloorHeight;
     }
 
     void Update()
@@ -118,7 +109,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.GetContact(0).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.center.y + playerHitbox.radius)
+        if (collision.GetContact(0).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.radius)
         {
             IsOnFloor = true;
             floorContacts.Add(collision.collider);
@@ -142,23 +133,19 @@ public class PlayerController : MonoBehaviour
         if (IsOnFloor && !isSliding && GetInput.CrouchInput.WasPressedThisFrame())
         {
             // Adjust controller height for crouching
-            playerHitbox.height = playerCrouchingHeight;
-            playerHitbox.center = playerCrouchingCenter; // Adjust the center position for crouching
-            model.transform.localPosition = -playerStandingCenter; // Adjust model position for crouching
+            playerHitbox.height = playerCrouchingHeight; // Adjust the center position for crouching
+            model.transform.localPosition = playerHitbox.height / 2 * Vector3.down; // Adjust model position for crouching
             playerSpeed *= playerCrouchSpeedMultiplier;
-            floorHeight = crouchingFloorHeight;
             IsCrouching = true; // Mark the player as crouching
-            rb.MovePosition(rb.position - (playerStandingHeight - playerCrouchingHeight - 0.05f) * Vector3.up - playerStandingCenter); // Physically move the player to the crouch position
+            rb.MovePosition(transform.position - (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
         }
 
-        else if (IsCrouching && !GetInput.CrouchInput.IsPressed() && Physics.OverlapCapsuleNonAlloc(rb.position + 2.45f * Vector3.up, rb.position + (2.45f + playerStandingHeight) * Vector3.up, playerHitbox.radius, overlapResults) < 3)
+        else if (IsCrouching && !GetInput.CrouchInput.IsPressed() && Physics.OverlapCapsuleNonAlloc(transform.position - playerHitbox.height / 2 * Vector3.up, transform.position + playerHitbox.height / 2 * Vector3.up, playerHitbox.radius, overlapResults) < 3)
         {
             // Physically move the player to the standing position
-            rb.MovePosition(rb.position + (playerStandingHeight - playerCrouchingHeight - 0.05f) * Vector3.up + playerStandingCenter);
+            rb.MovePosition(transform.position + (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Move the player to the standing position
             model.transform.localPosition = modelStartPosition; // Return the model to its original position
             playerHitbox.height = playerStandingHeight; // Restore the standing height
-            playerHitbox.center = playerStandingCenter; // Restore the standing center
-            floorHeight = standingFloorHeight;
             IsCrouching = false; // Mark the player as not crouching
         }
     }
@@ -204,19 +191,14 @@ public class PlayerController : MonoBehaviour
         if (GetInput.SlideInput.WasPressedThisFrame() && rb.linearVelocity.magnitude != 0)
         {
             playerHitbox.height = playerSlidingHeight;
-            playerHitbox.center = playerSlidingCenter;
-            model.transform.localPosition += playerCrouchingCenter;
             isSliding = true;
-            floorHeight = slidingFloorHeight;
-            model.transform.localRotation = Quaternion.Euler(modelSlidingAngle, 0, 0);
+            model.transform.SetLocalPositionAndRotation(playerSlidingHeight / 2 * Vector3.up, Quaternion.Euler(modelSlidingAngle, 0, 0)); // Adjust model position for sliding
 
         }
 
         else if (isSliding && (!GetInput.SlideInput.IsPressed() || rb.linearVelocity.magnitude == 0))
         {
-            floorHeight = standingFloorHeight;
             playerHitbox.height = playerStandingHeight;
-            playerHitbox.center = playerStandingCenter;
             model.transform.SetLocalPositionAndRotation(modelStartPosition, Quaternion.Euler(Vector3.zero));
             isSliding = false;
         }

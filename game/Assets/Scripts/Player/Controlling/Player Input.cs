@@ -82,9 +82,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
                     ""name"": ""SlideInput"",
                     ""type"": ""Button"",
                     ""id"": ""fdc40a36-1d35-4a20-bd2a-7fc1643d973b"",
+=======
+                    ""name"": ""AttackInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""15a946ab-d6d9-44bd-ba6e-cce831b30fb3"",
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -237,12 +243,21 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
                     ""id"": ""2be5da41-1698-4306-9d79-e11f16085b4b"",
                     ""path"": ""<Keyboard>/leftAlt"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""SlideInput"",
+=======
+                    ""id"": ""d383597c-c9c9-4269-bc43-45033cc228b1"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""AttackInput"",
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -259,7 +274,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_JumpInput = m_Player.FindAction("JumpInput", throwIfNotFound: true);
         m_Player_SprintInput = m_Player.FindAction("SprintInput", throwIfNotFound: true);
         m_Player_CrouchInput = m_Player.FindAction("CrouchInput", throwIfNotFound: true);
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
         m_Player_SlideInput = m_Player.FindAction("SlideInput", throwIfNotFound: true);
+=======
+        m_Player_AttackInput = m_Player.FindAction("AttackInput", throwIfNotFound: true);
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
     }
 
     ~@PlayerInput()
@@ -332,7 +351,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_JumpInput;
     private readonly InputAction m_Player_SprintInput;
     private readonly InputAction m_Player_CrouchInput;
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
     private readonly InputAction m_Player_SlideInput;
+=======
+    private readonly InputAction m_Player_AttackInput;
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -343,7 +366,11 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @JumpInput => m_Wrapper.m_Player_JumpInput;
         public InputAction @SprintInput => m_Wrapper.m_Player_SprintInput;
         public InputAction @CrouchInput => m_Wrapper.m_Player_CrouchInput;
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
         public InputAction @SlideInput => m_Wrapper.m_Player_SlideInput;
+=======
+        public InputAction @AttackInput => m_Wrapper.m_Player_AttackInput;
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -371,9 +398,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CrouchInput.started += instance.OnCrouchInput;
             @CrouchInput.performed += instance.OnCrouchInput;
             @CrouchInput.canceled += instance.OnCrouchInput;
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
             @SlideInput.started += instance.OnSlideInput;
             @SlideInput.performed += instance.OnSlideInput;
             @SlideInput.canceled += instance.OnSlideInput;
+=======
+            @AttackInput.started += instance.OnAttackInput;
+            @AttackInput.performed += instance.OnAttackInput;
+            @AttackInput.canceled += instance.OnAttackInput;
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -396,9 +429,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @CrouchInput.started -= instance.OnCrouchInput;
             @CrouchInput.performed -= instance.OnCrouchInput;
             @CrouchInput.canceled -= instance.OnCrouchInput;
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
             @SlideInput.started -= instance.OnSlideInput;
             @SlideInput.performed -= instance.OnSlideInput;
             @SlideInput.canceled -= instance.OnSlideInput;
+=======
+            @AttackInput.started -= instance.OnAttackInput;
+            @AttackInput.performed -= instance.OnAttackInput;
+            @AttackInput.canceled -= instance.OnAttackInput;
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -424,6 +463,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnJumpInput(InputAction.CallbackContext context);
         void OnSprintInput(InputAction.CallbackContext context);
         void OnCrouchInput(InputAction.CallbackContext context);
+<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.cs
         void OnSlideInput(InputAction.CallbackContext context);
+=======
+        void OnAttackInput(InputAction.CallbackContext context);
+>>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.cs
     }
 }
