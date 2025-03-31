@@ -25,7 +25,8 @@ public class hp_system : MonoBehaviour
 
         if(current_hp <= 0)
         {
-            Debug.Log("Player died!");
+            Debug.Log("died!");
+            gameObject.SetActive(false); // Deactivate the player object
         }
     }
 }
