@@ -387,7 +387,6 @@ GameObject:
   - component: {fileID: 94875009}
   - component: {fileID: 94875011}
   - component: {fileID: 94875013}
-  - component: {fileID: 94875012}
   m_Layer: 0
   m_Name: base_enemy
   m_TagString: Untagged
@@ -406,11 +405,11 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 515, y: 51.59, z: 500}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 1990980094}
-  - {fileID: 1916973916}
   - {fileID: 1965870255}
+  - {fileID: 1916973916}
+  - {fileID: 1990980094}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &94875009
@@ -463,21 +462,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &94875012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 94875006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6204f7f4e1ce66d4ebded0d89a76c406, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  max_hp: 50
-  current_hp: 50
-  hp_bar: {fileID: 156977325}
 --- !u!114 &94875013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,7 +474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9017a1e225220724386734972eeec8e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1.5
+  moveSpeed: 2
   forceMultiplier: 10
   maxSpeed: 3
   detectionRange: 20
@@ -862,7 +846,7 @@ GameObject:
   - component: {fileID: 156977324}
   - component: {fileID: 156977326}
   - component: {fileID: 156977325}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: healt_bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3935,10 +3919,10 @@ MonoBehaviour:
   animator: {fileID: 617115084}
   attackPoint: {fileID: 1801167216}
   attackRange: 1.5
+  attackCooldown: 1
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
-  attackCooldown: 1
 --- !u!1001 &811946107
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4372,7 +4356,7 @@ GameObject:
   - component: {fileID: 1097574549}
   - component: {fileID: 1097574551}
   - component: {fileID: 1097574550}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6003,7 +5987,7 @@ GameObject:
   - component: {fileID: 1861327133}
   - component: {fileID: 1861327132}
   - component: {fileID: 1861327131}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: hp_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6122,7 +6106,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1916973915}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6140,7 +6124,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1965870255}
   - component: {fileID: 1965870256}
-  m_Layer: 0
+  - component: {fileID: 1965870257}
+  m_Layer: 7
   m_Name: hitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6157,8 +6142,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 94875007}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6181,10 +6166,25 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.7
-  m_Height: 2.5
+  m_Radius: 1
+  m_Height: 2.8
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1965870257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1965870254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6204f7f4e1ce66d4ebded0d89a76c406, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  max_hp: 20
+  current_hp: 20
+  hp_bar: {fileID: 156977325}
 --- !u!1001 &1982010248
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6439,7 +6439,7 @@ GameObject:
   - component: {fileID: 2116113266}
   - component: {fileID: 2116113268}
   - component: {fileID: 2116113267}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6674,5 +6674,5 @@ SceneRoots:
   - {fileID: 2095384097}
   - {fileID: 1558894936}
   - {fileID: 774600891}
-  - {fileID: 94875007}
   - {fileID: 102328999}
+  - {fileID: 94875007}
