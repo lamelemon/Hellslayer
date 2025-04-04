@@ -10,6 +10,7 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction CrouchInput { get; private set; }
     public InputAction MouseInput { get; private set; }
     public InputAction AttackInput { get; private set; }
+    public InputAction SlideInput { get; private set; }
     public Vector2 MoveValue { get; private set; }
     public Vector2 MouseValue { get; private set; }
 
@@ -22,6 +23,8 @@ public class PlayerInputManager : MonoBehaviour
         CrouchInput = InputSystem.actions.FindAction("CrouchInput");
         MouseInput = InputSystem.actions.FindAction("MouseInput");
         AttackInput = InputSystem.actions.FindAction("AttackInput");
+        SlideInput = InputSystem.actions.FindAction("SlideInput");
+
     }
 
     private void Update()
@@ -39,6 +42,7 @@ public class PlayerInputManager : MonoBehaviour
         CrouchInput.Enable();
         MouseInput.Enable();
         AttackInput.Enable();
+        SlideInput.Enable();
     }
 
     private void OnDisable()
@@ -50,5 +54,6 @@ public class PlayerInputManager : MonoBehaviour
         CrouchInput.Disable();
         MouseInput.Disable();
         AttackInput.Disable();
+        SlideInput.Disable();
     }
 }
