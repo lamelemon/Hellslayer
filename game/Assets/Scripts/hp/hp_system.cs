@@ -4,6 +4,7 @@ using System.Collections;
 public class hp_system : MonoBehaviour
 {
     public int max_hp = 100;
+    public GameObject target; // reference to the player object
     public int current_hp = 0;
     //public Animator anim;
 
@@ -14,6 +15,7 @@ public class hp_system : MonoBehaviour
 
     void Start()
     {
+        target = transform.root.gameObject;
         current_hp = max_hp;
         hp_bar.hp_bar_max(max_hp);
     }
@@ -26,7 +28,7 @@ public class hp_system : MonoBehaviour
         if(current_hp <= 0)
         {
             Debug.Log("died!");
-            gameObject.SetActive(false); // Deactivate the player object
+            target.SetActive(false); // Deactivate the player object
         }
     }
 }

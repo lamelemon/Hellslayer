@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: 102328997}
   - component: {fileID: 102328996}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3884,6 +3884,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max_hp: 100
+  target: {fileID: 0}
   current_hp: 0
   hp_bar: {fileID: 16964884}
 --- !u!114 &774600902
@@ -3919,7 +3920,7 @@ MonoBehaviour:
   animator: {fileID: 617115084}
   attackPoint: {fileID: 1801167216}
   attackRange: 1.5
-  attackCooldown: 1
+  attackCooldown: 0.3
   enemyLayers:
     serializedVersion: 2
     m_Bits: 128
@@ -6183,6 +6184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max_hp: 20
+  target: {fileID: 0}
   current_hp: 20
   hp_bar: {fileID: 156977325}
 --- !u!1001 &1982010248
