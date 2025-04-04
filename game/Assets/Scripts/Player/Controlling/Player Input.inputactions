@@ -60,15 +60,18 @@
                     "initialStateCheck": false
                 },
                 {
-<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.inputactions
                     "name": "SlideInput",
                     "type": "Button",
                     "id": "fdc40a36-1d35-4a20-bd2a-7fc1643d973b",
-=======
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "AttackInput",
                     "type": "Button",
-                    "id": "15a946ab-d6d9-44bd-ba6e-cce831b30fb3",
->>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.inputactions
+                    "id": "f37d2423-0f3e-4962-972d-76cdcfeb1261",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -221,21 +224,23 @@
                 },
                 {
                     "name": "",
-<<<<<<< HEAD:game/Assets/Scripts/Player/Controlling/Player Input.inputactions
                     "id": "2be5da41-1698-4306-9d79-e11f16085b4b",
                     "path": "<Keyboard>/leftAlt",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "SlideInput",
-=======
-                    "id": "d383597c-c9c9-4269-bc43-45033cc228b1",
-                    "path": "<Mouse>/leftButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fcabb24d-ace7-406f-bafe-2f2851b22ebb",
+                    "path": "*/{PrimaryAction}",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "AttackInput",
->>>>>>> 8a4b11e722b200064e5572a3b9a33aeb118edb2e:game/Assets/Scripts/Player/Player Input.inputactions
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
