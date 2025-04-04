@@ -7,6 +7,8 @@ TagManager:
   - playerCamera
   - playerModel
   - PlayerHitbox
+  - handPosition
+  - crosshair
   layers:
   - Default
   - TransparentFX
