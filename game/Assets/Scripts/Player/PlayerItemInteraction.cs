@@ -1,13 +1,13 @@
-using System.Numerics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public float interactionRange = 25f; // Maximum range to interact with items
+    public float interactionRange = 7f; // Maximum range to interact with items
     public InputAction pickupAction; // Input Action for picking up items
     public InputAction dropAction; // Input Action for dropping items
     private Camera playerCamera;
+    private bool OnHand = false; // Flag to check if the item is on hand
 
     [SerializeField] private PlayerInputManager getInput;
     [SerializeField] private Transform handPosition; // Reference to the player's hand position
@@ -56,6 +56,14 @@ public class PlayerInteraction : MonoBehaviour
                 if (getInput.PickupInput.WasPressedThisFrame() && currentlyHeldItem == null)
                 {
                     MoveItemToHand(item);
+                    item.PickupInput(); // Call the pickup method on the item
+                }
+
+                else if (getInput.PickupInput.WasPressedThisFrame() && currentlyHeldItem != null)
+                {
+                    DropItem(); // Drop the item if already holding one
+                    MoveItemToHand(item);
+                    item.PickupInput(); // Call the pickup method on the item
                 }
             }
         }
@@ -77,14 +85,6 @@ public class PlayerInteraction : MonoBehaviour
         }
 
         item.transform.SetParent(handPosition); // Parent the item to the hand
-        item.transform.localPosition = UnityEngine.Vector3.zero; // Reset position relative to the hand
-
-        // Call the rotation function if the item has an ItemRotation script
-        var rotationScript = item.GetComponent<MonoBehaviour>() as Katana;
-        if (rotationScript != null)
-        {
-            rotationScript.RotateTo(new UnityEngine.Vector3(0, 0, 0f)); // Rotate to the desired angle
-        }
 
         foreach (Collider collider in item.GetComponents<Collider>())
         {

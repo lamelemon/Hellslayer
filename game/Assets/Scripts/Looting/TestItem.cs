@@ -5,7 +5,9 @@ public class TestItem : MonoBehaviour
 {
     public string itemName = "TestItem"; // Name of the item
     public int itemValue = 10;           // Value of the item
-
+    
+    public Quaternion ItemRotation = Quaternion.Euler(0, 0, 0);// Rotation of the item
+    public Vector3 ItemPosition = new(0, 0, 0); // Position of the item
     public void RotateTo(Vector3 desiredRotation)
     {
         transform.rotation = Quaternion.Euler(desiredRotation);
@@ -24,9 +26,8 @@ public class TestItem : MonoBehaviour
         // Destroy the item after picking it up
         // Destroy(gameObject);
         // transform.SetParent(handPosition); // Attach to hand
-        // transform.localPosition = Vector3.zero; // Reset positions
-        RotateTo(new Vector3(0, 0, 0f));
-        // transform.localRotation = Quaternion.identity; // Reset rotation
+        transform.localPosition = ItemPosition; // Reset positions
+        transform.localRotation = ItemRotation; // Reset rotation
         GetComponent<Rigidbody>().isKinematic = true; // Disable physics
     }
 }
