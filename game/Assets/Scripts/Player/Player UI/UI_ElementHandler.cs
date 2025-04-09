@@ -7,6 +7,8 @@ public class ResumeButton : MonoBehaviour
     public RectTransform healthBar; // Reference to the health bar's RectTransform
     public RectTransform staminaBar; // Reference to the stamina bar's RectTransform
 
+    public RectTransform combatstaminaBar; // Reference to the combat stamina bar's RectTransform
+
     void Update()
     {
         // Position the resume button
@@ -30,7 +32,7 @@ public class ResumeButton : MonoBehaviour
             healthBar.pivot = new Vector2(0, 0);     // Pivot at the bottom-left corner
 
             // Offset the health bar by 20 pixels from the left and bottom
-            healthBar.anchoredPosition = new Vector2(20, 50);
+            healthBar.anchoredPosition = new Vector2(20, 90);
         }
 
         // Position the stamina bar in the lower-left corner, above the health bar
@@ -42,7 +44,19 @@ public class ResumeButton : MonoBehaviour
             staminaBar.pivot = new Vector2(0, 0);     // Pivot at the bottom-left corner
 
             // Offset the stamina bar by 20 pixels from the left and 100 pixels from the bottom
-            staminaBar.anchoredPosition = new Vector2(20, 10);
+            staminaBar.anchoredPosition = new Vector2(20, 50);
+        }
+
+
+        if (combatstaminaBar != null)
+        {
+            // Anchor the stamina bar to the bottom-left corner
+            combatstaminaBar.anchorMin = new Vector2(0, 0); // Bottom-left corner
+            combatstaminaBar.anchorMax = new Vector2(0, 0); // Bottom-left corner
+            combatstaminaBar.pivot = new Vector2(0, 0);     // Pivot at the bottom-left corner
+
+            // Offset the stamina bar by 20 pixels from the left and 100 pixels from the bottom
+            combatstaminaBar.anchoredPosition = new Vector2(20, 10);
         }
     }
 }
