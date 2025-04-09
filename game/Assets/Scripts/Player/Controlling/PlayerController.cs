@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerCamera playerCamera; // Reference to the PlayerCamera to handle camera rotation
     [SerializeField] GameObject model; // Reference to the player model (used for crouching animation)
 
+    [SerializeField] Stamina_System staminaSystem; // Reference to the stamina system
+
     private void Awake()
     {
         // Initializing the references
@@ -100,13 +102,13 @@ public class PlayerController : MonoBehaviour
         Crouch();
         Sliding();
 
-        if (!IsCrouching && !isSliding && GetInput.SprintInput.WasPressedThisFrame())
+        if (!IsCrouching && !isSliding && staminaSystem.CanSprint && GetInput.SprintInput.WasPressedThisFrame())
         {
             playerSpeed *= playerRunMultiplier;
             isRunning = true;
         }
 
-        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching))
+        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !staminaSystem.CanSprint))
         {
             isRunning = false;
             playerSpeed = playerWalkSpeed;
@@ -177,11 +179,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!IsCrouching && canJump && coyoteTime > 0 && GetInput.JumpInput.IsPressed()) // Handle jumping input
         {
-            coyoteTime = 0;
-            IsJumping = true; // Mark the player as jumping
-            rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
-            canJump = false;
-            StartCoroutine(JumpCooldownCoroutine());
+            if (staminaSystem.CanJump)
+            {
+                coyoteTime = 0;
+                IsJumping = true; // Mark the player as jumping
+                rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
+                canJump = false;
+                staminaSystem.ConsumeStaminaForJump();
+                StartCoroutine(JumpCooldownCoroutine());
+            }
+            else
+            {
+                print("Not enough stamina to jump!");
+            }
         }
     }
 
