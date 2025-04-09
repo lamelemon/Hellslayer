@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private float coyoteTime;
     public bool IsJumping { get; private set; } // Boolean indicating if the player is currently jumping
     private readonly float jumpingCooldown = 0.25f; // jump cooldown in milliseconds
-    private bool canJump = true;
+    public bool canJump = true;
 
     // Crouching
     private float playerStandingHeight; // Player height when standing
@@ -62,6 +62,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerCamera playerCamera; // Reference to the PlayerCamera to handle camera rotation
     [SerializeField] GameObject model; // Reference to the player model (used for crouching animation)
 
+    [SerializeField] Stamina_System staminaSystem; // Reference to the stamina system
+
     private void Awake()
     {
         // Initializing the references
@@ -70,7 +72,7 @@ public class PlayerController : MonoBehaviour
         playerHitbox = GameObject.FindGameObjectWithTag("PlayerHitbox").GetComponent<CapsuleCollider>();
         layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps");
     }
-
+    
     private void Start()
     {
         // Set the initial player height and center offsets
@@ -100,13 +102,17 @@ public class PlayerController : MonoBehaviour
         Crouch();
         Sliding();
 
-        if (!IsCrouching && !isSliding && GetInput.SprintInput.WasPressedThisFrame())
+        // Check if the player can sprint
+        if (!IsCrouching && !isSliding && Stamina_System.CanSprint && GetInput.SprintInput.IsPressed())
         {
-            playerSpeed *= playerRunMultiplier;
-            isRunning = true;
+            if (!isRunning)
+            {
+                playerSpeed *= playerRunMultiplier;
+                isRunning = true;
+            }
         }
 
-        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching))
+        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !Stamina_System.CanSprint))
         {
             isRunning = false;
             playerSpeed = playerWalkSpeed;
@@ -177,11 +183,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!IsCrouching && canJump && coyoteTime > 0 && GetInput.JumpInput.IsPressed()) // Handle jumping input
         {
-            coyoteTime = 0;
-            IsJumping = true; // Mark the player as jumping
-            rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
-            canJump = false;
-            StartCoroutine(JumpCooldownCoroutine());
+            if (staminaSystem.CanJump) // Check if the player has enough stamina to jump
+            {
+                coyoteTime = 0;
+                IsJumping = true; // Mark the player as jumping
+                rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
+                canJump = false;
+                staminaSystem.ConsumeStaminaForJump(); // Consume stamina for jumping
+                StartCoroutine(JumpCooldownCoroutine());
+            }
+            else
+            {
+                print("Not enough stamina to jump!");
+            }
         }
     }
 
