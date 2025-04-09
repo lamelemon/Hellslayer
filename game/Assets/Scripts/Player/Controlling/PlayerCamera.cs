@@ -16,6 +16,11 @@ public class PlayerCamera : MonoBehaviour
 
     void Update()
     {
+        if(PauseMenu.isPaused) // Check if the game is paused
+        {
+            return; // Skip camera rotation if the game is paused
+        }
+
         if (TotalYRot >= 360f || TotalYRot <= -360f) // prevent y rotation from going too high
         {
             TotalYRot = 0f;

@@ -3145,6 +3145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   getInput: {fileID: 774600895}
+  crosshair: {fileID: 1675824149}
   pauseMenuUI: {fileID: 637777808}
 --- !u!4 &609483054
 Transform:
