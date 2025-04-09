@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public float interactionRange = 7f; // Maximum range to interact with items
+    public float interactionRange = 8.5f; // Maximum range to interact with items
     public InputAction pickupAction; // Input Action for picking up items
     public InputAction dropAction; // Input Action for dropping items
     private Camera playerCamera;

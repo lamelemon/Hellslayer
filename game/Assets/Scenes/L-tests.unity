@@ -4057,7 +4057,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 890a7ce961e751944946f2d4adbba525, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 7
+  interactionRange: 8.5
   pickupAction:
     m_Name: Pickup
     m_Type: 0
