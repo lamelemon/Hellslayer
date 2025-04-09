@@ -18,7 +18,7 @@ public class Stamina_System : MonoBehaviour
     private bool canSprintAgain = true; // Whether the player is allowed to sprint
 
     // Static property to check if the player can sprint
-    public static bool CanSprint = true;
+    public bool CanSprint = true;
 
     // Property to check if the player can jump
     public bool CanJump => 0 < currentStamina && currentStamina >= staminaRegenThreshold;

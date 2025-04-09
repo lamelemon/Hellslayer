@@ -98,6 +98,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PickupInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""72d479c1-a148-4784-a25c-27fda2953f0e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""DropInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""814e76b0-46b3-4976-bd91-0f3985d5d311"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -265,6 +283,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""AttackInput"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f6c609a7-025b-4d53-825c-08cc99ec0f0d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PickupInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f2d12a2-dd32-4c25-bece-90e6e9164e3e"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DropInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -281,6 +321,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_CrouchInput = m_Player.FindAction("CrouchInput", throwIfNotFound: true);
         m_Player_SlideInput = m_Player.FindAction("SlideInput", throwIfNotFound: true);
         m_Player_AttackInput = m_Player.FindAction("AttackInput", throwIfNotFound: true);
+        m_Player_PickupInput = m_Player.FindAction("PickupInput", throwIfNotFound: true);
+        m_Player_DropInput = m_Player.FindAction("DropInput", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -355,6 +397,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_CrouchInput;
     private readonly InputAction m_Player_SlideInput;
     private readonly InputAction m_Player_AttackInput;
+    private readonly InputAction m_Player_PickupInput;
+    private readonly InputAction m_Player_DropInput;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -367,6 +411,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @CrouchInput => m_Wrapper.m_Player_CrouchInput;
         public InputAction @SlideInput => m_Wrapper.m_Player_SlideInput;
         public InputAction @AttackInput => m_Wrapper.m_Player_AttackInput;
+        public InputAction @PickupInput => m_Wrapper.m_Player_PickupInput;
+        public InputAction @DropInput => m_Wrapper.m_Player_DropInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -400,6 +446,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @AttackInput.started += instance.OnAttackInput;
             @AttackInput.performed += instance.OnAttackInput;
             @AttackInput.canceled += instance.OnAttackInput;
+            @PickupInput.started += instance.OnPickupInput;
+            @PickupInput.performed += instance.OnPickupInput;
+            @PickupInput.canceled += instance.OnPickupInput;
+            @DropInput.started += instance.OnDropInput;
+            @DropInput.performed += instance.OnDropInput;
+            @DropInput.canceled += instance.OnDropInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -428,6 +480,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @AttackInput.started -= instance.OnAttackInput;
             @AttackInput.performed -= instance.OnAttackInput;
             @AttackInput.canceled -= instance.OnAttackInput;
+            @PickupInput.started -= instance.OnPickupInput;
+            @PickupInput.performed -= instance.OnPickupInput;
+            @PickupInput.canceled -= instance.OnPickupInput;
+            @DropInput.started -= instance.OnDropInput;
+            @DropInput.performed -= instance.OnDropInput;
+            @DropInput.canceled -= instance.OnDropInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -455,5 +513,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnCrouchInput(InputAction.CallbackContext context);
         void OnSlideInput(InputAction.CallbackContext context);
         void OnAttackInput(InputAction.CallbackContext context);
+        void OnPickupInput(InputAction.CallbackContext context);
+        void OnDropInput(InputAction.CallbackContext context);
     }
 }

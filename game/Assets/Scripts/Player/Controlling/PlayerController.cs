@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
     private float coyoteTime;
     public bool IsJumping { get; private set; } // Boolean indicating if the player is currently jumping
     private readonly float jumpingCooldown = 0.25f; // jump cooldown in milliseconds
-    public bool canJump = true;
+    private bool canJump = true;
 
     // Crouching
     private float playerStandingHeight; // Player height when standing
@@ -72,7 +72,7 @@ public class PlayerController : MonoBehaviour
         playerHitbox = GameObject.FindGameObjectWithTag("PlayerHitbox").GetComponent<CapsuleCollider>();
         layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps");
     }
-    
+
     private void Start()
     {
         // Set the initial player height and center offsets
@@ -102,17 +102,13 @@ public class PlayerController : MonoBehaviour
         Crouch();
         Sliding();
 
-        // Check if the player can sprint
-        if (!IsCrouching && !isSliding && Stamina_System.CanSprint && GetInput.SprintInput.IsPressed())
+        if (!IsCrouching && !isSliding && staminaSystem.CanSprint && GetInput.SprintInput.WasPressedThisFrame())
         {
-            if (!isRunning)
-            {
-                playerSpeed *= playerRunMultiplier;
-                isRunning = true;
-            }
+            playerSpeed *= playerRunMultiplier;
+            isRunning = true;
         }
 
-        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !Stamina_System.CanSprint))
+        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !staminaSystem.CanSprint))
         {
             isRunning = false;
             playerSpeed = playerWalkSpeed;
@@ -183,13 +179,13 @@ public class PlayerController : MonoBehaviour
     {
         if (!IsCrouching && canJump && coyoteTime > 0 && GetInput.JumpInput.IsPressed()) // Handle jumping input
         {
-            if (staminaSystem.CanJump) // Check if the player has enough stamina to jump
+            if (staminaSystem.CanJump)
             {
                 coyoteTime = 0;
                 IsJumping = true; // Mark the player as jumping
                 rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
                 canJump = false;
-                staminaSystem.ConsumeStaminaForJump(); // Consume stamina for jumping
+                staminaSystem.ConsumeStaminaForJump();
                 StartCoroutine(JumpCooldownCoroutine());
             }
             else
