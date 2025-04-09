@@ -21,11 +21,6 @@ public class PlayerCamera : MonoBehaviour
             TotalYRot = 0f;
         }
 
-        if (PauseMenu.isPaused) // check if the game is paused
-        {
-            return; // exit the update method
-        }
-
         TotalYRot += GetInput.MouseValue.x * sensitivity;
 
         totalXRot = Mathf.Clamp(GetInput.MouseValue.y * -sensitivity + totalXRot, -90f, 45f);
