@@ -6,7 +6,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,7 +31,7 @@ public class PlayerController : MonoBehaviour
     private readonly float maxCoyoteTime = 0.2f;
     private float coyoteTime;
     public bool IsJumping { get; private set; } // Boolean indicating if the player is currently jumping
-    private readonly float jumpingCooldown = 0.25f; // jump cooldown in milliseconds
+    private readonly float jumpingCooldown = 1f; // jump cooldown in milliseconds
     private bool canJump = true;
 
     // Crouching
@@ -43,10 +42,13 @@ public class PlayerController : MonoBehaviour
     // Sliding
     private readonly float playerSlidingHeight = 2.5f;
     private bool isSliding;
-    private float slideTime;
+
+    // Mantling
+    private readonly Collider[] mantleResults = new Collider[10]; // Array to store colliders for mantling detection
+    private Vector3 mantlePosition;
 
     // Buffers
-    private List<Collider> overlapResults = new(); // Used for checking collisions when standing up from crouch
+    private readonly List<Collider> overlapResults = new(); // Used for checking collisions when standing up from crouch
     public bool IsOnFloor { get; private set; } 
     private readonly List<Collider> floorContacts = new();
     private int layerMask; // Layer mask for collision detection
@@ -61,7 +63,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerInputManager GetInput; // Reference to the PlayerInputManager for capturing input
     [SerializeField] PlayerCamera playerCamera; // Reference to the PlayerCamera to handle camera rotation
     [SerializeField] GameObject model; // Reference to the player model (used for crouching animation)
-
     [SerializeField] Stamina_System staminaSystem; // Reference to the stamina system
 
     private void Awake()
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour
         GetInput = GetComponent<PlayerInputManager>();
         rb = gameObject.GetComponent<Rigidbody>();
         playerHitbox = GameObject.FindGameObjectWithTag("PlayerHitbox").GetComponent<CapsuleCollider>();
-        layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps");
+        layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps", "Ignore Raycast");
     }
 
     private void Start()
@@ -86,21 +87,14 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (IsOnFloor)
-        {
-            steer = 1;
-            coyoteTime = maxCoyoteTime;
-            IsJumping = false;
-        }
-
-        else
+        if (!IsOnFloor)
         {
             coyoteTime -= Time.deltaTime;
-            steer = aerialsteer;
         }
 
         Crouch();
         Sliding();
+        Mantle();
 
         if (!IsCrouching && !isSliding && staminaSystem.CanSprint && GetInput.SprintInput.WasPressedThisFrame())
         {
@@ -123,15 +117,25 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (IsOnFloor)
+        {
+            steer = 1;
+            coyoteTime = maxCoyoteTime;
+            IsJumping = false;
+        }
+
+        else
+        {
+            steer = aerialsteer;
+        }
+
         Jumping();
         Moving();
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        print($"{collision.impulse.magnitude} {Movement.magnitude} {collision.relativeVelocity.magnitude}");
-
-        if (collision.GetContact(0).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.radius)
+        if (collision.GetContact(0).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.radius / 2)
         {
             IsOnFloor = true;
             floorContacts.Add(collision.collider);
@@ -148,11 +152,10 @@ public class PlayerController : MonoBehaviour
         IsOnFloor = floorContacts.Count != 0;
     }
 
-
     // Handle crouching behavior
     private void Crouch()
     {
-        if (IsOnFloor && !isSliding && !IsCrouching && GetInput.CrouchInput.WasPressedThisFrame())
+        if (IsOnFloor && !isSliding && !IsCrouching && GetInput.CrouchInput.IsPressed())
         {
             // Adjust controller height for crouching
             playerHitbox.height = playerCrouchingHeight; // Adjust the center position for crouching
@@ -163,7 +166,7 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(transform.position - (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
         }
 
-        else if (IsCrouching && !GetInput.CrouchInput.IsPressed() && CanUnCrouch())
+        else if (IsCrouching && (!GetInput.CrouchInput.IsPressed() || !IsOnFloor) && CanUnCrouch())
         {
             // Physically move the player to the standing position
             rb.MovePosition(transform.position + (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Move the player to the standing position
@@ -177,21 +180,15 @@ public class PlayerController : MonoBehaviour
 
     private void Jumping()
     {
-        if (!IsCrouching && canJump && coyoteTime > 0 && GetInput.JumpInput.IsPressed()) // Handle jumping input
+        if (!IsCrouching && GetInput.JumpInput.IsPressed() && staminaSystem.CanJump && canJump && coyoteTime > 0) // Handle jumping input
         {
-            if (staminaSystem.CanJump)
-            {
-                coyoteTime = 0;
-                IsJumping = true; // Mark the player as jumping
-                rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
-                canJump = false;
-                staminaSystem.ConsumeStaminaForJump();
-                StartCoroutine(JumpCooldownCoroutine());
-            }
-            else
-            {
-                print("Not enough stamina to jump!");
-            }
+            coyoteTime = 0;
+            IsJumping = true; // Mark the player as jumping
+            rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
+            canJump = false;
+            IsOnFloor = false;
+            staminaSystem.ConsumeStaminaForJump();
+            StartCoroutine(JumpCooldownCoroutine());
         }
     }
 
@@ -209,7 +206,11 @@ public class PlayerController : MonoBehaviour
         if (isSliding)
         {
             Movement = Vector3.Lerp(Movement, Vector3.zero, Time.deltaTime); // Smoothly reduce slide movement over time
-            slideTime += Time.deltaTime; // Increment slide time
+
+            if (Movement.magnitude < 0.1f)
+            {
+                Movement = Vector3.zero;
+            }
         }
         
         else
@@ -219,15 +220,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // Apply the combined movement to the rigidbody
-        rb.linearVelocity = new Vector3(Movement.x, rb.linearVelocity.y, Movement.z) + externalForces;
+        rb.linearVelocity = Movement + rb.linearVelocity.y * Vector3.up + externalForces;
 
-        if (Movement.magnitude < 0.1f)
-        {
-            Movement = Vector3.zero;
-        }
+
 
         // Smoothly reduce external forces over time
-        externalForces = Vector3.Lerp(externalForces, Vector3.zero, Time.deltaTime * 2);
+        externalForces = Vector3.Lerp(externalForces, Vector3.zero, rb.linearDamping * Time.deltaTime);
 
         // Debugging outputs
         // print($"Velocity: {rb.linearVelocity} external: {externalForces} input: {Movement} input magnitude: {Movement.magnitude}");
@@ -241,15 +239,12 @@ public class PlayerController : MonoBehaviour
             isSliding = true;
             model.transform.localPosition = playerSlidingHeight / 2 * Vector3.down; // Adjust model position for sliding
             model.transform.SetLocalPositionAndRotation(playerSlidingHeight / 2 * Vector3.down, Quaternion.Euler(-80, 0, 0)); // Adjust model position for sliding
-            playerCamera.transform.localPosition = new(playerCamera.transform.localPosition.x, playerSlidingHeight / 2, playerCamera.transform.localPosition.z); // Adjust camera position for crouching
+            playerCamera.transform.localPosition = new(playerCamera.transform.localPosition.x, playerStandingHeight / 2, playerCamera.transform.localPosition.z); // Adjust camera position for crouching
             rb.MovePosition(transform.position - (playerStandingHeight - playerSlidingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
-            Movement = rb.linearVelocity;
         }
 
         else if (isSliding && (!GetInput.SlideInput.IsPressed() || new Vector3(Movement.x, 0, Movement.z).magnitude < 0.5f || IsJumping) && CanUnCrouch())
         {
-            print(slideTime);
-            slideTime = 0;
             rb.MovePosition(transform.position + (playerStandingHeight - playerSlidingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
             playerHitbox.height = playerStandingHeight;
             isSliding = false;
@@ -260,8 +255,9 @@ public class PlayerController : MonoBehaviour
 
     private bool CanUnCrouch()
     {
+        overlapResults.Clear();
         playerHitboxBounds = new(transform.position + (playerStandingHeight - playerHitbox.height) / 2 * Vector3.up, new(playerHitbox.radius , playerStandingHeight, playerHitbox.radius));
-        overlapResults.AddRange(Physics.OverlapCapsule(transform.position - playerHitbox.height / 2 * Vector3.up, transform.position + (playerStandingHeight - playerHitbox.height / 2) * Vector3.up, playerHitbox.radius, layerMask));
+        overlapResults.AddRange(Physics.OverlapCapsule(transform.position - (playerHitbox.height / 2 - playerHitbox.radius) * Vector3.up, transform.position + (playerStandingHeight - playerHitbox.height / 2) * Vector3.up, playerHitbox.radius, layerMask));
 
         foreach (Collider collision in overlapResults)
         {
@@ -272,5 +268,24 @@ public class PlayerController : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void Mantle()
+    {
+        // Calculate the mantle position based on player dimensions and orientation
+        mantlePosition = transform.position + (playerStandingHeight / 2 - playerHitbox.radius) * Vector3.up + Quaternion.Euler(0, rb.transform.eulerAngles.y, 0) * (playerHitbox.radius * 2 * Vector3.forward);
+        // Check for a ledge and if the player fits on the ledge
+        print(Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask));
+        if (GetInput.JumpInput.WasPressedThisFrame() && Physics.Raycast(mantlePosition + Vector3.up * playerStandingHeight / 2, Vector3.down, out RaycastHit hit, playerHitbox.height, layerMask) && Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask) == 0)
+        {
+            // Move the player to the ledge position
+            transform.position = hit.point + Vector3.up * playerStandingHeight / 2;
+            StartCoroutine(JumpCooldownCoroutine());
+        }
+    }
+
+    public void AddExternalForces(Vector3 force)
+    {
+        externalForces += force; // Add external forces to the player's movement
     }
 }
