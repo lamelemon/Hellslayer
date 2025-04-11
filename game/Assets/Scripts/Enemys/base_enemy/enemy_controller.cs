@@ -1,4 +1,15 @@
 using UnityEngine;
+using System.Collections;
+
+
+// Enemy_Controller.cs
+// This script controls the behavior of an enemy in a Unity game.
+// Features:
+// - Movement: Moves towards the player with a maximum speed and force multiplier.
+// - Detection: Detects the player within a primary and secondary range.
+// - Combat: Attacks the player when in secondary range with a cooldown system.
+// - Debugging: Visualizes detection ranges using Gizmos in the editor.
+
 
 public class Enemy_Controller : MonoBehaviour
 {
@@ -11,12 +22,17 @@ public class Enemy_Controller : MonoBehaviour
 
     [Header("Detection range Settings")]
     [SerializeField] private float detectionRange = 20f;
-    [Header("Attack range Settings")]
-    [SerializeField] private float secondaryDetectionRange = 2f;
-    private Transform player;
-    
+
     [Header("")]
 
+    [Header("Combat Settings")]
+    [SerializeField] private float secondaryDetectionRange = 2f;
+    [SerializeField] private float attackCooldown = 1f; // Cooldown duration in seconds
+    [SerializeField] private int attackDamage = 5; // Damage dealt to the player
+
+
+    private Transform player;
+    private bool attacked = false;
     private Rigidbody rb;
 
     private void Awake()
@@ -90,8 +106,22 @@ public class Enemy_Controller : MonoBehaviour
 
     private void attackplayer()
     {
-        // Implement attack logic here, e.g., dealing damage to the player
-        Debug.Log("Attacking player!");
+        if (!attacked)
+        {
+            hp_system hpSystem = player.GetComponent<hp_system>();
+            if (hpSystem != null)
+            {
+                hpSystem.take_damage(attackDamage);
+                attacked = true;
+                StartCoroutine(AttackCooldown());
+            }
+        }
+    }
+
+    private IEnumerator AttackCooldown()
+    {
+        yield return new WaitForSeconds(attackCooldown); // Cooldown duration in seconds
+        attacked = false;
     }
 
     private void OnDrawGizmosSelected()
