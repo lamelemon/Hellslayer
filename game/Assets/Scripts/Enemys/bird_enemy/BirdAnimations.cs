@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class SpikyAnimation : MonoBehaviour
+public class BirdAnimation : MonoBehaviour
 {
     private Animator animator; // Reference to the animator
     private NavMeshAgent agent; // Reference to the NavMeshAgent
