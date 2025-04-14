@@ -22,12 +22,10 @@ public class TestItem : MonoBehaviour
         Debug.Log($"picked up: {itemName}, value: {itemValue}");
         // Add logic to add the item to the player's inventory here
         // Example: InventorySystem.AddItem(this);
-
         // Destroy the item after picking it up
         // Destroy(gameObject);
         // transform.SetParent(handPosition); // Attach to hand
-        transform.localPosition = ItemPosition; // Reset positions
-        transform.localRotation = ItemRotation; // Reset rotation
+        transform.SetLocalPositionAndRotation(ItemPosition, ItemRotation);
         GetComponent<Rigidbody>().isKinematic = true; // Disable physics
     }
 }

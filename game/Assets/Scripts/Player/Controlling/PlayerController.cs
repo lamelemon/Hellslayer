@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Unity.Mathematics;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -24,14 +25,14 @@ public class PlayerController : MonoBehaviour
     private readonly float playerCrouchSpeedMultiplier = 0.5f; // Multiplier for crouch speed
     private Vector3 Movement;
     private Vector3 externalForces;
-    private bool isRunning;
+    public bool IsRunning { get; private set; } // Boolean indicating if the player is running;
 
     // Jumping
     public float playerJumpHeight = 7.0f; // Jump height constant
     private readonly float maxCoyoteTime = 0.2f;
     private float coyoteTime;
     public bool IsJumping { get; private set; } // Boolean indicating if the player is currently jumping
-    private readonly float jumpingCooldown = 1f; // jump cooldown in milliseconds
+    private readonly float jumpingCooldown = 0.3f; // jump cooldown in seconds
     private bool canJump = true;
 
     // Crouching
@@ -40,7 +41,7 @@ public class PlayerController : MonoBehaviour
     public bool IsCrouching { get; private set; } // Boolean indicating if the player is crouching
 
     // Sliding
-    private readonly float playerSlidingHeight = 2.5f;
+    private readonly float playerSlidingHeight = 3.5f;
     private bool isSliding;
 
     // Mantling
@@ -50,7 +51,7 @@ public class PlayerController : MonoBehaviour
     // Buffers
     private readonly List<Collider> overlapResults = new(); // Used for checking collisions when standing up from crouch
     public bool IsOnFloor { get; private set; } 
-    private readonly List<Collider> floorContacts = new();
+    private readonly List<ContactPoint> floorContacts = new();
     private int layerMask; // Layer mask for collision detection
     private Bounds playerHitboxBounds;
 
@@ -99,12 +100,12 @@ public class PlayerController : MonoBehaviour
         if (!IsCrouching && !isSliding && staminaSystem.CanSprint && GetInput.SprintInput.WasPressedThisFrame())
         {
             playerSpeed *= playerRunMultiplier;
-            isRunning = true;
+            IsRunning = true;
         }
 
-        else if (isRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !staminaSystem.CanSprint))
+        else if (IsRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !staminaSystem.CanSprint))
         {
-            isRunning = false;
+            IsRunning = false;
             playerSpeed = playerWalkSpeed;
         }
 
@@ -135,27 +136,38 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.GetContact(0).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.radius / 2)
+        for (int i = 0; i < collision.contactCount; i++)
         {
-            IsOnFloor = true;
-            floorContacts.Add(collision.collider);
+            // Check if the contact point is below the player's hitbox and mark the player as on the floor
+            if (collision.GetContact(i).point.y < transform.position.y - playerHitbox.height / 2 + playerHitbox.radius / 2)
+            {
+                IsOnFloor = true;
+                floorContacts.Add(collision.GetContact(i)); // Add the collider to the list of floor contacts
+                break;
+            }
         }
     }
 
     void OnCollisionExit(Collision collision)
     {
-        if (floorContacts.Contains(collision.collider))
+        // Check if the collision object was part of the floor contacts
+        for (int i = 0; i < floorContacts.Count; i++)
         {
-            floorContacts.Remove(collision.collider);
+            if (floorContacts[i].otherCollider == collision.collider)
+            {
+                floorContacts.RemoveAt(i);
+                i --;
+            }
         }
 
-        IsOnFloor = floorContacts.Count != 0;
+        // Update the IsOnFloor status
+        IsOnFloor = floorContacts.Count > 0;
     }
 
     // Handle crouching behavior
     private void Crouch()
     {
-        if (IsOnFloor && !isSliding && !IsCrouching && GetInput.CrouchInput.IsPressed())
+        if (!isSliding && !IsCrouching && GetInput.CrouchInput.IsPressed())
         {
             // Adjust controller height for crouching
             playerHitbox.height = playerCrouchingHeight; // Adjust the center position for crouching
@@ -166,7 +178,7 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(transform.position - (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
         }
 
-        else if (IsCrouching && (!GetInput.CrouchInput.IsPressed() || !IsOnFloor) && CanUnCrouch())
+        else if (IsCrouching && !GetInput.CrouchInput.IsPressed() && CanUnCrouch())
         {
             // Physically move the player to the standing position
             rb.MovePosition(transform.position + (playerStandingHeight - playerCrouchingHeight) / 2 * Vector3.up); // Move the player to the standing position
@@ -180,11 +192,11 @@ public class PlayerController : MonoBehaviour
 
     private void Jumping()
     {
-        if (!IsCrouching && GetInput.JumpInput.IsPressed() && staminaSystem.CanJump && canJump && coyoteTime > 0) // Handle jumping input
+        if (GetInput.JumpInput.IsPressed() && staminaSystem.CanJump && canJump && coyoteTime > 0) // Handle jumping input
         {
             coyoteTime = 0;
             IsJumping = true; // Mark the player as jumping
-            rb.linearVelocity += playerJumpHeight * Vector3.up; // Set the jump velocity based on the jump height
+            rb.linearVelocity += Mathf.Sqrt(playerJumpHeight * -Physics.gravity.y) * Vector3.up; // Set the jump velocity based on the jump height
             canJump = false;
             IsOnFloor = false;
             staminaSystem.ConsumeStaminaForJump();
@@ -205,7 +217,7 @@ public class PlayerController : MonoBehaviour
         // Handle sliding movement
         if (isSliding)
         {
-            Movement = Vector3.Lerp(Movement, Vector3.zero, Time.deltaTime); // Smoothly reduce slide movement over time
+            Movement = Vector3.Lerp(Movement, Vector3.zero, rb.linearDamping * Time.deltaTime); // Smoothly reduce slide movement over time
 
             if (Movement.magnitude < 0.1f)
             {
@@ -243,7 +255,7 @@ public class PlayerController : MonoBehaviour
             rb.MovePosition(transform.position - (playerStandingHeight - playerSlidingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
         }
 
-        else if (isSliding && (!GetInput.SlideInput.IsPressed() || new Vector3(Movement.x, 0, Movement.z).magnitude < 0.5f || IsJumping) && CanUnCrouch())
+        else if (isSliding && (!GetInput.SlideInput.IsPressed() || new Vector3(Movement.x, 0, Movement.z).magnitude < 0.5f) && CanUnCrouch())
         {
             rb.MovePosition(transform.position + (playerStandingHeight - playerSlidingHeight) / 2 * Vector3.up); // Physically move the player to the crouch position
             playerHitbox.height = playerStandingHeight;
@@ -274,12 +286,13 @@ public class PlayerController : MonoBehaviour
     {
         // Calculate the mantle position based on player dimensions and orientation
         mantlePosition = transform.position + (playerStandingHeight / 2 - playerHitbox.radius) * Vector3.up + Quaternion.Euler(0, rb.transform.eulerAngles.y, 0) * (playerHitbox.radius * 2 * Vector3.forward);
+
         // Check for a ledge and if the player fits on the ledge
-        print(Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask));
         if (GetInput.JumpInput.WasPressedThisFrame() && Physics.Raycast(mantlePosition + Vector3.up * playerStandingHeight / 2, Vector3.down, out RaycastHit hit, playerHitbox.height, layerMask) && Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask) == 0)
         {
             // Move the player to the ledge position
             transform.position = hit.point + Vector3.up * playerStandingHeight / 2;
+            IsOnFloor = true;
             StartCoroutine(JumpCooldownCoroutine());
         }
     }
