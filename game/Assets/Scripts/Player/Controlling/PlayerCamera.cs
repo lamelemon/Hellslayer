@@ -27,10 +27,9 @@ public class PlayerCamera : MonoBehaviour
         }
 
         TotalYRot += GetInput.MouseValue.x * sensitivity;
+        totalXRot = Mathf.Clamp(GetInput.MouseValue.y * -sensitivity + totalXRot, -90f, 90f);
 
-        totalXRot = Mathf.Clamp(GetInput.MouseValue.y * -sensitivity + totalXRot, -90f, 90);
-
-        transform.localRotation = Quaternion.Euler(totalXRot, 0, 0);
+        transform.rotation = Quaternion.Euler(totalXRot, TotalYRot, 0);
     }
 
 }

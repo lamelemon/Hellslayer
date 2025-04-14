@@ -39,7 +39,7 @@ public class Stamina_System : MonoBehaviour
     void Update()
     {
         // Handle sprint input
-        if (getInput.SprintInput.IsPressed() && canSprintAgain && getInput.MoveInput.IsPressed())
+        if (playerController.IsRunning && canSprintAgain && getInput.MoveInput.IsPressed())
         {
             if (currentStamina > 0)
             {
