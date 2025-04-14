@@ -4,6 +4,8 @@ public class PauseMenu : MonoBehaviour
 {
 
     [SerializeField] PlayerInputManager getInput;
+
+    public GameObject crosshair;
     public GameObject pauseMenuUI; // Assign the pause menu UI in the Inspector
     public static bool isPaused = false;
 
@@ -39,6 +41,7 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUI.SetActive(false); // Hide the pause menu
+        crosshair.SetActive(true); // Show the crosshair
         Time.timeScale = 1f; // Resume game time
         isPaused = false;
 
@@ -50,6 +53,7 @@ public class PauseMenu : MonoBehaviour
     void Pause()
     {
         pauseMenuUI.SetActive(true); // Show the pause menu
+        crosshair.SetActive(false); // Hide the crosshair
         Time.timeScale = 0f; // Freeze game time
         isPaused = true;
 
