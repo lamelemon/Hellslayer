@@ -27,7 +27,6 @@ public class PlayerCamera : MonoBehaviour
         }
 
         TotalYRot += GetInput.MouseValue.x * sensitivity;
-
         totalXRot = Mathf.Clamp(GetInput.MouseValue.y * -sensitivity + totalXRot, -90f, 90f);
 
         transform.rotation = Quaternion.Euler(totalXRot, TotalYRot, 0);

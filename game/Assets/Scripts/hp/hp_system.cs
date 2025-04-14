@@ -1,10 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
+
+
+// <summary>
+// This script manages the health system for a character in the game. 
+// If a target is not manually assigned, it defaults to the GameObject this script is attached to.
+
+
 public class hp_system : MonoBehaviour
 {
     public int max_hp = 100;
-    public GameObject target; // reference to the player object
+    public GameObject target; // reference to the main object
     public int current_hp = 0;
     //public Animator anim;
 
