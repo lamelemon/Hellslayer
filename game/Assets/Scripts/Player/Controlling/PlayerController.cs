@@ -245,7 +245,7 @@ public class PlayerController : MonoBehaviour
 
     private void Sliding()
     {
-        if (GetInput.SlideInput.WasPressedThisFrame() && new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).sqrMagnitude != 0)
+        if (GetInput.SlideInput.WasPressedThisFrame() && new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z).magnitude != 0)
         {
             playerHitbox.height = playerSlidingHeight;
             isSliding = true;
