@@ -13,10 +13,8 @@ public class ui_follow_player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
-        Vector3 targetPosition = player.position;
-        targetPosition.y = transform.position.y; // Keep the ui bar upright by aligning only the X and Z axes
-        transform.LookAt(targetPosition);
+        transform.LookAt(player.position);
     }
 }
