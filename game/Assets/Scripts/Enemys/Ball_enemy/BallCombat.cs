@@ -38,6 +38,7 @@ public class BallCombat : MonoBehaviour
         float sqrDistance = (player.position - transform.position).sqrMagnitude;
         return sqrDistance <= attackRange * attackRange;
     }
+    
     private void AttackPlayer()
     {
         if (!attacked)
