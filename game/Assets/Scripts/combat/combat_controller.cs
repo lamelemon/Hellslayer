@@ -79,6 +79,7 @@ public class combat_controller : MonoBehaviour
             if (hpSystem != null)
             {
                 hpSystem.take_damage(5); // Default damage
+                // Debug.Log("We hit " + enemy.name);
             }
         }
     }
