@@ -2,6 +2,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
+// Notes:
+// If you want to improve the jump—make it heavier, slower, etc.—try adjusting the Rigidbody's mass or the gravity settings first. 
+// Alternatively, you can create custom gravity behavior in a script.
+// That chances how controllable in air is
+
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour // Part of the player finite StateMachine
 {
@@ -17,6 +22,10 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     public float jumpCooldown = 5f; // Cooldown time between jumps
     [HideInInspector] public float lastJumpTime; // Timestamp of the last jump
 
+    [Header("Effects Settings")]
+    [Range(1f, 179.0f)] public float BaseFieldOfView = 95.0f; // Duration of the jump effect
+    [Range(1f, 179.0f)] public float SprintFieldOfView = 105.0f; // Duration of the jump effect
+
     // Ground detection settings
     [Header("Ground Detection Settings")]
     public CapsuleCollider playerCollider; // Reference to the player's CapsuleCollider
@@ -26,6 +35,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     // Dependencies
     [Header("Dependencies")]
     public Transform orientation; // Object used to orient the player
+    public Camera targetCamera; // Camera used for player efffects
 
     // Input and state variables
     [HideInInspector] public bool isSprinting = false; // Is the player sprinting?
@@ -72,6 +82,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
 
     private void Start()
     {
+        targetCamera.fieldOfView = BaseFieldOfView;
         // Initialize the state machine with the idle state
         stateMachine.Initialize(new PlayerIdleState(this, stateMachine));
     }
@@ -97,7 +108,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         // Handle state transitions based on input and conditions
         if (isJumping && IsGrounded && readyToJump)
         {
-            Debug.Log("jump");
+            //Debug.Log("jump");
             stateMachine.ChangeState(new PlayerJumpState(this, stateMachine));
         }
         else if (isSprinting && moveInput.magnitude > 0.1f)
