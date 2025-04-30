@@ -7,6 +7,7 @@ public class combat_controller : MonoBehaviour
     [Header("References about player")]
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerInputManager getInput;
+    [SerializeField] private PlayerInteraction playerItemInteraction; // Reference to PlayerItemInteraction
 
     [Header("")]
 
@@ -23,7 +24,7 @@ public class combat_controller : MonoBehaviour
     [Header("")]
 
     [Header("Enemy layers Settings")]
-    public LayerMask enemyLayers;
+    public LayerMask enemyLayer;
 
     [Header("")]
     
@@ -31,7 +32,7 @@ public class combat_controller : MonoBehaviour
     
     void Update()
     {
-        if (getInput.AttackInput.IsPressed())
+        if (getInput.AttackInput.WasPressedThisFrame())
         {
             Attack_Clicked(true);
         }
@@ -55,17 +56,30 @@ public class combat_controller : MonoBehaviour
     {
         if (!canAttack) return;
 
+        // Check if the player is holding an item with the TestItem script
+        if (playerItemInteraction.currentlyHeldItem != null)
+        {
+            TestItem heldItem = playerItemInteraction.currentlyHeldItem.GetComponent<TestItem>();
+            if (heldItem != null)
+            {
+                // Call the PerformAttack method on the held item
+                heldItem.PerformAttack();
+                return; // Exit to avoid the default attack logic
+            }
+        }
+
+        // Default attack logic (if no TestItem is held)
         canAttack = false;
         StartCoroutine(AttackCooldownRoutine());
 
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayers);
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
         foreach (Collider enemy in hitEnemies)
         {
             hp_system hpSystem = enemy.GetComponent<hp_system>();
             if (hpSystem != null)
             {
-                hpSystem.take_damage(5);
-                //Debug.Log("We hit " + enemy.name);
+                hpSystem.take_damage(5); // Default damage
+                // Debug.Log("We hit " + enemy.name);
             }
         }
     }

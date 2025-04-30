@@ -12,8 +12,12 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private PlayerInputManager getInput;
     [SerializeField] private Transform handPosition; // Reference to the player's hand position
     [SerializeField] private ItemSlotHandler itemSlotHandler; // Reference to the ItemSlotHandler
+    [SerializeField] private string crimson_sword = "crimson_sword"; // Reference to a tag
+    [SerializeField] private string katana = "katana"; // Reference to a tag
 
     public TestItem currentlyHeldItem; // Reference to the currently held item
+
+    // public CrimsonSword currentlyHeldItem2; // Reference to the currently held item
 
     private void Start()
     {
@@ -127,3 +131,4 @@ public class PlayerInteraction : MonoBehaviour
         currentlyHeldItem = null; // Clear the reference to the held item
     }
 }
+
