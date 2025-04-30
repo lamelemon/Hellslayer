@@ -5,6 +5,7 @@ public class TestItem : MonoBehaviour
 {
     public string itemName = "TestItem"; // Name of the item
     public int itemValue = 10;           // Value of the item
+    public Sprite itemIcon; // Icon for the item
     
     public Quaternion ItemRotation = Quaternion.Euler(0, 0, 0);// Rotation of the item
     public Vector3 ItemPosition = new(0, 0, 0); // Position of the item

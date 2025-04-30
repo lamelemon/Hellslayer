@@ -6,8 +6,9 @@ public class ResumeButton : MonoBehaviour
     public GameObject quit_button;
     public RectTransform healthBar; // Reference to the health bar's RectTransform
     public RectTransform staminaBar; // Reference to the stamina bar's RectTransform
-
     public RectTransform combatstaminaBar; // Reference to the combat stamina bar's RectTransform
+    public RectTransform itemSlot1Panel; // Reference to the first item slot panel's RectTransform
+    public RectTransform itemSlot2Panel; // Reference to the second item slot panel's RectTransform
 
     void Update()
     {
@@ -57,6 +58,28 @@ public class ResumeButton : MonoBehaviour
 
             // Offset the stamina bar by 20 pixels from the left and 100 pixels from the bottom
             combatstaminaBar.anchoredPosition = new Vector2(20, 10);
+        }
+
+        if (itemSlot1Panel != null)
+        {
+            // Anchor the first item slot panel to the bottom-right corner
+            itemSlot1Panel.anchorMin = new Vector2(1, 0); // Bottom-right corner
+            itemSlot1Panel.anchorMax = new Vector2(1, 0); // Bottom-right corner
+            itemSlot1Panel.pivot = new Vector2(1, 0);     // Pivot at the bottom-right corner
+
+            // Offset the first item slot panel by 20 pixels from the right and 10 pixels from the bottom
+            itemSlot1Panel.anchoredPosition = new Vector2(-90, 10);
+        }
+        
+        if (itemSlot2Panel != null)
+        {
+            // Anchor the second item slot panel to the bottom-right corner
+            itemSlot2Panel.anchorMin = new Vector2(1, 0); // Bottom-right corner
+            itemSlot2Panel.anchorMax = new Vector2(1, 0); // Bottom-right corner
+            itemSlot2Panel.pivot = new Vector2(1, 0);     // Pivot at the bottom-right corner
+
+            // Offset the second item slot panel by 20 pixels from the right and 10 pixels from the bottom
+            itemSlot2Panel.anchoredPosition = new Vector2(-20, 10);
         }
     }
 }

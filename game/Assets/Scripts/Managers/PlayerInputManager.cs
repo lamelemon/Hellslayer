@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 public class PlayerInputManager : MonoBehaviour
 {
     public InputAction MoveInput { get; private set; }
+    public InputAction ItemSlot1Input { get; private set; }
+    public InputAction ItemSlot2Input { get; private set; }
     public InputAction MenuInput { get; private set; }
     public InputAction JumpInput { get; private set; }
     public InputAction SprintInput { get; private set; }
@@ -18,6 +20,8 @@ public class PlayerInputManager : MonoBehaviour
 
     private void Awake()
     {
+        ItemSlot1Input = InputSystem.actions.FindAction("ItemSlot1Input");
+        ItemSlot2Input = InputSystem.actions.FindAction("ItemSlot2Input");
         MoveInput = InputSystem.actions.FindAction("MovementInput");
         MenuInput = InputSystem.actions.FindAction("MenuInput");
         JumpInput = InputSystem.actions.FindAction("JumpInput");
@@ -38,6 +42,8 @@ public class PlayerInputManager : MonoBehaviour
 
     private void OnEnable()
     {
+        ItemSlot1Input.Enable();
+        ItemSlot2Input.Enable();
         MoveInput.Enable();
         MenuInput.Enable();
         JumpInput.Enable();
@@ -52,6 +58,8 @@ public class PlayerInputManager : MonoBehaviour
 
     private void OnDisable()
     {
+        ItemSlot1Input.Disable();
+        ItemSlot2Input.Disable();
         MoveInput.Disable();
         MenuInput.Disable();
         JumpInput.Disable();
