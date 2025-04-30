@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -62,12 +63,17 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void QuitGame()
+    public void MainMenu()
     {
-        Debug.Log("Quitting game...");
-        Application.Quit(); // Quit the application
+        SceneTracker.lastScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("Main_Menu"); // Load the main menu scene
     }
 
+    public void optionsMenu()
+    {
+        SceneTracker.lastScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("Options"); // Load the options menu scene
+    }
     public void ResumeButton()
     {
         pauseMenuUI.SetActive(false); // Hide the pause menu
