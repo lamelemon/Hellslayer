@@ -12,7 +12,12 @@ public class PlayerRunState : PlayerState // This is part of the player finite S
     }
     public override void UpdateState()
     {
-        if (player.moveInput.magnitude <= 0.1f)
+        if (player.isJumping && player.IsGrounded && player.readyToJump) // not nesesary but trying make smoother transition to ujmp state
+        {
+            stateMachine.ChangeState(new PlayerJumpState(player, stateMachine));
+        }
+
+        else if (player.moveInput.magnitude <= 0.1f)
         {
             stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
         }

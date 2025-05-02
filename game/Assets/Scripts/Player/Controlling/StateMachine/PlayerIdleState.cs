@@ -10,9 +10,13 @@ public class PlayerIdleState : PlayerState // This is part of the player finite 
         //Debug.Log("Entering idle State");
         // Any logic you want to trigger when entering the run state, like setting animations, etc.
     }
-    public override void UpdateState()
+    public override void UpdateState() // Member to you dont need make transitions to all states to all states. Make only base of the state the valid transitions
     {
-        if (player.moveInput.magnitude > 0.1f)
+        if (player.isJumping && player.IsGrounded && player.readyToJump)
+        {
+            stateMachine.ChangeState(new PlayerJumpState(player, stateMachine));
+        }
+        else if (player.moveInput.magnitude > 0.1f)
         {
             stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
         }

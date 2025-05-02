@@ -35,7 +35,6 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     // Dependencies
     [Header("Dependencies")]
     public Transform orientation; // Object used to orient the player
-    public Camera targetCamera; // Camera used for player efffects
 
     // Input and state variables
     [HideInInspector] public bool isSprinting = false; // Is the player sprinting?
@@ -82,7 +81,6 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
 
     private void Start()
     {
-        targetCamera.fieldOfView = BaseFieldOfView;
         // Initialize the state machine with the idle state
         stateMachine.Initialize(new PlayerIdleState(this, stateMachine));
     }

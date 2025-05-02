@@ -13,7 +13,11 @@ public class PlayerWalkState : PlayerState // This is part of the player finite 
     }
     public override void UpdateState()
     {
-        if (player.moveInput.magnitude <= 0.1f)
+        if (player.isSprinting && player.moveInput.magnitude > 0.1f)
+        {
+            stateMachine.ChangeState(new PlayerRunState(player, stateMachine));
+        }
+        else if (player.moveInput.magnitude <= 0.1f)
         {
             stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
         }
