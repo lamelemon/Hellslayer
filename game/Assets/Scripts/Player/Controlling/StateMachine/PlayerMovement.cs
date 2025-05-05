@@ -10,16 +10,17 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerMovement : MonoBehaviour // Part of the player finite StateMachine
 {
+    // !!! The values that are now in variables are tested values
     // Movement settings
     [Header("Movement Settings")]
-    [Range(0.001f, 100.0f)] public float deceleration = 0.1f; // Deceleration factor
-    [Range(10f, 150f)] public float walkAcceleration; // Acceleration while walking
-    [Range(1f, 150f)] public float walkMaxSpeed = 12f; // Maximum walking speed
-    [Range(10f, 150f)] public float sprintAcceleration = 5f; // Acceleration while sprinting
-    [Range(1f, 150f)] public float sprintMaxSpeed = 20f; // Maximum sprinting speed
-    [Range(0f, 10f)] public float groundDrag = 4f; // Drag applied when grounded
-    public float jumpForce = 5f; // Force applied when jumping
-    public float jumpCooldown = 5f; // Cooldown time between jumps
+    [Range(0.001f, 100.0f)] public float deceleration = 0.001f; // Deceleration factor
+    [Range(10f, 150f)] public float walkAcceleration = 20f; // Acceleration while walking
+    [Range(1f, 150f)] public float walkMaxSpeed = 5f; // Maximum walking speed
+    [Range(10f, 150f)] public float sprintAcceleration = 21f; // Acceleration while sprinting
+    [Range(1f, 150f)] public float sprintMaxSpeed = 7.15f; // Maximum sprinting speed
+    [Range(0f, 10f)] public float groundDrag = 1.3f; // Drag applied when grounded
+    public float jumpForce = 10f; // Force applied when jumping
+    public float jumpCooldown = 0.58f; // Cooldown time between jumps
     [HideInInspector] public float lastJumpTime; // Timestamp of the last jump
 
     [Header("Effects Settings")]
@@ -35,6 +36,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     // Dependencies
     [Header("Dependencies")]
     public Transform orientation; // Object used to orient the player
+    public Animator ArmsAnimator;
 
     // Input and state variables
     [HideInInspector] public bool isSprinting = false; // Is the player sprinting?
@@ -49,6 +51,8 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     private InputAction jumpAction; // Jump input action
 
     public PlayerStateMachine stateMachine; // Player state machine
+
+    int SpeedHash; // Hash for speed parameter in animator
 
     private void Awake()
     {
@@ -81,6 +85,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
 
     private void Start()
     {
+        SpeedHash = Animator.StringToHash("Speed"); // Hash for speed parameter in animator
         // Initialize the state machine with the idle state
         stateMachine.Initialize(new PlayerIdleState(this, stateMachine));
     }
@@ -111,7 +116,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         }
         else if (isSprinting && moveInput.magnitude > 0.1f)
         {
-            stateMachine.ChangeState(new PlayerRunState(this, stateMachine));
+            stateMachine.ChangeState(new PlayerSprintState(this, stateMachine));
         }
         else if (moveInput.magnitude > 0.1f)
         {
@@ -121,6 +126,22 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         {
             stateMachine.ChangeState(new PlayerIdleState(this, stateMachine));
         }
+
+        // Update animator speed parameter (0.0 to 1.0 based on velocity)
+
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        float horizontalSpeed = horizontalVelocity.magnitude;
+
+        // Apply threshold to prevent tiny floating point noise
+        if (horizontalSpeed < 0.01f)
+            horizontalSpeed = 0f;
+
+        float normalizedSpeed = horizontalSpeed / sprintMaxSpeed;
+        ArmsAnimator.SetFloat("Speed", Mathf.Clamp01(normalizedSpeed));
+
+        Debug.Log(ArmsAnimator.GetFloat("Speed"));
+
+
 
         // Delegate update logic to the current state
         stateMachine.currentState.UpdateState();

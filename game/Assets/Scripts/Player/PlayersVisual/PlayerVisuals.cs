@@ -25,8 +25,11 @@ public class PlayerVisuals : MonoBehaviour
     {
         if (playerRigidbody == null || playerCam == null) return;
 
+
+        // !!! Code has some issues !!! to go fully 0f // but its works :] good enough for now
         // Ignore Y-axis velocity
         float currentSpeed = new Vector3(playerRigidbody.linearVelocity.x, 0, playerRigidbody.linearVelocity.z).magnitude;
+        //Debug.Log(currentSpeed);
         float targetFov = Mathf.Lerp(baseFov, maxFov, currentSpeed / 10f);
         playerCam.fieldOfView = Mathf.Lerp(playerCam.fieldOfView, targetFov, Time.deltaTime * fovChangeSpeed);
         // use this way make velocity basesd run sound
