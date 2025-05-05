@@ -876,8 +876,6 @@ MonoBehaviour:
   jumpForce: 10
   jumpCooldown: 0.56
   lastJumpTime: 0
-  BaseFieldOfView: 95
-  SprintFieldOfView: 105
   playerCollider: {fileID: 618725302}
   orientation: {fileID: 502593789}
   ArmsAnimator: {fileID: 1425904545}
@@ -941,7 +939,7 @@ MonoBehaviour:
   fovChangeSpeed: 6
   maxFov: 120
   playerCam: {fileID: 1054901341}
-  playerRigidbody: {fileID: 1014629442}
+  playerRigidbody: {fileID: 0}
 --- !u!1 &1054901336
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,10 +23,6 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     public float jumpCooldown = 0.58f; // Cooldown time between jumps
     [HideInInspector] public float lastJumpTime; // Timestamp of the last jump
 
-    [Header("Effects Settings")]
-    [Range(1f, 179.0f)] public float BaseFieldOfView = 95.0f; // Duration of the jump effect
-    [Range(1f, 179.0f)] public float SprintFieldOfView = 105.0f; // Duration of the jump effect
-
     // Ground detection settings
     [Header("Ground Detection Settings")]
     public CapsuleCollider playerCollider; // Reference to the player's CapsuleCollider
@@ -52,7 +48,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
 
     public PlayerStateMachine stateMachine; // Player state machine
 
-    int SpeedHash; // Hash for speed parameter in animator
+
 
     private void Awake()
     {
@@ -85,33 +81,21 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
 
     private void Start()
     {
-        SpeedHash = Animator.StringToHash("Speed"); // Hash for speed parameter in animator
         // Initialize the state machine with the idle state
         stateMachine.Initialize(new PlayerIdleState(this, stateMachine));
     }
 
+
+
     private void Update()
     {
-        // Apply drag when grounded
-        if (IsGrounded)
-        {
-            rb.linearDamping = groundDrag; // Apply drag when grounded
-        }
-        else
-        {
-            rb.linearDamping = groundDrag; // No drag in the air
-        }
-        //rb.linearDamping = IsGrounded ? groundDrag : 0f;
+        GroundDrag(); // Apply drag when grounded
+        InputsValuesReader(); // Read input values
 
-        // Read input values
-        moveInput = moveAction.ReadValue<Vector2>();
-        isSprinting = sprintAction.ReadValue<float>() > 0.1f;
-        isJumping = jumpAction.ReadValue<float>() > 0;
 
         // Handle state transitions based on input and conditions
         if (isJumping && IsGrounded && readyToJump)
         {
-            //Debug.Log("jump");
             stateMachine.ChangeState(new PlayerJumpState(this, stateMachine));
         }
         else if (isSprinting && moveInput.magnitude > 0.1f)
@@ -127,21 +111,8 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
             stateMachine.ChangeState(new PlayerIdleState(this, stateMachine));
         }
 
-        // Update animator speed parameter (0.0 to 1.0 based on velocity)
-
-        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        float horizontalSpeed = horizontalVelocity.magnitude;
-
-        // Apply threshold to prevent tiny floating point noise
-        if (horizontalSpeed < 0.01f)
-            horizontalSpeed = 0f;
-
-        float normalizedSpeed = horizontalSpeed / sprintMaxSpeed;
-        ArmsAnimator.SetFloat("Speed", Mathf.Clamp01(normalizedSpeed));
-
-        Debug.Log(ArmsAnimator.GetFloat("Speed"));
-
-
+        
+        ArmsAnimatorSpeedVariable(); // Update animator speed parameter (0.0 to 1.0 based on velocity)
 
         // Delegate update logic to the current state
         stateMachine.currentState.UpdateState();
@@ -153,8 +124,9 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         stateMachine.currentState.FixedUpdateState();
     }
 
-    // Ground detection using collision events
-    private void OnCollisionEnter(Collision collision)
+
+
+    private void OnCollisionEnter(Collision collision) // Ground detection Enter -using collision events
     {
         foreach (ContactPoint contact in collision.contacts)
         {
@@ -172,7 +144,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    private void OnCollisionExit(Collision collision) // Ground detection Exit
     {
         // Remove the collider from the list when the collision ends
         if (feetColliders.Contains(collision.collider))
@@ -180,6 +152,44 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
             feetColliders.Remove(collision.collider);
         }
     }
+
+    private void GroundDrag()
+    {
+        // Apply drag when grounded
+        if (IsGrounded)
+        {
+            rb.linearDamping = groundDrag; // Apply drag when grounded
+        }
+        else
+        {
+            rb.linearDamping = groundDrag; // No drag in the air
+        }
+    }
+
+    private void InputsValuesReader()
+    {
+        // Read input values
+        moveInput = moveAction.ReadValue<Vector2>();
+        isSprinting = sprintAction.ReadValue<float>() > 0.1f;
+        isJumping = jumpAction.ReadValue<float>() > 0;
+    }
+
+    private void ArmsAnimatorSpeedVariable()
+    {
+        // Update animator speed parameter (0.0 to 1.0 based on velocity)
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        float horizontalSpeed = horizontalVelocity.magnitude;
+
+        // Apply threshold to prevent tiny floating point noise
+        if (horizontalSpeed < 0.01f)
+            horizontalSpeed = 0f;
+
+        float normalizedSpeed = horizontalSpeed / sprintMaxSpeed;
+        ArmsAnimator.SetFloat("Speed", Mathf.Clamp01(normalizedSpeed));
+        //Debug.Log(ArmsAnimator.GetFloat("Speed"));
+    }
+
+    // *Not nesesary functions/code
 
     // Visualize the feet level in the editor
     private void OnDrawGizmos()
