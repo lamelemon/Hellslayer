@@ -23,23 +23,26 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     public float jumpCooldown = 0.58f; // Cooldown time between jumps
     [HideInInspector] public float lastJumpTime; // Timestamp of the last jump
 
-    // Ground detection settings
-    [Header("Ground Detection Settings")]
-    public CapsuleCollider playerCollider; // Reference to the player's CapsuleCollider
-    private List<Collider> feetColliders = new List<Collider>(); // Colliders at feet level
-    public bool IsGrounded => feetColliders.Count > 0; // Check if the player is grounded
+    [Header("Sound Settings")]
+    [Range(0.01f, 20.0f)] public float JumpSoundPitchMin = 0.70f;
+    [Range(0.01f, 20.0f)] public float JumpSoundPitchMax = 0.82f;
 
     // Dependencies
     [Header("Dependencies")]
     public Transform orientation; // Object used to orient the player
     public Animator ArmsAnimator;
 
+    // Ground detection Settings/Dependencies
+    public CapsuleCollider playerCollider; // Reference to the player's CapsuleCollider
+    private List<Collider> feetColliders = new List<Collider>(); // Colliders at feet level
+    public bool IsGrounded => feetColliders.Count > 0; // Check if the player is grounded
     // Input and state variables
     [HideInInspector] public bool isSprinting = false; // Is the player sprinting?
     [HideInInspector] public Rigidbody rb; // Rigidbody component
     [HideInInspector] public Vector2 moveInput; // Movement input
     [HideInInspector] public bool isJumping; // Is the player attempting to jump?
     [HideInInspector] public bool readyToJump = true; // Is the player ready to jump?
+    [HideInInspector] public float ZeroToOneMaxSpeed; // Speed variable for animator (0.0 to 1.0 based on velocity)
 
     private PlayerInput playerInput; // Input system reference
     private InputAction moveAction; // Movement input action
@@ -185,7 +188,8 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
             horizontalSpeed = 0f;
 
         float normalizedSpeed = horizontalSpeed / sprintMaxSpeed;
-        ArmsAnimator.SetFloat("Speed", Mathf.Clamp01(normalizedSpeed));
+        ZeroToOneMaxSpeed = Mathf.Clamp01(normalizedSpeed); // Clamp the value between 0.0 and 1.0
+        ArmsAnimator.SetFloat("Speed", ZeroToOneMaxSpeed);
         //Debug.Log(ArmsAnimator.GetFloat("Speed"));
     }
 

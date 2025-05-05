@@ -30,15 +30,9 @@ public class PlayerJumpState : PlayerState // This is part of the player finite 
             }
         }
     }
-
-    /*private void Jump()
-    {
-        player.rb.linearVelocity = new Vector3(player.rb.linearVelocity.x, 0f, player.rb.linearVelocity.z); // reset y velocity
-        player.rb.AddForce(player.transform.up * player.jumpForce, ForceMode.Impulse);
-        player.readyToJump = true; // Reset jump state after applying force
-    }*/
     private void Jump()
     {
+        Sound(); // Play jump sound effect
         // Preserve horizontal velocity (x and z components)
         Vector3 horizontalVelocity = new Vector3(player.rb.linearVelocity.x, 0f, player.rb.linearVelocity.z);
 
@@ -52,4 +46,10 @@ public class PlayerJumpState : PlayerState // This is part of the player finite 
         player.readyToJump = true;
     }
 
+    private void Sound()
+    {
+        float JumpRandomPitch = UnityEngine.Random.Range(player.JumpSoundPitchMin, player.JumpSoundPitchMax);
+        // Play jump sound effect
+        audio_manager.Instance.PlaySFX("PlayerJump", JumpRandomPitch);
+    }
 }

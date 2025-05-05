@@ -35,7 +35,6 @@ public class PlayerSprintState : PlayerState // This is part of the player finit
 
         // Get current horizontal velocity
         Vector3 horizontalVelocity = new Vector3(player.rb.linearVelocity.x, 0f, player.rb.linearVelocity.z);
-
         // If under max speed, apply acceleration force
         if (horizontalVelocity.magnitude < player.sprintMaxSpeed)
         {
