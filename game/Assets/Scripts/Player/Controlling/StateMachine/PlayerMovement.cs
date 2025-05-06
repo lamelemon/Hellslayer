@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     public Animator ArmsAnimator;
 
     // Ground detection Settings/Dependencies
-    public CapsuleCollider playerCollider; // Reference to the player's CapsuleCollider
+    public CapsuleCollider GroundCollider; // Reference to the player's CapsuleCollider
     private List<Collider> feetColliders = new List<Collider>(); // Colliders at feet level
     public bool IsGrounded => feetColliders.Count > 0; // Check if the player is grounded
     // Input and state variables
@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     [HideInInspector] public Vector2 moveInput; // Movement input
     [HideInInspector] public bool isJumping; // Is the player attempting to jump?
     [HideInInspector] public bool readyToJump = true; // Is the player ready to jump?
-    [HideInInspector] public float ZeroToOneMaxSpeed; // Speed variable for animator (0.0 to 1.0 based on velocity)
+    [HideInInspector] public float ZeroToOneMaxSpeed; // Speed variable for animator (0.0 to 1.0 based on velocity / max sprint speed)
 
     private PlayerInput playerInput; // Input system reference
     private InputAction moveAction; // Movement input action
@@ -134,7 +134,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         foreach (ContactPoint contact in collision.contacts)
         {
             // Calculate the feet level (center - extents.y)
-            float feetLevel = playerCollider.bounds.center.y - playerCollider.bounds.extents.y;
+            float feetLevel = GroundCollider.bounds.center.y - GroundCollider.bounds.extents.y;
 
             // If the contact point is at feet level, add the collider to the list
             if (Mathf.Abs(contact.point.y - feetLevel) < 0.1f) // Tolerance to check feet level
@@ -198,12 +198,12 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     // Visualize the feet level in the editor
     private void OnDrawGizmos()
     {
-        if (playerCollider != null)
+        if (GroundCollider != null)
         {
-            float feetLevel = playerCollider.bounds.center.y - playerCollider.bounds.extents.y;
+            float feetLevel = GroundCollider.bounds.center.y - GroundCollider.bounds.extents.y;
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(new Vector3(playerCollider.bounds.min.x, feetLevel, playerCollider.bounds.min.z),
-                            new Vector3(playerCollider.bounds.max.x, feetLevel, playerCollider.bounds.max.z));
+            Gizmos.DrawLine(new Vector3(GroundCollider.bounds.min.x, feetLevel, GroundCollider.bounds.min.z),
+                            new Vector3(GroundCollider.bounds.max.x, feetLevel, GroundCollider.bounds.max.z));
         }
     }
 }
