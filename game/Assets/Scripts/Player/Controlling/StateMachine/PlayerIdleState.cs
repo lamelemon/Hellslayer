@@ -24,7 +24,7 @@ public class PlayerIdleState : PlayerState // This is part of the player finite 
 
     public override void FixedUpdateState()
     {
-        // Stay still in idle and  apply a small deceleration to the player	
+        // Stay still in idle and apply a small deceleration to the player	
         Vector3 IdleDeceleration = new Vector3(player.rb.linearVelocity.x, 0, player.rb.linearVelocity.z) * player.deceleration;
         player.rb.AddForce(IdleDeceleration, ForceMode.VelocityChange);
     }

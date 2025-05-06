@@ -1,48 +1,101 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using UnityEngine.AI;
 
 // Notes:
+// NavMesh.CalculatePath docs: https://docs.unity3d.com/ScriptReference/AI.NavMesh.CalculatePath.html
+// Using [SerializeField] private - - for variables that can be chanced in editor but cant be accessed from other scripts other than this one
+// The settings are good, but member the rigibody settings e.g mass.
 
 [RequireComponent(typeof(Rigidbody))]
 public class SpikyMovement : MonoBehaviour
 {
-    [Header("Movement Settings")]
-    [Range(0f, 10f)] public float groundDrag = 1.3f; // Drag applied when grounded
-
-    [Header("Dependencies")]
-    [HideInInspector] public Rigidbody rb;
     public SpikyStateMachine stateMachine;
 
-    // Ground detection Settings/Dependencies
-    public SphereCollider GroundCollider; // Reference to the player's CapsuleCollider
+    [Header("Movement Settings")]
+    public float Deceleration = 0.001f; // Deceleration when not moving
+    public float chaseAcceleration = 13f; // Movement speed when targeting the player
+    public float chaseMaxSpeed = 25f; // Maximum velocity for the enemy
+    [SerializeField] private float groundDrag = 0.003f; // Drag applied when grounded
+    [SerializeField] private float Mass = 1f; // Mass of the enemy
+
+    [Header("Dedection/Pathfinding Settings")]
+    [SerializeField] private float WatchRange = 20f;
+
+    [Header("Dependencies")]
+    [SerializeField] private SphereCollider GroundCollider;
+
+    [HideInInspector] public Rigidbody rb;
+
+    // Ground
     private List<Collider> feetColliders = new List<Collider>(); // Colliders at feet level
     public bool IsGrounded => feetColliders.Count > 0; // Check if the player is grounded
 
+    // Pathfinding
+    [HideInInspector] public Transform target; // Variable to store the target's transform
+    private NavMeshPath path;
+    private float elapsed = 0.0f;
+    
 
-    private void Awake() 
+
+
+    private void Awake() // Initialize components and state machine
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true; // Prevent tipping over
-        // Initialize components and state machine
+        
         stateMachine = new SpikyStateMachine();
     }
 
     private void Start() 
     {
+        path = new NavMeshPath();
+        elapsed = 0.0f;
+        rb.mass = Mass;
+        target = player_manager.instance.player.transform; // Assign the player's transform to the target.. *Better perfromance this way
         stateMachine.Initialize(new SpikyIdleState(this, stateMachine)); // Initialize the state machine with the idle state
     }
 
     private void Update() 
     {
         GroundDrag(); // Apply drag when grounded
-        if (1 == 1) // Handle state transitions based on input and conditions
+
+        elapsed += Time.deltaTime; // keep track of the time elapsed since the last pathfinding update
+        if (IsPlayerWatchRange())
         {
-            stateMachine.ChangeState(new SpikyIdleState(this, stateMachine));
+            if (elapsed > 1.0f)
+            {
+                PathFinding();
+            }
+
+            stateMachine.ChangeState(new SpikyChaseState(this, stateMachine)); // start chase if in watch range and update pathfinding if elapsed time is greater than 1 second
+        }
+        else
+        {
+            stateMachine.ChangeState(new SpikyIdleState(this, stateMachine)); // start idle if out of watch range
         }
 
-        
         stateMachine.currentState.UpdateState(); // Delegate update logic to the current state
+    }
+    private void PathFinding()
+    {
+        // Update the way to the goal every second.
+        //elapsed += Time.deltaTime;
+        //if (elapsed > 1.0f)
+        //{
+        elapsed -= 1.0f; // Reset elapsed time
+        // Calculate the path to the target position
+        NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
+        //}
+        for (int i = 0; i < path.corners.Length - 1; i++)
+            Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+    }
+
+    public bool IsPlayerWatchRange()
+    {
+        float sqrDistance = (target.position - transform.position).sqrMagnitude;
+        return sqrDistance <= WatchRange * WatchRange;
     }
 
     private void FixedUpdate()
@@ -50,8 +103,6 @@ public class SpikyMovement : MonoBehaviour
         
         stateMachine.currentState.FixedUpdateState(); // Delegate physics-related logic to the current state
     }
-
-
 
     private void OnCollisionEnter(Collision collision) // Ground detection Enter -using collision events
     {
@@ -96,6 +147,8 @@ public class SpikyMovement : MonoBehaviour
     {
         if (GroundCollider != null)
         {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(transform.position, WatchRange);
             float feetLevel = GroundCollider.bounds.center.y - GroundCollider.bounds.extents.y;
             Gizmos.color = Color.red;
             Gizmos.DrawLine(new Vector3(GroundCollider.bounds.min.x, feetLevel, GroundCollider.bounds.min.z),

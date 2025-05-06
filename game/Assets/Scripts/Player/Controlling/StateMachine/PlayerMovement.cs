@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
     [Range(1f, 150f)] public float walkMaxSpeed = 5f; // Maximum walking speed
     [Range(10f, 150f)] public float sprintAcceleration = 21f; // Acceleration while sprinting
     [Range(1f, 150f)] public float sprintMaxSpeed = 7.15f; // Maximum sprinting speed
-    [Range(0f, 10f)] public float groundDrag = 1.3f; // Drag applied when grounded
+    [SerializeField] [Range(0f, 10f)] private float groundDrag = 1.3f; // Drag applied when grounded
     public float jumpForce = 10f; // Force applied when jumping
     public float jumpCooldown = 0.58f; // Cooldown time between jumps
     [HideInInspector] public float lastJumpTime; // Timestamp of the last jump
