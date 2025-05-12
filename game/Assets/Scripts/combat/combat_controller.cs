@@ -29,7 +29,11 @@ public class combat_controller : MonoBehaviour
     [Header("")]
     
     private bool canAttack = true;
-    
+
+    void Awake()
+    {
+        enemyLayer = LayerMask.GetMask("enemy_1");
+    }
     void Update()
     {
         if (getInput.AttackInput.WasPressedThisFrame() && !PauseMenu.isPaused)
@@ -55,7 +59,7 @@ public class combat_controller : MonoBehaviour
     void Attack()
     {
         if (!canAttack) return;
-
+        print("Attacking!");
         // Check if the player is holding an item with the TestItem script
         if (playerItemInteraction.currentlyHeldItem != null)
         {
@@ -67,21 +71,24 @@ public class combat_controller : MonoBehaviour
                 return; // Exit to avoid the default attack logic
             }
         }
-
-        // Default attack logic (if no TestItem is held)
-        canAttack = false;
-        StartCoroutine(AttackCooldownRoutine());
-
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
-        foreach (Collider enemy in hitEnemies)
+        else
         {
-            hp_system hpSystem = enemy.GetComponent<hp_system>();
-            if (hpSystem != null)
+            Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
+            //print(hitEnemies.Length);
+            foreach (Collider enemy in hitEnemies)
             {
-                hpSystem.take_damage(5); // Default damage
-                // Debug.Log("We hit " + enemy.name);
+                hp_system hpSystem = enemy.GetComponent<hp_system>();
+                if (hpSystem != null)
+                {
+                    hpSystem.take_damage(5); // Default damage
+                    // Debug.Log("We hit " + enemy.name);
+                }
             }
         }
+
+        // Default attack logic
+        canAttack = false;
+        StartCoroutine(AttackCooldownRoutine());
     }
 
     IEnumerator AttackCooldownRoutine()
