@@ -9,6 +9,8 @@ TagManager:
   - PlayerHitbox
   - handPosition
   - crosshair
+  - crimson_sword
+  - katana
   layers:
   - Default
   - TransparentFX
@@ -21,7 +23,7 @@ TagManager:
   - enemy_1
   - wall
   - Loot
-  - 
+  - enemyLayer
   - 
   - 
   - 
