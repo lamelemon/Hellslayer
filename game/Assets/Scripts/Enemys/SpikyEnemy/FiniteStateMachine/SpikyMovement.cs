@@ -18,14 +18,18 @@ public class SpikyMovement : MonoBehaviour
     public float chaseAcceleration = 13f; // Movement speed when targeting the player
     public float chaseMaxSpeed = 25f; // Maximum velocity for the enemy
     [SerializeField] private float groundDrag = 0.003f; // Drag applied when grounded
-    [SerializeField] private float Mass = 1f; // Mass of the enemy
-    [SerializeField] private float PathFindingUpdateTime = 0.5f; // Time interval for pathfinding updates
+    [SerializeField] private float Mass = 2f; // Mass of the enemy
+    [SerializeField] private float PathFindingUpdateTime = 0.2f; // Time interval for pathfinding updates
 
     [Header("Dedection/Pathfinding Settings")]
-    [SerializeField] private float WatchRange = 20f;
+    [SerializeField] private float WatchRange = 30f;
 
     [Header("Dependencies")]
     [SerializeField] private SphereCollider GroundCollider;
+    public Animator Animator;
+    public GameObject Visuals; // Reference to the enemy visuals
+    [Header("Visuals Settings")]
+    [SerializeField] private float turnSpeed = 5f;
 
     [HideInInspector] public Rigidbody rb;
 
@@ -37,6 +41,7 @@ public class SpikyMovement : MonoBehaviour
     [HideInInspector] public Transform target; // Variable to store the target's transform
     [HideInInspector] public NavMeshPath path;
     private float elapsed = 0.0f;
+    [HideInInspector] public float ZeroToOneMaxSpeed; // Speed variable for animator (0.0 to 1.0 based on velocity / max sprint speed)
     
 
 
@@ -76,7 +81,8 @@ public class SpikyMovement : MonoBehaviour
         {
             stateMachine.ChangeState(new SpikyIdleState(this, stateMachine)); // start idle if out of watch range
         }
-
+        AnimatorSpeedVariable(); // Update animator speed parameter (0.0 to 1.0 based on velocity)
+        RotateVisuals(); // Rotate the enemy visuals to face the movement direction
         stateMachine.currentState.UpdateState(); // Delegate update logic to the current state
     }
     private void PathFinding()
@@ -89,6 +95,29 @@ public class SpikyMovement : MonoBehaviour
         //Debug.Log($"Path corners count: {path.corners.Length}");
         for (int i = 0; i < path.corners.Length - 1; i++)
             Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
+    }
+    private void RotateVisuals()
+    {
+        Vector3 directionToTarget = target.position - transform.position;
+        directionToTarget.y = 0f; // Keep movement in the XZ plane
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        Visuals.transform.rotation = Quaternion.Slerp(Visuals.transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
+    }
+    private void AnimatorSpeedVariable()
+    {
+        // Update animator speed parameter (0.0 to 1.0 based on velocity)
+        Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
+        float horizontalSpeed = horizontalVelocity.magnitude;
+
+        // Apply threshold to prevent tiny floating point noise
+        if (horizontalSpeed < 0.01f)
+            horizontalSpeed = 0f;
+
+        float normalizedSpeed = horizontalSpeed / chaseMaxSpeed;
+        ZeroToOneMaxSpeed = Mathf.Clamp01(normalizedSpeed); // Clamp the value between 0.0 and 1.0
+        Animator.SetFloat("Speed", ZeroToOneMaxSpeed);
+        Debug.Log(Animator.GetFloat("Speed"));
     }
 
     public bool IsPlayerWatchRange()
