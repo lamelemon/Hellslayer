@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -12,14 +13,16 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         // Ensure the pause menu is hidden at the start of the game
-        if (pauseMenuUI != null)
+        if (pauseMenuUI != null && BackButton.JustVisitedOptions == false)
         {
-            pauseMenuUI.SetActive(false);
+            Resume(); // Hide the pause menu and resume the game
         }
 
-        // Lock and hide the cursor at the start of the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        else if (BackButton.JustVisitedOptions == true)
+        {
+            Pause();
+            BackButton.JustVisitedOptions = false; // Reset the flag after using it
+        }
     }
 
     void Update()
@@ -62,12 +65,17 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void QuitGame()
+    public void MainMenu()
     {
-        Debug.Log("Quitting game...");
-        Application.Quit(); // Quit the application
+        SceneTracker.lastScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("Main_Menu"); // Load the main menu scene
     }
 
+    public void optionsMenu()
+    {
+        SceneTracker.lastScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("Options"); // Load the options menu scene
+    }
     public void ResumeButton()
     {
         pauseMenuUI.SetActive(false); // Hide the pause menu

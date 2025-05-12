@@ -13,7 +13,7 @@ public class audio_manager : MonoBehaviour
         if(Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
+            //DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -24,7 +24,7 @@ public class audio_manager : MonoBehaviour
     private void Start()
     {
         //PlayMusic("background music here The name")
-        PlayMusic("ambient_test");
+        PlayMusic("test");
     } 
     public void PlayMusic(string name)
     {
@@ -52,7 +52,7 @@ public class audio_manager : MonoBehaviour
         }
         else
         {
-            sfxSource.PlayOneShot(s.clip);
+            //sfxSource.PlayOneShot(s.clip);
             sfxSource.pitch = pitch; // Apply custom pitch
             sfxSource.PlayOneShot(s.clip);
         }

@@ -18,10 +18,10 @@ TagManager:
   - Player
   - Water
   - UI
-  - fps_camera
+  - FpsCamera
   - Ignore Overlaps
   - enemy_1
-  - wall
+  - 
   - Loot
   - enemyLayer
   - 

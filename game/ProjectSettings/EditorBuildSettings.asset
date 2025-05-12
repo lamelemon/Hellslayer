@@ -8,6 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/test/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/L-tests.unity
+    guid: 3be68709295ae6f41a2d18f5023d4c11
+  - enabled: 1
+    path: Assets/Scenes/Main_Menu.unity
+    guid: 357cc836c33e9c044b2dc3867afd7d84
+  - enabled: 1
+    path: Assets/Scenes/Options.unity
+    guid: 13c24d36c69434d4a8682a40f6b98bd6
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b982f469207956e4fa81e7e95ba48daf, type: 3}
   m_UseUCBPForAssetBundles: 0

@@ -36,7 +36,7 @@ public class combat_controller : MonoBehaviour
     }
     void Update()
     {
-        if (getInput.AttackInput.WasPressedThisFrame())
+        if (getInput.AttackInput.WasPressedThisFrame() && !PauseMenu.isPaused)
         {
             Attack_Clicked(true);
         }
