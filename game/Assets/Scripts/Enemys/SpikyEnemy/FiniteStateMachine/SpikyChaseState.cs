@@ -4,7 +4,7 @@ public class SpikyChaseState : SpikyState
 {
     public SpikyChaseState(SpikyMovement spiky, SpikyStateMachine stateMachine) 
         : base(spiky, stateMachine) { }
-
+    Vector3 moveDirection;
     public override void EnterState()
     {
         // Any logic you want to trigger when entering the chase state
@@ -21,8 +21,12 @@ public class SpikyChaseState : SpikyState
 
     public override void FixedUpdateState()
     {
+        moveDirection = (spiky.target.position - spiky.rb.transform.position).normalized;
         // Calculate direction towards the player
-        Vector3 moveDirection = (spiky.target.position - spiky.rb.transform.position).normalized;
+        if (spiky.path.corners.Length > 1)
+        {
+            moveDirection = (spiky.path.corners[1] - spiky.rb.transform.position).normalized;
+        }
 
         // Get current horizontal velocity
         Vector3 horizontalVelocity = new Vector3(spiky.rb.linearVelocity.x, 0f, spiky.rb.linearVelocity.z);

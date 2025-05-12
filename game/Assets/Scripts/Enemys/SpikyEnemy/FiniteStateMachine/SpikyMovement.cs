@@ -19,6 +19,7 @@ public class SpikyMovement : MonoBehaviour
     public float chaseMaxSpeed = 25f; // Maximum velocity for the enemy
     [SerializeField] private float groundDrag = 0.003f; // Drag applied when grounded
     [SerializeField] private float Mass = 1f; // Mass of the enemy
+    [SerializeField] private float PathFindingUpdateTime = 0.5f; // Time interval for pathfinding updates
 
     [Header("Dedection/Pathfinding Settings")]
     [SerializeField] private float WatchRange = 20f;
@@ -34,7 +35,7 @@ public class SpikyMovement : MonoBehaviour
 
     // Pathfinding
     [HideInInspector] public Transform target; // Variable to store the target's transform
-    private NavMeshPath path;
+    [HideInInspector] public NavMeshPath path;
     private float elapsed = 0.0f;
     
 
@@ -64,7 +65,7 @@ public class SpikyMovement : MonoBehaviour
         elapsed += Time.deltaTime; // keep track of the time elapsed since the last pathfinding update
         if (IsPlayerWatchRange())
         {
-            if (elapsed > 1.0f)
+            if (elapsed > PathFindingUpdateTime)
             {
                 PathFinding();
             }
@@ -80,14 +81,12 @@ public class SpikyMovement : MonoBehaviour
     }
     private void PathFinding()
     {
-        // Update the way to the goal every second.
-        //elapsed += Time.deltaTime;
-        //if (elapsed > 1.0f)
-        //{
-        elapsed -= 1.0f; // Reset elapsed time
+        elapsed -= PathFindingUpdateTime; // Reset elapsed time
         // Calculate the path to the target position
         NavMesh.CalculatePath(transform.position, target.position, NavMesh.AllAreas, path);
-        //}
+
+        // Log the number of corners in the path
+        //Debug.Log($"Path corners count: {path.corners.Length}");
         for (int i = 0; i < path.corners.Length - 1; i++)
             Debug.DrawLine(path.corners[i], path.corners[i + 1], Color.red);
     }
