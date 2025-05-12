@@ -94,6 +94,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ItemSlot1Input",
+                    "type": "Button",
+                    "id": "189e5eb5-162b-48ad-aff8-be88e8a77b20",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ItemSlot2Input",
+                    "type": "Button",
+                    "id": "9df30032-65a1-4683-b738-402a04799742",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -281,6 +299,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "DropInput",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ca986da7-42cd-4943-bc5e-b9addac01aa5",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ItemSlot1Input",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "874c80b4-94d2-43a8-afb5-967d94cd79f1",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ItemSlot2Input",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

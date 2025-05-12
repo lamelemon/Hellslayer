@@ -11,6 +11,7 @@ public class PlayerInteraction : MonoBehaviour
 
     [SerializeField] private PlayerInputManager getInput;
     [SerializeField] private Transform handPosition; // Reference to the player's hand position
+    [SerializeField] private ItemSlotHandler itemSlotHandler; // Reference to the ItemSlotHandler
     [SerializeField] private string crimson_sword = "crimson_sword"; // Reference to a tag
     [SerializeField] private string katana = "katana"; // Reference to a tag
 
@@ -52,21 +53,11 @@ public class PlayerInteraction : MonoBehaviour
             // Check if the object hit by the raycast has a TestItem component
             if (hit.collider.TryGetComponent<TestItem>(out TestItem item))
             {
-                // Display a message or UI prompt (optional)
                 Debug.Log($"Looking at {item.itemName}, press the pickup key to pick up");
 
-                // Check if the player presses the pickup key using GetInput
-                // Ensure the player can hold only one item at a time
-                if (getInput.PickupInput.WasPressedThisFrame() && currentlyHeldItem == null)
+                if (getInput.PickupInput.WasPressedThisFrame())
                 {
-                    MoveItemToHand(item);
-                    item.PickupInput(); // Call the pickup method on the item
-                }
-
-                else if (getInput.PickupInput.WasPressedThisFrame() && currentlyHeldItem != null)
-                {
-                    DropItem(); // Drop the item if already holding one
-                    MoveItemToHand(item);
+                    itemSlotHandler.PickUpItem(item);
                     item.PickupInput(); // Call the pickup method on the item
                 }
             }
@@ -76,6 +67,17 @@ public class PlayerInteraction : MonoBehaviour
         if (getInput.DropInput.WasPressedThisFrame() && currentlyHeldItem != null)
         {
             DropItem();
+            itemSlotHandler.DropItem(); // Call the drop method on the item slot handler
+        }
+
+        // Switch slots based on input
+        if (getInput.ItemSlot1Input.WasPressedThisFrame())
+        {
+            itemSlotHandler.SwitchSlot(1);
+        }
+        else if (getInput.ItemSlot2Input.WasPressedThisFrame())
+        {
+            itemSlotHandler.SwitchSlot(2);
         }
     }
 
@@ -99,7 +101,7 @@ public class PlayerInteraction : MonoBehaviour
         Debug.Log($"{item.itemName} has been picked up and moved to the hand.");
     }
 
-    private void DropItem()
+    public void DropItem()
     {
         if (currentlyHeldItem == null) return;
 
