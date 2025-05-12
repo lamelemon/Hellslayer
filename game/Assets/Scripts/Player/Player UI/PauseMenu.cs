@@ -13,14 +13,16 @@ public class PauseMenu : MonoBehaviour
     void Start()
     {
         // Ensure the pause menu is hidden at the start of the game
-        if (pauseMenuUI != null)
+        if (pauseMenuUI != null && BackButton.JustVisitedOptions == false)
         {
-            pauseMenuUI.SetActive(false);
+            Resume(); // Hide the pause menu and resume the game
         }
 
-        // Lock and hide the cursor at the start of the game
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        else if (BackButton.JustVisitedOptions == true)
+        {
+            Pause();
+            BackButton.JustVisitedOptions = false; // Reset the flag after using it
+        }
     }
 
     void Update()

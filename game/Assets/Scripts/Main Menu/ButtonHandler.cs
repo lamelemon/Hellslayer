@@ -3,7 +3,6 @@ using UnityEngine.SceneManagement;
 
 public class ButtonHandler : MonoBehaviour
 {
-    public GameObject optionsPanel;
 
     public void StartGame()
     {
@@ -13,9 +12,8 @@ public class ButtonHandler : MonoBehaviour
 
     public void OpenOptions()
     {
-        Debug.Log("Options clicked!");
-        if (optionsPanel != null)
-            optionsPanel.SetActive(true);
+        SceneTracker.lastScene = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene("Options"); // Load the options menu scene
     }
 
     public void QuitGame()
