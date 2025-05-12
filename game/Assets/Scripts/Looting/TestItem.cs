@@ -5,6 +5,8 @@ public class TestItem : MonoBehaviour
 {
     public string itemName = "TestItem"; // Name of the item
     public int itemValue = 10;           // Value of the item
+    public Sprite itemIcon; // Icon for the item
+    
     public int damageValue = 20;         // Damage the item can deal
     public float attackRange = 10f;      // Range of the melee attack
     public LayerMask enemyLayer;         // Layer for enemies

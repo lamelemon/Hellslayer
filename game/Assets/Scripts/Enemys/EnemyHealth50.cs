@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 public class EnemyHealth : MonoBehaviour
 {
     public int maxHealth = 50; // Maximum health of the enemy
-    private int currentHealth;
+    public int currentHealth;
     private hp_bar_ui hpBarUI;
 
     private void Awake()
@@ -35,5 +35,13 @@ public class EnemyHealth : MonoBehaviour
     {
         Debug.Log($"{gameObject.name} has died.");
         Destroy(gameObject); // Destroy the enemy object
+    }
+
+    void Update()
+    {
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
     }
 }

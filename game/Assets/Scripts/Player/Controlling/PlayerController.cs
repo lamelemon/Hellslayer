@@ -64,7 +64,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] PlayerInputManager GetInput; // Reference to the PlayerInputManager for capturing input
     [SerializeField] PlayerCamera playerCamera; // Reference to the PlayerCamera to handle camera rotation
     [SerializeField] GameObject model; // Reference to the player model (used for crouching animation)
-    [SerializeField] Stamina_System staminaSystem; // Reference to the stamina system
 
     private void Awake()
     {
@@ -97,13 +96,13 @@ public class PlayerController : MonoBehaviour
         Sliding();
         Mantle();
 
-        if (!IsCrouching && !isSliding && staminaSystem.CanSprint && GetInput.SprintInput.WasPressedThisFrame())
+        if (!IsCrouching && !isSliding && GetInput.SprintInput.WasPressedThisFrame())
         {
             playerSpeed *= playerRunMultiplier;
             IsRunning = true;
         }
 
-        else if (IsRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching || !staminaSystem.CanSprint))
+        else if (IsRunning && (!GetInput.SprintInput.IsPressed() || isSliding || IsCrouching))
         {
             IsRunning = false;
             playerSpeed = playerWalkSpeed;
@@ -192,14 +191,13 @@ public class PlayerController : MonoBehaviour
 
     private void Jumping()
     {
-        if (GetInput.JumpInput.IsPressed() && staminaSystem.CanJump && canJump && coyoteTime > 0) // Handle jumping input
+        if (GetInput.JumpInput.IsPressed() && canJump && coyoteTime > 0) // Handle jumping input
         {
             coyoteTime = 0;
             IsJumping = true; // Mark the player as jumping
             rb.linearVelocity += Mathf.Sqrt(playerJumpHeight * -Physics.gravity.y) * Vector3.up; // Set the jump velocity based on the jump height
             canJump = false;
             IsOnFloor = false;
-            staminaSystem.ConsumeStaminaForJump();
             StartCoroutine(JumpCooldownCoroutine());
         }
     }
@@ -288,7 +286,7 @@ public class PlayerController : MonoBehaviour
         mantlePosition = transform.position + (playerStandingHeight / 2 - playerHitbox.radius) * Vector3.up + Quaternion.Euler(0, rb.transform.eulerAngles.y, 0) * (playerHitbox.radius * 2 * Vector3.forward);
 
         // Check for a ledge and if the player fits on the ledge
-        if (GetInput.JumpInput.WasPressedThisFrame() && Physics.Raycast(mantlePosition + Vector3.up * playerStandingHeight / 2, Vector3.down, out RaycastHit hit, playerHitbox.height, layerMask) && Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask) == 0)
+        if (GetInput.JumpInput.WasPressedThisFrame() && Physics.Raycast(mantlePosition + Vector3.up * playerStandingHeight / 2, Vector3.down, out RaycastHit hit, (playerStandingHeight + playerHitbox.height) / 2, layerMask) && Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask) == 0)
         {
             // Move the player to the ledge position
             transform.position = hit.point + Vector3.up * playerStandingHeight / 2;
