@@ -117,7 +117,7 @@ public class SpikyMovement : MonoBehaviour
         float normalizedSpeed = horizontalSpeed / chaseMaxSpeed;
         ZeroToOneMaxSpeed = Mathf.Clamp01(normalizedSpeed); // Clamp the value between 0.0 and 1.0
         Animator.SetFloat("Speed", ZeroToOneMaxSpeed);
-        Debug.Log(Animator.GetFloat("Speed"));
+        //Debug.Log(Animator.GetFloat("Speed"));
     }
 
     public bool IsPlayerWatchRange()
