@@ -1,5 +1,5 @@
 using UnityEngine;
-
+ 
 public class PlayerCamera : MonoBehaviour
 {
     [SerializeField] float sensitivity = 0.1f;
