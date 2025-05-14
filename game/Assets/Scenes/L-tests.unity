@@ -5528,6 +5528,11 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1174178560 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8909832003195137994, guid: 7e56d997dac829a418c2a7a86c16dae9, type: 3}
+  m_PrefabInstance: {fileID: 3666832767308512768}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1187118659
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6226,9 +6231,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootItems:
-  - itemPrefab: {fileID: 0}
-    weight: 0
-    dropAmountRange: {x: 0, y: 0}
+  - itemPrefab: {fileID: 1174178560}
+    weight: 8612
+    dropAmountRange: {x: 10, y: 11}
 --- !u!4 &1429141847 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5981910195043663163, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}

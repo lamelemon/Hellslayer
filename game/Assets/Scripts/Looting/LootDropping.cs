@@ -16,41 +16,43 @@ public class LootDropping : MonoBehaviour
         if (lootItems.Length > 0)
         {
             GameObject[] droppedItems = LootItem.InstantiateLootItems(LootItem.FindItemByRandomWeight(lootItems), transform.position);
-            Collider[][] colliders = LootItem.GetColliders(droppedItems);
-            Rigidbody[] rb = LootItem.GetRigidbodies(droppedItems);
-            foreach (Rigidbody rigidbody in rb)
+            foreach (GameObject item in droppedItems)
             {
-                rigidbody.isKinematic = true; // Set all rigidbodies to kinematic
+                item.GetComponent<Rigidbody>().isKinematic = true; // Set all rigidbodies to kinematic
             }
         
-            //StartCoroutine(DelayedStuff(lootItem, rb, colliders));
+            StartCoroutine(DelayedStuff(droppedItems));
         }
     }
 
-    private float GetHeight(Collider[][] colliders)
+    private float GetHeight(Collider[] colliders)
     {
-        foreach (Collider[] colliderArray in colliders)
+        float biggestSize = 0f;
+        foreach (Collider collider in colliders)
         {
-            foreach (Collider collider in colliderArray)
+            if (collider.bounds.size.y > biggestSize)
             {
-                if (collider.bounds.size.y > 0)
-                {
-                    return collider.bounds.size.y;
-                }
+                biggestSize = collider.bounds.size.y;
             }
         }
 
-        return 0f; // Return zero if no collider found
+        return biggestSize; // Return zero if no collider found
     }
-/*    IEnumerator DelayedStuff(GameObject[] obj, Rigidbody[] rb, Collider[][] colliders)
+    IEnumerator DelayedStuff(GameObject[] obj)
     {
         yield return new WaitForFixedUpdate();
-        obj.transform.position = transform.position + GetHeight(colliders) / 2 * Vector3.up; // Adjust the position to be above the enemy
-        rb.isKinematic = false; // Ensure the loot item is not kinematic
-        rb.AddForce(new(UnityEngine.Random.Range(2f, 5f), 5f, UnityEngine.Random.Range(2f, 5f)), ForceMode.Impulse); // Add upward force to the loot item
+
+        foreach (GameObject item in obj)
+        {
+            Rigidbody itemRigidbody = item.GetComponent<Rigidbody>();
+            itemRigidbody.AddForce(new(UnityEngine.Random.Range(2f, 5f), 5f, UnityEngine.Random.Range(2f, 5f)), ForceMode.Impulse);
+            item.transform.position = transform.position + GetHeight(item.transform.GetComponents<Collider>()) / 2 * Vector3.up; // Adjust the position to be above the enemy
+            itemRigidbody.isKinematic = false; // Set all rigidbodies to non-kinematic
+        }
+
         lootItems = null;
         transform.gameObject.SetActive(false); // Deactivate the enemy object
-    }*/
+    }
 }
 
 [Serializable]
@@ -60,11 +62,9 @@ public class LootItem
     public GameObject itemPrefab;
     [Tooltip("The weight of the item. Higher weight means more likely to drop.")]
     [Range(0, 100000)]
-    public int weight;
-    
+    public int weight = 1;
     [Tooltip("The range of the amount of items that can drop (min inclusive, max inclusive). PLEASE DON'T SET TO AN INSANELY HIGH NUMBER.")]
-    [Range(1, 100)]
-    public Vector2Int dropAmountRange;
+    public Vector2Int dropAmountRange = new(1, 1); // Range of items that can drop
 
     public int GetRandomDropAmount()
     {
@@ -111,38 +111,15 @@ public class LootItem
         return (float)weight / totalWeight;
     }
 
-    public static GameObject InstantiateLootItem(LootItem lootItem, Vector3 position)
-    {
-        return GameObject.Instantiate(lootItem.itemPrefab, position, Quaternion.identity);
-    }
-
     public static GameObject[] InstantiateLootItems(LootItem lootItem, Vector3 position)
     {
         GameObject[] lootItems = new GameObject[lootItem.GetRandomDropAmount()];
+
         for (int i = 0; i < lootItems.Length; i++)
         {
-            lootItems[i] = InstantiateLootItem(lootItem, position);
+            lootItems[i] = GameObject.Instantiate(lootItem.itemPrefab, position, Quaternion.identity);
         }
+        
         return lootItems;
-    }
-
-    public static Collider[][] GetColliders(GameObject[] lootItems)
-    {
-        Collider[][] colliders = new Collider[lootItems.Length][];
-        for (int i = 0; i < lootItems.Length; i++)
-        {
-            colliders[i] = lootItems[i].GetComponents<Collider>();
-        }
-        return colliders;
-    }
-
-    public static Rigidbody[] GetRigidbodies(GameObject[] lootItems)
-    {
-        Rigidbody[] rigidbodies = new Rigidbody[lootItems.Length];
-        for (int i = 0; i < lootItems.Length; i++)
-        {
-            rigidbodies[i] = lootItems[i].GetComponent<Rigidbody>();
-        }
-        return rigidbodies;
     }
 }
