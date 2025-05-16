@@ -112,6 +112,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "SpecialInput",
+                    "type": "Button",
+                    "id": "7fff2f2b-9b8f-4b9d-b8bc-53cc739b55b1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -321,6 +330,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ItemSlot2Input",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d206c897-a200-4227-8485-6b05ff45e829",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpecialInput",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
