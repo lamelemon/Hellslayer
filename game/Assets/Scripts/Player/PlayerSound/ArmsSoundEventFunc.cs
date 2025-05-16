@@ -13,8 +13,11 @@ public class ArmsSoundEventFunc : MonoBehaviour
     [Range(0.01f, 20.0f)] public float SprintSoundPitchMin = 0.70f;
     [Range(0.01f, 20.0f)] public float SprintSoundPitchMax = 0.82f;
 
+    [Range(0.01f, 20.0f)] public float FistAttackSoundPitchMin = 0.70f;
+    [Range(0.01f, 20.0f)] public float FistAttackSoundPitchMax = 0.82f;
+
     // Sound event functions mainly used for animations that clearly have spesific frame that sound should play
-    public void ArmsSprintSoundPlay() // function that plays based on animation event
+    public void SprintSoundPlay() // function that plays based on animation event
     {
         if (playerMovement.IsGrounded) // Ensure the player is grounded
         {
@@ -22,5 +25,11 @@ public class ArmsSoundEventFunc : MonoBehaviour
             //Debug.Log("Sprint sound played with pitch: " + sprintRandomPitch); // Debug log for testing
             audio_manager.Instance.PlaySFX("PlayerSprint", SprintRandomPitch); // Play sprint sound with custom pitch
         }
+    }
+
+    public void FistAttackSoundPlay() // function that plays based on animation event
+    {
+        float FistAttackRandomPitch = UnityEngine.Random.Range(FistAttackSoundPitchMin, FistAttackSoundPitchMax);
+        audio_manager.Instance.PlaySFX("PlayerFistAttack", FistAttackRandomPitch); // Play sprint sound with custom pitch
     }
 }

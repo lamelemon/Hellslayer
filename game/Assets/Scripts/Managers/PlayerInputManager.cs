@@ -15,6 +15,7 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction PickupInput { get; private set; }
     public InputAction DropInput { get; private set; } 
     public InputAction SlideInput { get; private set; }
+    public InputAction SpecialInput { get; private set; }
     public Vector2 MoveValue { get; private set; }
     public Vector2 MouseValue { get; private set; }
 
@@ -32,6 +33,7 @@ public class PlayerInputManager : MonoBehaviour
         PickupInput = InputSystem.actions.FindAction("PickupInput");
         DropInput = InputSystem.actions.FindAction("DropInput"); 
         SlideInput = InputSystem.actions.FindAction("SlideInput");
+        SpecialInput = InputSystem.actions.FindAction("SpecialInput");    
     }
 
     private void Update()
@@ -54,6 +56,7 @@ public class PlayerInputManager : MonoBehaviour
         PickupInput.Enable();
         DropInput.Enable();
         SlideInput.Enable();
+        SpecialInput.Enable();
     }
 
     private void OnDisable()
@@ -70,5 +73,6 @@ public class PlayerInputManager : MonoBehaviour
         PickupInput.Disable();
         DropInput.Disable(); 
         SlideInput.Disable();
+        SpecialInput.Disable();
     }
 }
