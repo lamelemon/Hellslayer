@@ -1643,8 +1643,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a210faa3ba0c964b80e36e47ee9308a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldownTime: 0.4
-  attackComboTimer: 5
+  attackCooldownTime: 0.48
+  attackComboTime: 15
   baseAttackDamage: 5
   animator: {fileID: 1425904545}
   getInput: {fileID: 1014629441}
