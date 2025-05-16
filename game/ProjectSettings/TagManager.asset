@@ -11,6 +11,7 @@ TagManager:
   - crosshair
   - crimson_sword
   - katana
+  - spiky
   layers:
   - Default
   - TransparentFX
