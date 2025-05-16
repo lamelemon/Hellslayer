@@ -27,7 +27,7 @@ public class combat_controller : MonoBehaviour
     public LayerMask enemyLayer;
 
     [Header("")]
-    
+
     private bool canAttack = true;
 
     void Awake()
@@ -36,14 +36,7 @@ public class combat_controller : MonoBehaviour
     }
     void Update()
     {
-        if (getInput.AttackInput.WasPressedThisFrame() && !PauseMenu.isPaused)
-        {
-            Attack_Clicked(true);
-        }
-        else
-        {
-            Attack_Clicked(false);
-        }
+        Attack_Clicked(canAttack && getInput.AttackInput.WasPressedThisFrame() && !PauseMenu.isPaused);
     }
 
     void Attack_Clicked(bool is_attacking)
@@ -58,18 +51,17 @@ public class combat_controller : MonoBehaviour
 
     void Attack()
     {
-        if (!canAttack) return;
         print("Attacking!");
-        // Check if the player is holding an item with the TestItem script
-        if (playerItemInteraction.currentlyHeldItem != null)
+        canAttack = false;
+        // Check if the player is holding an item with the IWeapon interface
+        if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent<IWeapon>(out var heldItem))
         {
-            TestItem heldItem = playerItemInteraction.currentlyHeldItem.GetComponent<TestItem>();
-            if (heldItem != null)
+            heldItem.Attack();
+            if (playerItemInteraction.currentlyHeldItem.TryGetComponent<IReloadable>(out var reloadableItem))
             {
-                // Call the PerformAttack method on the held item
-                heldItem.PerformAttack();
-                return; // Exit to avoid the default attack logic
+                reloadableItem.DeductAmmo();
             }
+            StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown));
         }
         else
         {
@@ -84,22 +76,19 @@ public class combat_controller : MonoBehaviour
                     // Debug.Log("We hit " + enemy.name);
                 }
             }
+            StartCoroutine(AttackCooldownRoutine(attackCooldown));
         }
-
-        // Default attack logic
-        canAttack = false;
-        StartCoroutine(AttackCooldownRoutine());
     }
 
-    IEnumerator AttackCooldownRoutine()
+    IEnumerator AttackCooldownRoutine(float attackCooldown)
     {
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
     }
-    
-    
+
+
     // see attack radios on when clikking on the player
-        void OnDrawGizmosSelected()
+    void OnDrawGizmosSelected()
     {
         if (attackPoint == null)
         {
@@ -108,4 +97,23 @@ public class combat_controller : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
+}
+
+public interface IWeapon
+{
+    int Damage { get; set; } // Property to get and set damage
+    float AttackRange { get; set; } // Property to get and set attack range
+    float AttackCooldown { get; set; } // Property to get and set attack cooldown
+    void Attack();
+    void SpecialAbility();
+}
+
+public interface IReloadable
+{
+    bool ReloadsFully { get; set; }
+    int ReloadAmount { get; set; }
+    float ReloadSpeed { get; set; }
+    float AmmoPerShot { get; set; }
+    void Reload(int amount = 0, bool ReloadsFully = false, float ReloadSpeed = 0);
+    void DeductAmmo();
 }
