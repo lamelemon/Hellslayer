@@ -14,6 +14,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private ItemSlotHandler itemSlotHandler; // Reference to the ItemSlotHandler
     [SerializeField] private string crimson_sword = "crimson_sword"; // Reference to a tag
     [SerializeField] private string katana = "katana"; // Reference to a tag
+    [SerializeField] private string rpg = "rpg"; // Reference to a tag
 
     public TestItem currentlyHeldItem; // Reference to the currently held item
 
@@ -41,6 +42,8 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Update()
     {
+        
+
         if (playerCamera == null)
         {
             return;

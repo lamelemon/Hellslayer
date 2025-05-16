@@ -10,6 +10,7 @@ public class CrimsonSwordAbility : MonoBehaviour
     [SerializeField] private Camera PlayerCamera;
     [SerializeField] private int damageValue = 12; // Damage to deal
     [SerializeField] private LineRenderer beamVisual;
+    [SerializeField] private PlayerInteraction PlayerItemInteraction;
 
     private Vector3 storedRayOrigin;
     private Vector3 storedRayDirection;
@@ -22,31 +23,34 @@ public class CrimsonSwordAbility : MonoBehaviour
     {
         if (GetInput.SpecialInput.WasPressedThisFrame() && Time.time >= lastUsedTime + cooldownDuration)
         {
-            Debug.Log("Special ability activated!");
-
-            Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-            if (Physics.SphereCast(ray, sphereRadius, out RaycastHit hitInfo, SpecialRayLength))
+            if (PlayerItemInteraction.currentlyHeldItem.itemName == "CrimsonSword")
             {
-                Debug.Log($"First hit object: {hitInfo.collider.gameObject.name}");
+                Debug.Log("Special ability activated!");
+
+                Ray ray = PlayerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+                if (Physics.SphereCast(ray, sphereRadius, out RaycastHit hitInfo, SpecialRayLength))
+                {
+                    Debug.Log($"First hit object: {hitInfo.collider.gameObject.name}");
+                }
+
+                storedRayOrigin = ray.origin;
+                storedRayDirection = ray.direction;
+                isRayActive = true;
+
+                damageCoroutine = StartCoroutine(DamageWhileActive());
+                StartCoroutine(DeactivateRayAfterDelay(3f));
+                lastUsedTime = Time.time;
+
+                // Set the beam visual line positions
+                beamVisual.enabled = true;
+                beamVisual.SetPosition(0, storedRayOrigin);
+                beamVisual.SetPosition(1, storedRayOrigin + storedRayDirection * SpecialRayLength);
             }
-
-            storedRayOrigin = ray.origin;
-            storedRayDirection = ray.direction;
-            isRayActive = true;
-
-            damageCoroutine = StartCoroutine(DamageWhileActive());
-            StartCoroutine(DeactivateRayAfterDelay(3f));
-            lastUsedTime = Time.time;
-
-            // Set the beam visual line positions
-            beamVisual.enabled = true;
-            beamVisual.SetPosition(0, storedRayOrigin);
-            beamVisual.SetPosition(1, storedRayOrigin + storedRayDirection * SpecialRayLength);
         }
-        else if (GetInput.SpecialInput.WasPressedThisFrame())
-        {
-            Debug.Log("Ability is on cooldown!");
-        }
+            else if (GetInput.SpecialInput.WasPressedThisFrame())
+            {
+                Debug.Log("Ability is on cooldown!");
+            }
     }
 
     void OnDrawGizmos()
