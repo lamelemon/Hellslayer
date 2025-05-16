@@ -74,7 +74,7 @@ public class PauseMenu : MonoBehaviour
     public void optionsMenu()
     {
         SceneTracker.lastScene = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene("Options"); // Load the options menu scene
+        SceneManager.LoadSceneAsync("Options", LoadSceneMode.Additive);
     }
     public void ResumeButton()
     {
