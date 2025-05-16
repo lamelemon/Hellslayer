@@ -13,7 +13,7 @@ public class ButtonHandler : MonoBehaviour
     public void OpenOptions()
     {
         SceneTracker.lastScene = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene("Options"); // Load the options menu scene
+        SceneManager.LoadSceneAsync("Options", LoadSceneMode.Additive);
     }
 
     public void QuitGame()
