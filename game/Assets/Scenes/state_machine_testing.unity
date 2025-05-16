@@ -487,6 +487,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1809804967}
   m_SourcePrefab: {fileID: 100100000, guid: a5632712406bd5040bf903ad869f6ce0, type: 3}
+--- !u!4 &244338746 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2086596211630721698, guid: 03c7efc2af99bdd4e9deded8ff61d00e, type: 3}
+  m_PrefabInstance: {fileID: 1425904542}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &347466496
 GameObject:
   m_ObjectHideFlags: 0
@@ -1503,6 +1508,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 928600926}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &1007933974 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7767239765786312836, guid: 03c7efc2af99bdd4e9deded8ff61d00e, type: 3}
+  m_PrefabInstance: {fileID: 1425904542}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1014629437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1517,6 +1527,8 @@ GameObject:
   - component: {fileID: 1014629440}
   - component: {fileID: 1014629443}
   - component: {fileID: 1014629444}
+  - component: {fileID: 1014629445}
+  - component: {fileID: 1014629446}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1640,20 +1652,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 1014629437}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a210faa3ba0c964b80e36e47ee9308a, type: 3}
+  m_Script: {fileID: 11500000, guid: bcc3a76350d59e345a065bf3859a4e24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackCooldownTime: 0.48
-  attackComboTime: 15
-  baseAttackDamage: 5
-  animator: {fileID: 1425904545}
-  getInput: {fileID: 1014629441}
+  attackCooldown: 0.5
+  comboResetTime: 5
   isAttacking: 0
+  animator: {fileID: 1425904545}
+  attackPoint: {fileID: 1007933974}
+  boxHalfExtents: {x: 0.15, y: 0.15, z: 0.15}
   enemyLayer:
     serializedVersion: 2
     m_Bits: 2048
-  canFirstAttack: 1
-  attackTimer: 5
+  playerItemInteraction: {fileID: 1014629446}
+--- !u!114 &1014629445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014629437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd2ef82ff3db3f42b318c61ee2ddef0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handPosition: {fileID: 244338746}
+--- !u!114 &1014629446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014629437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 890a7ce961e751944946f2d4adbba525, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactionRange: 8.5
+  pickupAction:
+    m_Name: Pickup
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: fa1ba39d-caa0-400b-8686-8869a05c5e05
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  dropAction:
+    m_Name: Drop
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 0c1f6bd0-c73a-466a-a508-51e362988e9f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
+  getInput: {fileID: 1014629441}
+  handPosition: {fileID: 244338746}
+  itemSlotHandler: {fileID: 0}
+  crimson_sword: crimson_sword
+  katana: katana
+  currentlyHeldItem: {fileID: 0}
 --- !u!1 &1026174632
 GameObject:
   m_ObjectHideFlags: 0
