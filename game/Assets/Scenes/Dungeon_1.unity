@@ -3087,15 +3087,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Resume
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -3223,15 +3223,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quit
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
+  m_sharedMaterial: {fileID: 2147374, guid: 0161d805a3764c089bef00bfe00793f5, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -5217,6 +5217,87 @@ Transform:
   m_Children: []
   m_Father: {fileID: 126185025}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1760330678
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 284396994339407930, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_Name
+      value: LaserDesertEagle
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 491.59265
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 50.18718
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 523.1092
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70705545
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.70705545
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.00852428
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.008524209
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -88.619
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1154146944648681828, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: getInput
+      value: 
+      objectReference: {fileID: 862227836}
+    - target: {fileID: 1154146944648681828, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 283911673}
+    - target: {fileID: 1154146944648681828, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: PlayerItemInteraction
+      value: 
+      objectReference: {fileID: 862227831}
+    - target: {fileID: 1797672919957350895, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1797672919957350895, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8265ca8e028655b4eb79fd8fe0d94cc7, type: 2}
+    - target: {fileID: 4581381139552469015, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: itemName
+      value: LaserDessu
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
 --- !u!1 &1836230746
 GameObject:
   m_ObjectHideFlags: 0
@@ -6410,3 +6491,4 @@ SceneRoots:
   - {fileID: 81535027}
   - {fileID: 913352802}
   - {fileID: 1603906741}
+  - {fileID: 1760330678}

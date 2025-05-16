@@ -6178,9 +6178,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootItems:
-  - itemPrefab: {fileID: 1213031977}
+  - itemPrefab: {fileID: 8909832003195137994, guid: 7e56d997dac829a418c2a7a86c16dae9, type: 3}
     weight: 8612
-    dropAmountRange: {x: 1000, y: 1001}
+    dropAmountRange: {x: 10, y: 11}
 --- !u!4 &1429141847 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5981910195043663163, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
@@ -8091,6 +8091,71 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 80570f1dd195ad74eb1535aa4ef86789, type: 3}
+--- !u!1001 &2272121400232280655
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 284396994339407930, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_Name
+      value: LaserDesertEagle
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 496.77075
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 54.27065
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 504.614
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70705545
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.70705545
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.00852428
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.008524209
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -88.619
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 628728389636346496, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1154146944648681828, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: getInput
+      value: 
+      objectReference: {fileID: 774600895}
+    - target: {fileID: 1154146944648681828, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
+      propertyPath: playerCamera
+      value: 
+      objectReference: {fileID: 27955287}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d1f5a9a18724be04cb7f8e5991d16ec9, type: 3}
 --- !u!1001 &3666832767308512768
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8099,6 +8164,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2095384097}
     m_Modifications:
+    - target: {fileID: 5623378042302984478, guid: 7e56d997dac829a418c2a7a86c16dae9, type: 3}
+      propertyPath: itemIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 0b91e2d5d0e826041b236a186da242e0, type: 3}
     - target: {fileID: 8137377447414478192, guid: 7e56d997dac829a418c2a7a86c16dae9, type: 3}
       propertyPath: m_LocalPosition.x
       value: -15.103561
@@ -8314,3 +8383,4 @@ SceneRoots:
   - {fileID: 1916973916}
   - {fileID: 8349864057247683217}
   - {fileID: 1965870255}
+  - {fileID: 2272121400232280655}
