@@ -1,6 +1,7 @@
 using UnityEngine;
 
 /// <summary>
+/// !!! Use this mainly only for enemy intereaction with player, other enemys not for players combat use PlayerCombat.cs
 /// Handles knockback mechanics for objects with specific tags or all rigidbodies.
 /// </summary>
 public class Knockback : MonoBehaviour

@@ -39,7 +39,7 @@ public class hp_system : MonoBehaviour
 
         if(current_hp <= 0)
         {
-            Debug.Log("died!");
+            //Debug.Log("died!");
 
             if (lootDropping != null && lootDropping.lootItems.Length > 0) // Check if loot items are available
             {

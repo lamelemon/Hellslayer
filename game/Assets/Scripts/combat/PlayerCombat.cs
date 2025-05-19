@@ -1,31 +1,41 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 //Notes:
 // in camera holder the right objcet for combat collider is - ORG-hand.R
 // chanced the sphere to box dedection for better shape management
 // PlayerCombat.cs
 // Handles player attack input, combos, and attack logic
 // !! there is issue when animation moves the arms it dosent get tranforms from hand. So make the CombatBox extra big
-
 public class PlayerCombat : MonoBehaviour
 {
     // === Inspector Fields ===
     [Header("Attack Settings")]
     public float attackCooldown = 0.5f;   // Time between attacks
-    public float comboResetTime = 1f;
+    public float comboResetTime = 1f; // need be longer than attack cooldown
+    public int FirstAttackDamage = 5; // !!! taks only hole number because hp system is shit :]
+    public int SecondAttackDamage = 6;
+    public int ThirdAttackDamage = 8;
+    public float FirstAttackKnockbackForce = 15.0f;
+    public float SecondAttackKnockbackForce = 20.0f;
+    public float ThirdAttackKnockbackForce = 35.0f;
     public Animator animator;
     public Transform attackPoint;
-    public Vector3 CombatBox = new Vector3(1.5f, 1f, 1.5f); // Adjust as needed
+    public Vector3 CombatBox = new(0.8f, 0.8f, 0.8f); // Adjust as needed
     public LayerMask enemyLayer;
 
     [Header("References")]
     [SerializeField] private PlayerInteraction playerItemInteraction; // Reference to PlayerItemInteraction
+    public ArmsPointActionFunc AnimationAction; // scripts that get true if animations is in action part
 
     // === Private State ===
+    private int AttackDamage = 0;
+    private float KnockbackForce = 0f;
     private int comboStep = 0;
     private bool isAttacking = false;
     private float attackCooldownTimer = 0f; // Tracks attack spam delay
     private float comboTimer = 0f;          // Tracks time to continue combo
+    private bool canAttack = true;
 
     // === Input System ===
     private InputAction AttackAction;
@@ -52,19 +62,23 @@ public class PlayerCombat : MonoBehaviour
     {
         InputsValuesReader();
 
-        // Decrease attack cooldown timer
-        if (attackCooldownTimer > 0f)
-        {
-            attackCooldownTimer -= Time.deltaTime;
-        }
-
+        //Debug.Log("Attack cooldown timer: " + attackCooldownTimer);
+        //Debug.Log("Combo step: " + comboStep);
+        //Debug.Log("Combo timer: " + comboTimer);
+        //Debug.Log("Can attack: " + canAttack);
+        //Debug.Log("Is attacking: " + isAttacking);
+        animator.SetBool("isAttacking", isAttacking);
         HandleCombo();
+        Debug.Log("AnimationAction.FirstAttackPoint" + AnimationAction.FirstAttackPoint);
+        Debug.Log("AnimationAction.SecondAttackPoint" + AnimationAction.SecondAttackPoint);
+        Debug.Log("AnimationAction.ThirdAttackPoint" + AnimationAction.ThirdAttackPoint);
     }
 
     // === Input Handling ===
     private void InputsValuesReader()
     {
-        isAttacking = AttackAction.ReadValue<float>() > 0.1f;
+        //isAttacking = AttackAction.ReadValue<float>() > 0.1f;
+        isAttacking = AttackAction.WasPressedThisFrame() && !PauseMenu.isPaused;// && AttackAction.ReadValue<float>() > 0.1f;
     }
 
     // === Combo Logic ===
@@ -81,8 +95,9 @@ public class PlayerCombat : MonoBehaviour
         }
 
         // If player presses attack input and cooldown allows it
-        if (isAttacking && attackCooldownTimer <= 0f)
+        if (isAttacking && canAttack)
         {
+            canAttack = true;
             OnAttackInput();
         }
     }
@@ -96,7 +111,7 @@ public class PlayerCombat : MonoBehaviour
             comboTimer = comboResetTime;
             attackCooldownTimer = attackCooldown; // Set delay before next attack
 
-            PerformAttack(); // Call the function where the attack actually happens
+            if (isAttacking) { PerformAttack();} // Call the function where the attack actually happens
 
             if (comboStep > 3)
             {
@@ -114,11 +129,12 @@ public class PlayerCombat : MonoBehaviour
     // === Attack Logic ===
     private void PerformAttack()
     {
+        if (!canAttack) { return; }
+        // This is a held item attack. !!! needs to make that this script pass the combo number to the item attacks and etc.
         // If holding an item, use its attack
         if (playerItemInteraction.currentlyHeldItem != null)
         {
-            TestItem heldItem = playerItemInteraction.currentlyHeldItem.GetComponent<TestItem>();
-            if (heldItem != null)
+            if (playerItemInteraction.currentlyHeldItem.TryGetComponent<TestItem>(out TestItem heldItem))
             {
                 heldItem.PerformAttack();
                 return; // Exit to avoid the default attack logic
@@ -126,26 +142,90 @@ public class PlayerCombat : MonoBehaviour
         }
         else
         {
-            // Default hand attack
-            animator.SetBool("isAttacking", isAttacking);
-            animator.Play("ArmsAttack1", 0, 0f);
+            if (comboStep == 1)
+            {
+                animator.SetTrigger("Attack1");
+            }
+            else if (comboStep == 2)
+            {
+                animator.SetTrigger("Attack2");
+            }
+            else if (comboStep == 3)
+            {
+                animator.SetTrigger("Attack3");
+            }
 
             // Collect all colliders within the box
             Collider[] hitEnemies = Physics.OverlapBox(attackPoint.position, CombatBox, attackPoint.rotation, enemyLayer);
-            foreach (Collider enemy in hitEnemies)
+            foreach (Collider enemy in hitEnemies) // !!! Make sure to put atleast enemys gameobject where is rigibody and hp system to the EnemyLayer else result is null
             {
+                // Apply damage to the enemy
+
                 hp_system hpSystem = enemy.GetComponent<hp_system>();
                 if (hpSystem != null)
                 {
-                    hpSystem.take_damage(10); // Default damage
+                    if (comboStep == 1 && AnimationAction.FirstAttackPoint == true)
+                    {
+                        AttackDamage = FirstAttackDamage;
+                    }
+                    else if (comboStep == 2 && AnimationAction.SecondAttackPoint == true)
+                    {
+                        AttackDamage = SecondAttackDamage;
+                    }
+                    else if (comboStep == 3 && AnimationAction.ThirdAttackPoint == true)
+                    {
+                        AttackDamage = ThirdAttackDamage;
+                    }
+                    hpSystem.take_damage(AttackDamage);
                 }
-                Debug.Log("We hit " + enemy.name);
+                //Debug.Log("We hit " + enemy.name);
+
+                // Apply knockback to the enemy
+
+                Rigidbody targetRigidbody = enemy.GetComponent<Rigidbody>();
+                // Try to get Rigidbody on the same GameObject, if not found, try parent
+                if (!enemy.TryGetComponent<Rigidbody>(out targetRigidbody))
+                {
+                    targetRigidbody = enemy.GetComponentInParent<Rigidbody>();
+                }
+
+                if (targetRigidbody != null)
+                {
+                    //Debug.Log("Applying knockback to: " + enemy.name);
+                    if (comboStep == 1 && AnimationAction.FirstAttackPoint == true)
+                    {
+                        KnockbackForce = FirstAttackKnockbackForce;
+                        //Debug.Log("1");
+                    }
+                    else if (comboStep == 2 && AnimationAction.SecondAttackPoint == true)
+                    {
+                        KnockbackForce = SecondAttackKnockbackForce;
+                        //Debug.Log("2");
+                    }
+                    else if (comboStep == 3 && AnimationAction.ThirdAttackPoint == true)
+                    {
+                        KnockbackForce = ThirdAttackKnockbackForce;
+                        //Debug.Log("3");
+                    }
+                    Vector3 knockbackDirection = (enemy.transform.position - transform.position).normalized;
+                    targetRigidbody.AddForce(knockbackDirection * KnockbackForce, ForceMode.Impulse);
+                }
             }
         }
+        AnimationAction.FirstAttackPoint = false;
+        AnimationAction.SecondAttackPoint = false;
+        AnimationAction.ThirdAttackPoint = false;
+        canAttack = false;
+        StartCoroutine(AttackCooldownRoutine());
+    }
+    IEnumerator AttackCooldownRoutine()
+    {
+        yield return new WaitForSeconds(attackCooldown);
+        canAttack = true;
     }
 
     // === Gizmos ===
-    // Visualize the attack area in the editor
+    // Visualize the attack area in the editor *the red box
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
