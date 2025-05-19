@@ -27,7 +27,7 @@ public class Rocket : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Player")) return;
-
+        Debug.Log("Rocket hit: " + collision.gameObject.name);
         Destroy(gameObject);
     }
 }
