@@ -13,6 +13,8 @@ TagManager:
   - katana
   - spiky
   - rpg
+  - rocket
+  - Enemy
   layers:
   - Default
   - TransparentFX
