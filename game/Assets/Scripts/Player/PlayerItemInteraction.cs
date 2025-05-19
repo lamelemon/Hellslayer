@@ -3,77 +3,60 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    public float interactionRange = 8.5f; // Maximum range to interact with items
-    public InputAction pickupAction; // Input Action for picking up items
-    public InputAction dropAction; // Input Action for dropping items
+    public float interactionRange = 8.5f; 
+    public InputAction pickupAction;
+    public InputAction dropAction;
     private Camera playerCamera;
-    private bool OnHand = false; // Flag to check if the item is on hand
+    private bool OnHand = false;
 
     [SerializeField] private PlayerInputManager getInput;
-    [SerializeField] private Transform handPosition; // Reference to the player's hand position
-    [SerializeField] private ItemSlotHandler itemSlotHandler; // Reference to the ItemSlotHandler
-    [SerializeField] private string crimson_sword = "crimson_sword"; // Reference to a tag
-    [SerializeField] private string katana = "katana"; // Reference to a tag
-    [SerializeField] private string rpg = "rpg"; // Reference to a tag
+    [SerializeField] private Transform handPosition;
+    [SerializeField] private ItemSlotHandler itemSlotHandler;
+    [SerializeField] private string crimson_sword = "crimson_sword";
+    [SerializeField] private string katana = "katana";
+    [SerializeField] private string rpg = "rpg";
 
-    public TestItem currentlyHeldItem; // Reference to the currently held item
-
-    // public CrimsonSword currentlyHeldItem2; // Reference to the currently held item
+    public TestItem currentlyHeldItem;
 
     private void Start()
     {
-        // Find the camera tagged as "playerCamera"
         playerCamera = GameObject.FindWithTag("playerCamera")?.GetComponent<Camera>();
         if (playerCamera == null)
-        {
-            Debug.LogError("Camera with tag 'playerCamera' not found. Please ensure your camera is tagged correctly.");
-        }
-
+            Debug.LogError("Camera with tag 'playerCamera' not found.");
         if (getInput == null)
-        {
-            Debug.LogError("PlayerInputManager not assigned. Please assign it in the inspector.");
-        }
-
+            Debug.LogError("PlayerInputManager not assigned.");
         if (handPosition == null)
-        {
-            Debug.LogError("Hand position not assigned. Please assign it in the inspector.");
-        }
+            Debug.LogError("Hand position not assigned.");
     }
 
     private void Update()
     {
-        
+        if (playerCamera == null) return;
 
-        if (playerCamera == null)
-        {
-            return;
-        }
-
-        // Perform a raycast from the center of the screen
-        Ray ray = playerCamera.ScreenPointToRay(new UnityEngine.Vector3(Screen.width / 2, Screen.height / 2));
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(ray, out RaycastHit hit, interactionRange))
         {
-            // Check if the object hit by the raycast has a TestItem component
             if (hit.collider.TryGetComponent<TestItem>(out TestItem item))
             {
-                Debug.Log($"Looking at {item.itemName}, press the pickup key to pick up");
+                Debug.Log($"Looking at {item.itemName}, press pickup key");
 
                 if (getInput.PickupInput.WasPressedThisFrame())
                 {
                     itemSlotHandler.PickUpItem(item);
-                    item.PickupInput(); // Call the pickup method on the item
+                    item.PickupInput();
+
+                    // Enable weapon script if RPG
+                    EnableWeaponScript(item.gameObject);
                 }
             }
         }
 
-        // Check if the player presses the drop key
         if (getInput.DropInput.WasPressedThisFrame() && currentlyHeldItem != null)
         {
             DropItem();
-            itemSlotHandler.DropItem(); // Call the drop method on the item slot handler
+            itemSlotHandler.DropItem();
         }
 
-        // Switch slots based on input
         if (getInput.ItemSlot1Input.WasPressedThisFrame())
         {
             itemSlotHandler.SwitchSlot(1);
@@ -86,21 +69,16 @@ public class PlayerInteraction : MonoBehaviour
 
     private void MoveItemToHand(TestItem item)
     {
-        // Disable the item's physics and move it to the player's hand
-        Rigidbody itemRigidbody = item.GetComponent<Rigidbody>();
-        if (itemRigidbody != null)
-        {
-            itemRigidbody.isKinematic = true; // Disable physics
-        }
+        Rigidbody rb = item.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = true;
 
-        item.transform.SetParent(handPosition); // Parent the item to the hand
+        item.transform.SetParent(handPosition);
 
         foreach (Collider collider in item.GetComponents<Collider>())
-        {
-            collider.enabled = false; // Disable the collider to prevent further interactions
-        }
+            collider.enabled = false;
 
-        currentlyHeldItem = item; // Set the currently held item
+        currentlyHeldItem = item;
         Debug.Log($"{item.itemName} has been picked up and moved to the hand.");
     }
 
@@ -108,30 +86,51 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (currentlyHeldItem == null) return;
 
-        // Re-enable the item's physics
-        Rigidbody itemRigidbody = currentlyHeldItem.GetComponent<Rigidbody>();
-        if (itemRigidbody != null)
-        {
-            itemRigidbody.isKinematic = false; // Enable physics
-        }
+        Rigidbody rb = currentlyHeldItem.GetComponent<Rigidbody>();
+        if (rb != null)
+            rb.isKinematic = false;
 
-        // Unparent the item from the hand
         currentlyHeldItem.transform.SetParent(null);
 
-        // Re-enable the item's colliders
         foreach (Collider collider in currentlyHeldItem.GetComponents<Collider>())
-        {
             collider.enabled = true;
-        }
 
-        // Optionally, apply a small force to the item to drop it
-        if (itemRigidbody != null)
-        {
-            itemRigidbody.AddForce(playerCamera.transform.forward * 2f, ForceMode.Impulse);
-        }
+        if (rb != null)
+            rb.AddForce(playerCamera.transform.forward * 2f, ForceMode.Impulse);
 
         Debug.Log($"{currentlyHeldItem.itemName} has been dropped.");
-        currentlyHeldItem = null; // Clear the reference to the held item
+
+        // Disable weapon scripts on dropped item
+        DisableWeaponScript(currentlyHeldItem.gameObject);
+
+        currentlyHeldItem = null;
+    }
+
+    private void EnableWeaponScript(GameObject itemObject)
+    {
+        // Disable all other RPG scripts on other items first
+        RPG[] allRPGs = Object.FindObjectsByType<RPG>(FindObjectsSortMode.None);
+        foreach (RPG rpgScript in allRPGs)
+        {
+            rpgScript.enabled = false;
+        }
+
+        // Enable RPG script only if this item has one
+        RPG thisRPG = itemObject.GetComponent<RPG>();
+        if (thisRPG != null)
+        {
+            thisRPG.enabled = true;
+            Debug.Log("Enabled RPG script on equipped item.");
+        }
+    }
+
+    private void DisableWeaponScript(GameObject itemObject)
+    {
+        RPG rpgScript = itemObject.GetComponent<RPG>();
+        if (rpgScript != null)
+        {
+            rpgScript.enabled = false;
+            Debug.Log("Disabled RPG script on dropped item.");
+        }
     }
 }
-

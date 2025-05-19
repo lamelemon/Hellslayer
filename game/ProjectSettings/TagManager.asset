@@ -13,6 +13,7 @@ TagManager:
   - katana
   - spiky
   - rpg
+  - rocket
   layers:
   - Default
   - TransparentFX

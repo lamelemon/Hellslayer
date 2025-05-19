@@ -47,10 +47,10 @@ public class CrimsonSwordAbility : MonoBehaviour
                 beamVisual.SetPosition(1, storedRayOrigin + storedRayDirection * SpecialRayLength);
             }
         }
-            else if (GetInput.SpecialInput.WasPressedThisFrame())
-            {
-                Debug.Log("Ability is on cooldown!");
-            }
+        else if (GetInput.SpecialInput.WasPressedThisFrame())
+        {
+            Debug.Log("Ability is on cooldown!");
+        }
     }
 
     void OnDrawGizmos()
