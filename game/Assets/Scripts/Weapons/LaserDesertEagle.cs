@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class LaserDesertEagle : MonoBehaviour
@@ -8,7 +9,10 @@ public class LaserDesertEagle : MonoBehaviour
     [SerializeField] private Transform muzzlePoint;
     [SerializeField] private LineRenderer laserLine;
     [SerializeField] private PlayerInputManager getInput;
-    [SerializeField] private PlayerInteraction PlayerItemInteraction;
+
+    // UI
+    [SerializeField] private Slider heatSlider;
+    [SerializeField] private Image heatFillImage;
 
     // Weapon Settings
     public float fireRate = 0.5f;
@@ -38,6 +42,7 @@ public class LaserDesertEagle : MonoBehaviour
     {
         laserLine.enabled = false;
         currentHeat = 0f;
+        UpdateHeatUI(); // Initialize UI
     }
 
     void Update()
@@ -47,11 +52,13 @@ public class LaserDesertEagle : MonoBehaviour
 
         HandleHeatCooldown();
 
-        if (getInput.AttackInput.WasPressedThisFrame() && Time.time >= nextFireTime && !isOverheated && PlayerItemInteraction.currentlyHeldItem.itemName == "LaserDessu")
+        if (getInput.AttackInput.WasPressedThisFrame() && Time.time >= nextFireTime && !isOverheated)
         {
             nextFireTime = Time.time + fireRate;
             Fire();
         }
+
+        UpdateHeatUI();
     }
 
     void CheckMovementInput()
@@ -99,7 +106,7 @@ public class LaserDesertEagle : MonoBehaviour
     {
         if (hit.collider.GetComponentInParent<EnemyHealth>() is EnemyHealth enemyHealth)
         {
-            enemyHealth.TakeDamage((int)damage);  // <-- Cast float to int here
+            enemyHealth.TakeDamage((int)damage);
             Debug.Log($"{gameObject.name} attacked {hit.collider.gameObject.name} for {(int)damage} damage.");
         }
         else
@@ -131,5 +138,27 @@ public class LaserDesertEagle : MonoBehaviour
         yield return new WaitForSeconds(overheatCooldownTime);
         isOverheated = false;
         currentHeat = 0f;
+    }
+
+    void UpdateHeatUI()
+    {
+        if (heatSlider != null)
+        {
+            heatSlider.maxValue = maxHeat;
+            heatSlider.value = currentHeat;
+
+            if (heatFillImage != null)
+            {
+                if (isOverheated)
+                {
+                    heatFillImage.color = Color.red;
+                }
+                else
+                {
+                    float t = currentHeat / maxHeat;
+                    heatFillImage.color = Color.Lerp(Color.green, Color.yellow, t);
+                }
+            }
+        }
     }
 }
