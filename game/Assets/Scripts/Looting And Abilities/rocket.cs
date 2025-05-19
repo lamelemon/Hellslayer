@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class crimson_sword_ability : MonoBehaviour
+public class Rocket : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

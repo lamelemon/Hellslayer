@@ -2,12 +2,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Collections;
+using NUnit.Framework.Internal.Commands;
 public class combat_controller : MonoBehaviour
 {
     [Header("References about player")]
     [SerializeField] private PlayerController playerController;
     [SerializeField] private PlayerInputManager getInput;
     [SerializeField] private PlayerInteraction playerItemInteraction; // Reference to PlayerItemInteraction
+    
 
     [Header("")]
 

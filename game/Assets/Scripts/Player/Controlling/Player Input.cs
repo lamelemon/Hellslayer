@@ -134,6 +134,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SpecialInput"",
+                    ""type"": ""Button"",
+                    ""id"": ""7fff2f2b-9b8f-4b9d-b8bc-53cc739b55b1"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -345,6 +354,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""ItemSlot2Input"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d206c897-a200-4227-8485-6b05ff45e829"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SpecialInput"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -365,6 +385,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_DropInput = m_Player.FindAction("DropInput", throwIfNotFound: true);
         m_Player_ItemSlot1Input = m_Player.FindAction("ItemSlot1Input", throwIfNotFound: true);
         m_Player_ItemSlot2Input = m_Player.FindAction("ItemSlot2Input", throwIfNotFound: true);
+        m_Player_SpecialInput = m_Player.FindAction("SpecialInput", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -443,6 +464,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_DropInput;
     private readonly InputAction m_Player_ItemSlot1Input;
     private readonly InputAction m_Player_ItemSlot2Input;
+    private readonly InputAction m_Player_SpecialInput;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -459,6 +481,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @DropInput => m_Wrapper.m_Player_DropInput;
         public InputAction @ItemSlot1Input => m_Wrapper.m_Player_ItemSlot1Input;
         public InputAction @ItemSlot2Input => m_Wrapper.m_Player_ItemSlot2Input;
+        public InputAction @SpecialInput => m_Wrapper.m_Player_SpecialInput;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -504,6 +527,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ItemSlot2Input.started += instance.OnItemSlot2Input;
             @ItemSlot2Input.performed += instance.OnItemSlot2Input;
             @ItemSlot2Input.canceled += instance.OnItemSlot2Input;
+            @SpecialInput.started += instance.OnSpecialInput;
+            @SpecialInput.performed += instance.OnSpecialInput;
+            @SpecialInput.canceled += instance.OnSpecialInput;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -544,6 +570,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ItemSlot2Input.started -= instance.OnItemSlot2Input;
             @ItemSlot2Input.performed -= instance.OnItemSlot2Input;
             @ItemSlot2Input.canceled -= instance.OnItemSlot2Input;
+            @SpecialInput.started -= instance.OnSpecialInput;
+            @SpecialInput.performed -= instance.OnSpecialInput;
+            @SpecialInput.canceled -= instance.OnSpecialInput;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -575,5 +604,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnDropInput(InputAction.CallbackContext context);
         void OnItemSlot1Input(InputAction.CallbackContext context);
         void OnItemSlot2Input(InputAction.CallbackContext context);
+        void OnSpecialInput(InputAction.CallbackContext context);
     }
 }

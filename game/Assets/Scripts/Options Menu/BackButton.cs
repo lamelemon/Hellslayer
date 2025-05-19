@@ -20,7 +20,7 @@ public class BackButton : MonoBehaviour
 
         if (!string.IsNullOrEmpty(SceneTracker.lastScene))
         {
-            SceneManager.LoadScene(SceneTracker.lastScene);
+            SceneManager.UnloadSceneAsync("Options");
         }
     }
 }
