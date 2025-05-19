@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -13,9 +14,9 @@ public class LootDropping : MonoBehaviour
     public void DropLoot()
     {
         // Check if lootItems is not null and has items
-        if (lootItems.Length > 0)
+        if (lootItems != null && lootItems.Length > 0)
         {
-            GameObject[] droppedItems = LootItem.InstantiateLootItems(LootItem.FindItemByRandomWeight(lootItems), transform.position);
+            GameObject[] droppedItems = LootItem.GetLoot(lootItems, transform.position); // Get the loot items
             foreach (GameObject item in droppedItems)
             {
                 item.GetComponent<Rigidbody>().isKinematic = true; // Set all rigidbodies to kinematic
@@ -65,10 +66,12 @@ public class LootItem
     public int weight = 1;
     [Tooltip("The range of the amount of items that can drop (min inclusive, max inclusive). PLEASE DON'T SET TO AN INSANELY HIGH NUMBER.")]
     public Vector2Int dropAmountRange = new(1, 1); // Range of items that can drop
+    public bool isStackable = true; // Whether the item is stackable or not
+    public bool isGuaranteed = false; // Whether the item is guaranteed to drop or not
 
     public int GetRandomDropAmount()
     {
-        return UnityEngine.Random.Range(dropAmountRange.x, dropAmountRange.y + 1);
+        return UnityEngine.Random.Range(Math.Min(dropAmountRange.x, dropAmountRange.y), Math.Max(dropAmountRange.x, dropAmountRange.y) + 1);
     }
 
     public static int GetTotalWeight(LootItem[] lootItems)
@@ -77,11 +80,6 @@ public class LootItem
 
         foreach (LootItem item in lootItems)
         {
-            if (item.weight <= 0)
-            {
-                item.weight = 1; // Ensure weight is at least 1
-            }
-
             totalWeight += item.weight;
         }
 
@@ -96,6 +94,7 @@ public class LootItem
             {
                 return item;
             }
+
             weight -= item.weight;
         }
         return null; // Return null if no item found
@@ -111,15 +110,48 @@ public class LootItem
         return (float)weight / totalWeight;
     }
 
-    public static GameObject[] InstantiateLootItems(LootItem lootItem, Vector3 position)
+    public static GameObject[] InstantiateLootItems(List<LootItem> drop, Vector3 position)
     {
-        GameObject[] lootItems = new GameObject[lootItem.GetRandomDropAmount()];
+        List<GameObject> lootItems = new();
 
-        for (int i = 0; i < lootItems.Length; i++)
+        foreach (LootItem item in drop)
         {
-            lootItems[i] = GameObject.Instantiate(lootItem.itemPrefab, position, Quaternion.identity);
+            int amount = item.GetRandomDropAmount();
+            for (int i = 0; i < amount; i++)
+            {
+                lootItems.Add(InstantiateLootItem(item.itemPrefab, position));
+            }
         }
-        
-        return lootItems;
+
+        return lootItems.ToArray();
+    }
+
+    public static GameObject InstantiateLootItem(GameObject item, Vector3 position)
+    {
+        return GameObject.Instantiate(item, position, Quaternion.identity);
+    }
+
+    public static LootItem[] GetGuaranteedLoot(LootItem[] lootItems)
+    {
+        List<LootItem> guaranteedLoot = new();
+
+        foreach (LootItem item in lootItems)
+        {
+            if (item.isGuaranteed)
+            {
+                guaranteedLoot.Add(item);
+            }
+        }
+        return guaranteedLoot.ToArray();
+    }
+
+    public static GameObject[] GetLoot(LootItem[] lootItems, Vector3 position)
+    {
+        List<LootItem> loot = new();
+
+        loot.AddRange(GetGuaranteedLoot(lootItems));
+        loot.Add(FindItemByRandomWeight(lootItems));
+
+        return InstantiateLootItems(loot, position);
     }
 }

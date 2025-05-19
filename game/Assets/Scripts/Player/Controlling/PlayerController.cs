@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
         GetInput = GetComponent<PlayerInputManager>();
         rb = gameObject.GetComponent<Rigidbody>();
         playerHitbox = GameObject.FindGameObjectWithTag("PlayerHitbox").GetComponent<CapsuleCollider>();
-        layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps", "Ignore Raycast");
+        layerMask = ~LayerMask.GetMask("Player", "Ignore Overlaps", "Ignore Raycast", "Loot");
     }
 
     private void Start()
