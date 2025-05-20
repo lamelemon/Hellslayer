@@ -10,20 +10,17 @@ public class EnemySound : MonoBehaviour
     private bool playonce = false; // Variable to check if the sound has played once
 
     // Update is called once per frame
-    void Start()
+    void Awake()
     {
         LastHp = hp_system.current_hp; // Initialize LastHp with the current HP
     }
     void Update()
     {
+        
         if (LastHp != hp_system.current_hp)
         {
             LastHp = hp_system.current_hp; // Update LastHp with the current HP
-            if (!playonce)
-            {
-                playonce = true; // Set playonce to true to prevent multiple sound plays
                 SpikyHitSoundPlay();
-            }
         }
     }
     public void SpikyHitSoundPlay()
