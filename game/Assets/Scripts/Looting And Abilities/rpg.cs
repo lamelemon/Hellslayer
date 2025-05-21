@@ -25,23 +25,29 @@ public class RPG : MonoBehaviour
         // Raycast from player camera to find target point
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         Vector3 targetPoint;
+        Transform lockOnTarget = null;
 
-        if (Physics.Raycast(ray, out RaycastHit hit, 100f)) // Max distance 100 units
+        if (Physics.Raycast(ray, out RaycastHit hit, 100f))
         {
-            targetPoint = hit.point; // Hit something - aim there
+            targetPoint = hit.point;
+
+            // Look for enemy tag on the root of the hit object
+            Transform rootTarget = hit.collider.transform.root;
+            if (rootTarget.CompareTag("Enemy"))
+            {
+                lockOnTarget = rootTarget;
+            }
         }
         else
         {
-            targetPoint = playerCamera.position + playerCamera.forward * 100f; // Nothing hit - aim far forward
+            targetPoint = playerCamera.position + playerCamera.forward * 100f;
         }
 
         // Calculate direction from rocket spawn point to target point
         Vector3 direction = (targetPoint - rocketSpawnPoint.position).normalized;
-
-        // Rotate spawn point to face direction
         rocketSpawnPoint.rotation = Quaternion.LookRotation(direction);
 
-        // Instantiate rocket and fire it
+        // Instantiate rocket and set velocity
         GameObject rocketInstance = Instantiate(rocketPrefab, rocketSpawnPoint.position, rocketSpawnPoint.rotation);
 
         Rigidbody rb = rocketInstance.GetComponent<Rigidbody>();
@@ -51,9 +57,12 @@ public class RPG : MonoBehaviour
             rb.linearDamping = 0f;
             rb.linearVelocity = direction * rocketSpeed;
         }
-        else
+
+        // Assign lock-on target to rocket
+        Rocket rocketScript = rocketInstance.GetComponent<Rocket>();
+        if (rocketScript != null && lockOnTarget != null)
         {
-            Debug.LogWarning("Rigidbody missing on rocket prefab!");
+            rocketScript.AssignTarget(lockOnTarget);
         }
     }
 }
