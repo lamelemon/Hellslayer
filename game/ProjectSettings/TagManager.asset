@@ -25,7 +25,7 @@ TagManager:
   - FpsCamera
   - Ignore Overlaps
   - enemy_1
-  - 
+  - Projectile
   - Loot
   - enemyLayer
   - 
