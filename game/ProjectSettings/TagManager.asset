@@ -3,35 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags:
-  - playerCamera
-  - playerModel
-  - PlayerHitbox
-  - handPosition
-  - crosshair
-  - crimson_sword
-  - katana
-  - spiky
-  - rpg
-  - rocket
-  - Enemy
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Player
+  - 
   - Water
   - UI
-  - FpsCamera
-  - Ignore Overlaps
-  - enemy_1
-<<<<<<< HEAD
-  - Rocket
-=======
-  - Projectile
->>>>>>> 488345497344c0d935ca20f710130447bf06cca2
-  - Loot
-  - enemyLayer
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
   - 
   - 
   - 
@@ -58,10 +43,3 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
-  - Light Layer 1
-  - Light Layer 2
-  - Light Layer 3
-  - Light Layer 4
-  - Light Layer 5
-  - Light Layer 6
-  - Light Layer 7
