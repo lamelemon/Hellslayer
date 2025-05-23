@@ -25,7 +25,11 @@ TagManager:
   - FpsCamera
   - Ignore Overlaps
   - enemy_1
+<<<<<<< HEAD
+  - Rocket
+=======
   - Projectile
+>>>>>>> 488345497344c0d935ca20f710130447bf06cca2
   - Loot
   - enemyLayer
   - 

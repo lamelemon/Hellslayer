@@ -43,6 +43,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        getInput.OnEnable();
         pauseMenuUI.SetActive(false); // Hide the pause menu
         crosshair.SetActive(true); // Show the crosshair
         Time.timeScale = 1f; // Resume game time
@@ -55,6 +56,7 @@ public class PauseMenu : MonoBehaviour
 
     void Pause()
     {
+        getInput.DisableExptMenu();
         pauseMenuUI.SetActive(true); // Show the pause menu
         crosshair.SetActive(false); // Hide the crosshair
         Time.timeScale = 0f; // Freeze game time
