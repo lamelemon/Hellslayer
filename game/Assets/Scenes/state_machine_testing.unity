@@ -1721,6 +1721,7 @@ GameObject:
   - component: {fileID: 1014629445}
   - component: {fileID: 1014629446}
   - component: {fileID: 1014629447}
+  - component: {fileID: 1014629448}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1901,6 +1902,21 @@ MonoBehaviour:
   max_hp: 100
   target: {fileID: 0}
   hp_bar: {fileID: 1456056793}
+--- !u!114 &1014629448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1014629437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 058050902192e864cb8296db95d5727c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerHitSoundPitchMin: 0.9
+  PlayerHitSoundPitchMax: 1
+  hp_system: {fileID: 1014629447}
 --- !u!1 &1026174632
 GameObject:
   m_ObjectHideFlags: 0
@@ -10178,6 +10194,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 09ac1c84beb00a44bb10ae2c6f1cd4b4, type: 3}
   - name: SpikyDie
     clip: {fileID: 8300000, guid: 171ea62a66531e94c9ae5494682be889, type: 3}
+  - name: PlayerHit
+    clip: {fileID: 8300000, guid: f4136a6aa9b199949903e6b051c1fac6, type: 3}
   musicSource: {fileID: 422924765}
   sfxSource: {fileID: 347466498}
 --- !u!4 &1723353575 stripped
