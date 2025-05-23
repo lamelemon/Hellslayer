@@ -34,21 +34,22 @@ public class hp_system : MonoBehaviour
     public void take_damage(int amount)  // void is a function that does not return anything
     {
         current_hp -= amount;
-        
         hp_bar.hp_bar_set(current_hp);
 
         if(current_hp <= 0)
         {
-            Debug.Log("died!");
 
             if (lootDropping != null && lootDropping.lootItems.Length > 0) // Check if loot items are available
             {
                 lootDropping.DropLoot(); // Call the DropLoot method from the LootDropping script
             }
-
+            else if (target.CompareTag("spiky")) // if target has spiky tag
+            {
+                return; // dont destroy/hide on this script
+            }
             else
             {
-                target.SetActive(false); // Deactivate the player object
+                target.SetActive(false); // Deactivate the player object 
             }
         }
     }

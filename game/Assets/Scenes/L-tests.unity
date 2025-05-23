@@ -5983,11 +5983,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 321147744016480642, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 321147744016480642, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1784802441422537519, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
       propertyPath: AttackRange
@@ -6039,7 +6039,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8049067298189182137, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8166,11 +8166,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7309094601410847407, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7309094601410847407, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8232,13 +8232,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ball_enemy
       objectReference: {fileID: 0}
-    - target: {fileID: 1644588628613520814, guid: 97d8cce2324174b4ba6bbd4ffdc2e333, type: 3}
-      propertyPath: m_AnchorMax.x
+    - target: {fileID: 1013051137120978148, guid: 97d8cce2324174b4ba6bbd4ffdc2e333, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1644588628613520814, guid: 97d8cce2324174b4ba6bbd4ffdc2e333, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1644588628613520814, guid: 97d8cce2324174b4ba6bbd4ffdc2e333, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2843913112000122928, guid: 97d8cce2324174b4ba6bbd4ffdc2e333, type: 3}
       propertyPath: m_Layer
