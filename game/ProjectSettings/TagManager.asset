@@ -14,6 +14,7 @@ TagManager:
   - spiky
   - rpg
   - rocket
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - FpsCamera
   - Ignore Overlaps
   - enemy_1
-  - 
+  - Projectile
   - Loot
   - enemyLayer
   - 
