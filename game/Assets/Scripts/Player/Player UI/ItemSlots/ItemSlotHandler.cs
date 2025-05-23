@@ -29,29 +29,31 @@ public class ItemSlotHandler : MonoBehaviour
 
     public void PickUpItem(TestItem newItem)
     {
-        // Check if the active slot is empty
+        int slotToFill = -1;
         if (itemSlots[activeSlot] == null)
         {
-            itemSlots[activeSlot] = newItem;
+            slotToFill = activeSlot;
         }
-        // If the active slot is full, check the other slot
         else if (itemSlots[1 - activeSlot] == null)
         {
-            itemSlots[1 - activeSlot] = newItem;
+            slotToFill = 1 - activeSlot;
         }
-        // If both slots are full, drop the item in the active slot and replace it
         else
         {
             PlayerInteraction.DropItem();
             DropItem();
-            itemSlots[activeSlot] = newItem;
+            slotToFill = activeSlot;
         }
 
-        // Update the item's transform for both slots
+        itemSlots[slotToFill] = newItem;
         UpdateItemTransform(newItem);
-
         UpdateSlotIcons();
-        UpdateHand();
+
+        // Only update hand if we picked up into the active slot
+        if (slotToFill == activeSlot)
+        {
+            UpdateHand();
+        }
     }
 
     // Helper method to set the item's position and rotation
@@ -95,21 +97,29 @@ public class ItemSlotHandler : MonoBehaviour
 
     private void UpdateHand()
     {
-        // Hide the current weapon
+        // Hide the current weapon and disable its script/UI
         if (currentWeapon != null)
         {
-            currentWeapon.SetActive(false); // Hide the current weapon
+            // Disable weapon script and hide UI
+            PlayerInteraction.DisableWeaponScript(currentWeapon);
+            currentWeapon.SetActive(false);
         }
 
         // If the active slot is empty, use fists (no weapon)
         if (itemSlots[activeSlot] == null)
         {
             UseFists();
+            currentWeapon = null;
         }
         else
         {
             // Equip the weapon in the active slot
             EquipWeapon(itemSlots[activeSlot]);
+            currentWeapon = itemSlots[activeSlot].gameObject;
+            currentWeapon.SetActive(true);
+
+            // Only enable weapon script for the equipped item
+            PlayerInteraction.EnableWeaponScript(currentWeapon);
         }
     }
 

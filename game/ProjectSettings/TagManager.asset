@@ -12,6 +12,8 @@ TagManager:
   - crimson_sword
   - katana
   - spiky
+  - rpg
+  - rocket
   layers:
   - Default
   - TransparentFX

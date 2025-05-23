@@ -1,117 +1,129 @@
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 
 public class LaserDesertEagle : MonoBehaviour
 {
-    // References
     [SerializeField] private Camera playerCamera;
     [SerializeField] private Transform muzzlePoint;
     [SerializeField] private LineRenderer laserLine;
     [SerializeField] private PlayerInputManager getInput;
+    [SerializeField] private AmmoTextHandler ammoTextHandler;
 
-    // UI
-    [SerializeField] private Slider heatSlider;
-    [SerializeField] private Image heatFillImage;
-
-    // Weapon Settings
     public float fireRate = 0.5f;
     private float nextFireTime = 0f;
     public float laserDuration = 0.05f;
     public float range = 100f;
     public float damage = 25f;
 
-    // Heat System
-    public float heatPerShot = 25f;
-    public float maxHeat = 100f;
-    public float heatCooldownRate = 15f; // per second
-    public float overheatCooldownTime = 2f;
+    public int maxAmmo = 7;
+    private int currentAmmo;
+    public float reloadTime = 3f;
+    private bool isReloading = false;
 
-    private float currentHeat = 0f;
-    private bool isOverheated = false;
-
-    // Accuracy Settings
     public float crouchAccuracy = 0.005f;
     public float hipAccuracy = 0.05f;
     public float moveAccuracy = 0.08f;
 
     private bool isMoving;
     private bool isCrouching;
+    private Coroutine reloadCoroutine;
+    private Coroutine laserCoroutine;
+
+    private bool hasFiredThisFrame = false;
+
+    public int CurrentAmmo => currentAmmo;
+    public int MaxAmmo => maxAmmo;
 
     void Start()
     {
         laserLine.enabled = false;
-        currentHeat = 0f;
-        UpdateHeatUI(); // Initialize UI
+        currentAmmo = maxAmmo;
+    }
+
+    void OnEnable()
+    {
+        ammoTextHandler?.Show(this);
+        UpdateAmmoUI();
+    }
+
+    void OnDisable()
+    {
+        ammoTextHandler?.Hide();
     }
 
     void Update()
     {
-        CheckMovementInput();
+        if (!gameObject.activeInHierarchy || isReloading)
+            return;
+
+        isMoving = getInput.MoveInput.IsPressed();
         isCrouching = getInput.CrouchInput.IsPressed();
 
-        HandleHeatCooldown();
-
-        if (getInput.AttackInput.WasPressedThisFrame() && Time.time >= nextFireTime && !isOverheated)
+        if (getInput.ReloadInput != null && getInput.ReloadInput.WasPressedThisFrame() && currentAmmo < maxAmmo)
         {
+            if (reloadCoroutine == null)
+                reloadCoroutine = StartCoroutine(Reload());
+            return;
+        }
+
+        if (!hasFiredThisFrame && getInput.AttackInput.WasPressedThisFrame() && Time.time >= nextFireTime && currentAmmo > 0)
+        {
+            hasFiredThisFrame = true;
             nextFireTime = Time.time + fireRate;
             Fire();
         }
 
-        UpdateHeatUI();
+        UpdateAmmoUI();
     }
 
-    void CheckMovementInput()
+    void LateUpdate()
     {
-        isMoving = getInput.MoveInput.IsPressed();
+        hasFiredThisFrame = false;
     }
 
     void Fire()
     {
-        // Add heat
-        currentHeat += heatPerShot;
-        if (currentHeat >= maxHeat)
-        {
-            currentHeat = maxHeat;
-            isOverheated = true;
-            StartCoroutine(OverheatCooldown());
-        }
+        Debug.Log("Fire() called at frame: " + Time.frameCount);
 
-        // Determine spread based on state
+        currentAmmo--;
+
         float spread = isCrouching ? crouchAccuracy : (isMoving ? moveAccuracy : hipAccuracy);
 
-        // Create ray from screen center
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f));
-        Vector3 direction = ray.direction + new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread), 0);
-        Ray spreadRay = new Ray(ray.origin, direction);
+        Vector3 randomOffset = new Vector3(Random.Range(-spread, spread), Random.Range(-spread, spread), 0);
+        Vector3 spreadDirection = (ray.direction + randomOffset).normalized;
+        Ray spreadRay = new Ray(ray.origin, spreadDirection);
 
         Vector3 hitPoint;
 
         if (Physics.Raycast(spreadRay, out RaycastHit hit, range))
         {
             hitPoint = hit.point;
-            DealDamage(hit);
+
+            EnemyHealth enemy = hit.collider.GetComponentInParent<EnemyHealth>();
+            if (enemy != null)
+            {
+                enemy.TakeDamage((int)damage);
+                Debug.Log($"Hit enemy: {enemy.gameObject.name} for {damage} damage");
+            }
         }
         else
         {
             hitPoint = spreadRay.GetPoint(range);
         }
 
-        StartCoroutine(FireLaser(hitPoint));
+        if (laserCoroutine != null)
+        {
+            StopCoroutine(laserCoroutine);
+        }
+
+        laserCoroutine = StartCoroutine(FireLaser(hitPoint));
 
         Debug.DrawRay(spreadRay.origin, spreadRay.direction * range, Color.red, 0.5f);
-    }
 
-    void DealDamage(RaycastHit hit)
-    {
-        if (hit.collider.GetComponentInParent<EnemyHealth>() is EnemyHealth enemyHealth)
+        if (currentAmmo <= 0 && reloadCoroutine == null)
         {
-            enemyHealth.TakeDamage((int)damage);
-            Debug.Log($"{gameObject.name} attacked {hit.collider.gameObject.name} for {(int)damage} damage.");
-        }
-        else
-        {
-            Debug.LogError("EnemyHealth component is missing on the target.");
+            reloadCoroutine = StartCoroutine(Reload());
         }
     }
 
@@ -122,43 +134,45 @@ public class LaserDesertEagle : MonoBehaviour
         laserLine.enabled = true;
         yield return new WaitForSeconds(laserDuration);
         laserLine.enabled = false;
+        laserCoroutine = null;
     }
 
-    void HandleHeatCooldown()
+    IEnumerator Reload()
     {
-        if (!isOverheated && currentHeat > 0f)
+        isReloading = true;
+        yield return new WaitForSeconds(reloadTime);
+        currentAmmo = maxAmmo;
+        isReloading = false;
+        reloadCoroutine = null;
+        UpdateAmmoUI();
+    }
+
+    public void CancelReload()
+    {
+        if (reloadCoroutine != null)
         {
-            currentHeat -= heatCooldownRate * Time.deltaTime;
-            currentHeat = Mathf.Clamp(currentHeat, 0f, maxHeat);
+            StopCoroutine(reloadCoroutine);
+            reloadCoroutine = null;
+        }
+        isReloading = false;
+    }
+
+    public void SetEquipped(bool equipped)
+    {
+        if (equipped)
+        {
+            ammoTextHandler?.Show(this);
+            UpdateAmmoUI();
+        }
+        else
+        {
+            ammoTextHandler?.Hide();
+            CancelReload();
         }
     }
 
-    IEnumerator OverheatCooldown()
+    void UpdateAmmoUI()
     {
-        yield return new WaitForSeconds(overheatCooldownTime);
-        isOverheated = false;
-        currentHeat = 0f;
-    }
-
-    void UpdateHeatUI()
-    {
-        if (heatSlider != null)
-        {
-            heatSlider.maxValue = maxHeat;
-            heatSlider.value = currentHeat;
-
-            if (heatFillImage != null)
-            {
-                if (isOverheated)
-                {
-                    heatFillImage.color = Color.red;
-                }
-                else
-                {
-                    float t = currentHeat / maxHeat;
-                    heatFillImage.color = Color.Lerp(Color.green, Color.yellow, t);
-                }
-            }
-        }
+        ammoTextHandler?.UpdateAmmo();
     }
 }
