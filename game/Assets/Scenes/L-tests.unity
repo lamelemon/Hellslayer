@@ -4766,6 +4766,7 @@ MonoBehaviour:
   itemSlotHandler: {fileID: 652543185}
   crimson_sword: crimson_sword
   katana: katana
+  rpg: rpg
   currentlyHeldItem: {fileID: 0}
 --- !u!114 &774600905
 MonoBehaviour:
@@ -5903,6 +5904,8 @@ MonoBehaviour:
   - itemPrefab: {fileID: 24434161}
     weight: 0
     dropAmountRange: {x: 300, y: 301}
+    isStackable: 1
+    isGuaranteed: 0
 --- !u!1 &1347857771 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 6c618c494c1193b4aaabaf3356f8685d, type: 3}
@@ -6175,11 +6178,6 @@ MonoBehaviour:
     dropAmountRange: {x: 10, y: 11}
     isStackable: 0
     isGuaranteed: 0
---- !u!4 &1429141847 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 5981910195043663163, guid: 17bd4328feb15624ab1a05f0c6255c16, type: 3}
-  m_PrefabInstance: {fileID: 1410495218}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1467756965
 GameObject:
   m_ObjectHideFlags: 0
@@ -8176,15 +8174,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 513.11
+      value: 484.24
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 56.53
+      value: 72.6
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 502.37
+      value: 504.6
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -8192,15 +8190,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7354344811398932448, guid: c86577a6bcbadce45824ebe4a690220f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
