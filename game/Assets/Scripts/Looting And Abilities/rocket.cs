@@ -12,6 +12,7 @@ public class Rocket : MonoBehaviour
 
     private Transform target;
     private Rigidbody rb;
+    private bool hasExploded = false;
 
     public void AssignTarget(Transform targetTransform)
     {
@@ -20,7 +21,7 @@ public class Rocket : MonoBehaviour
 
     private void Start()
     {
-        Destroy(gameObject, lifetime);
+        Invoke(nameof(Explode), lifetime); // Trigger explosion after lifetime ends
 
         rb = GetComponent<Rigidbody>();
         if (rb != null)
@@ -40,6 +41,21 @@ public class Rocket : MonoBehaviour
                 foreach (Collider playerCol in playerColliders)
                 {
                     Physics.IgnoreCollision(rocketCollider, playerCol);
+                }
+            }
+        }
+
+        // Ignore other rockets
+        Collider myCollider = GetComponent<Collider>();
+        Rocket[] otherRockets = FindObjectsByType<Rocket>(FindObjectsSortMode.None);
+        foreach (Rocket otherRocket in otherRockets)
+        {
+            if (otherRocket != this)
+            {
+                Collider otherCol = otherRocket.GetComponent<Collider>();
+                if (myCollider != null && otherCol != null)
+                {
+                    Physics.IgnoreCollision(myCollider, otherCol);
                 }
             }
         }
@@ -63,12 +79,16 @@ public class Rocket : MonoBehaviour
 
     private void Explode()
     {
+        if (hasExploded) return;
+        hasExploded = true;
+
         if (explosionEffectPrefab != null)
         {
+            explosionEffectPrefab.transform.localScale = Vector3.one * explosionRadius;
             Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
 
-        // Check for enemies in AoE using the specified enemyLayer
+        // Damage enemies in explosion radius
         Collider[] hits = Physics.OverlapSphere(transform.position, explosionRadius, enemyLayer);
         foreach (Collider hit in hits)
         {
