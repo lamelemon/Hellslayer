@@ -44,6 +44,7 @@ public class TestItem : MonoBehaviour
         Debug.Log($"Picked up: {itemName}, value: {itemValue}");
         transform.SetLocalPositionAndRotation(ItemPosition, ItemRotation);
         GetComponent<Rigidbody>().isKinematic = true; // Disable physics
+        GetComponent<ILootable>().ItemPickedUp(); // Call the item picked up method
     }
 
     // Method to perform a melee attack
@@ -78,3 +79,8 @@ public class TestItem : MonoBehaviour
     }
 }
 
+public interface ILootable
+{
+    void ItemPickedUp();
+    void ItemDropped();
+}

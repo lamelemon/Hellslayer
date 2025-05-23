@@ -14,6 +14,7 @@ public class hp_system : MonoBehaviour
     public int max_hp = 100;
     public GameObject target; // reference to the main object
     public int current_hp { get; private set; } = 0;
+    public float damageMultiplier = 1f; // Damage multiplier for the character
     //public Animator anim;
 
     public hp_bar_ui hp_bar; // reference to hp_bar_ui script
@@ -34,10 +35,10 @@ public class hp_system : MonoBehaviour
     public void take_damage(int amount)  // void is a function that does not return anything
     {
         current_hp -= amount;
-        
+
         hp_bar.hp_bar_set(current_hp);
 
-        if(current_hp <= 0)
+        if (current_hp <= 0)
         {
             Debug.Log("died!");
 
@@ -50,6 +51,15 @@ public class hp_system : MonoBehaviour
             {
                 target.SetActive(false); // Deactivate the player object
             }
+        }
+    }
+
+    public IEnumerator TakeDotDamage(int amount, int ticks, float interval)
+    {
+        for (int i = 0; i < ticks; i++)
+        {
+            yield return new WaitForSeconds(interval);
+            take_damage(amount);
         }
     }
 }
