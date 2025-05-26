@@ -26,7 +26,7 @@ public class Katana : MonoBehaviour, IWeapon, ISpecialAbility
 
     private void SpecialAbilityAttack(hp_system enemyHp)
     {
-        hitEnemies.Add(enemyHp.GetComponentInParent<Collider>()); // Add the hit enemy to the array
+        hitEnemies.Add(enemyHp.GetComponent<Collider>()); // Add the hit enemy to the array
         enemyHp.take_damage(Damage);
         StartCoroutine(enemyHp.TakeDotDamage(6, 2, 1f));
         Collider[] enemiesHit = Physics.OverlapSphere(enemyHp.transform.position, specialAbilityRadius, LayerMask.GetMask("enemy_1", "enemyLayer", "Player"));
