@@ -11,12 +11,13 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - FpsCamera
+  - Ignore Overlaps
+  - enemy_1
+  - Rocket
+  - Projectile
+  - Loot
+  - enemyLayer
   - 
   - 
   - 
