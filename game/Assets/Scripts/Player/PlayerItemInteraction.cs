@@ -44,9 +44,6 @@ public class PlayerInteraction : MonoBehaviour
                 {
                     itemSlotHandler.PickUpItem(item);
                     item.PickupInput();
-
-                    // Enable weapon script if RPG
-                    EnableWeaponScript(item.gameObject);
                 }
             }
         }
