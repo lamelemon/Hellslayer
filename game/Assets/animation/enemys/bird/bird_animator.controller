@@ -35,7 +35,7 @@ AnimatorController:
   m_Name: bird_animator
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: speed
+  - m_Name: Speed
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -96,11 +96,11 @@ BlendTree:
     m_Motion: {fileID: 7400000, guid: ba232da2805fda94f8d2fe504330ce5e, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 1
+    m_TimeScale: 1.2
     m_CycleOffset: 0
     m_DirectBlendParameter: speed
     m_Mirror: 0
-  m_BlendParameter: speed
+  m_BlendParameter: Speed
   m_BlendParameterY: speed
   m_MinThreshold: 0
   m_MaxThreshold: 1

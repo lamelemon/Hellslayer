@@ -79,3 +79,8 @@ public class TestItem : MonoBehaviour
     }
 }
 
+public interface ILootable
+{
+    void ItemPickedUp();
+    void ItemDropped();
+}
