@@ -35,7 +35,7 @@ public class RPG : MonoBehaviour
             targetPoint = hit.point;
 
             Transform rootTarget = hit.collider.transform.root;
-            if (rootTarget.CompareTag("Enemy"))
+            if (rootTarget.CompareTag("Enemy") || rootTarget.CompareTag("Boss"))
             {
                 lockOnTarget = rootTarget;
             }

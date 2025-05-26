@@ -60,10 +60,11 @@ public class TestItem : MonoBehaviour
         Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         if (Physics.Raycast(ray, out RaycastHit hit, attackRange, enemyLayer))
         {
+            print("hit sumdin");
             // Check if the hit object has an EnemyHealth component
-            if (hit.collider.GetComponentInParent<EnemyHealth>() is EnemyHealth enemyHealth)
+            if (hit.collider.TryGetComponent(out hp_system enemyHealth))
             {
-                enemyHealth.TakeDamage(damageValue); // Deal damage to the enemy
+                enemyHealth.take_damage(damageValue); // Deal damage to the enemy
                 Debug.Log($"{itemName} attacked {hit.collider.gameObject.name} for {damageValue} damage.");
             }
             else
