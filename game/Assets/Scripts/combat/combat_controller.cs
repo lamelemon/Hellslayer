@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System.Collections;
 using NUnit.Framework.Internal.Commands;
+using Unity.VisualScripting;
 public class combat_controller : MonoBehaviour
 {
     [Header("References about player")]
@@ -31,6 +32,7 @@ public class combat_controller : MonoBehaviour
     [Header("")]
 
     private bool canAttack = true;
+    private bool canUseSpecial = true;
 
     void Awake()
     {
@@ -39,6 +41,7 @@ public class combat_controller : MonoBehaviour
     void Update()
     {
         Attack_Clicked(canAttack && getInput.AttackInput.WasPressedThisFrame() && !PauseMenu.isPaused);
+        SpecialAbility_Clicked(canUseSpecial && getInput.SpecialInput.WasPressedThisFrame() && !PauseMenu.isPaused);
     }
 
     void Attack_Clicked(bool is_attacking)
@@ -47,6 +50,15 @@ public class combat_controller : MonoBehaviour
         if (is_attacking)
         {
             Attack();
+        }
+    }
+
+    void SpecialAbility_Clicked(bool is_special_ability)
+    {
+        animator.SetBool("is_special_ability", is_special_ability);
+        if (is_special_ability)
+        {
+            SpecialAbility();
         }
     }
 
@@ -59,10 +71,12 @@ public class combat_controller : MonoBehaviour
         if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent<IWeapon>(out var heldItem))
         {
             heldItem.Attack();
+
             if (playerItemInteraction.currentlyHeldItem.TryGetComponent<IReloadable>(out var reloadableItem))
             {
                 reloadableItem.DeductAmmo();
             }
+
             StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown));
         }
         else
@@ -82,10 +96,26 @@ public class combat_controller : MonoBehaviour
         }
     }
 
+    void SpecialAbility()
+    {
+        // Check if the player is holding an item with the ISpecialAbility interface
+        if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent<ISpecialAbility>(out var specialAbilityItem))
+        {
+            specialAbilityItem.SpecialAbility();
+            StartCoroutine(SpecialAbilityCooldownRoutine(specialAbilityItem.specialCooldown));
+        }
+    }
+
     IEnumerator AttackCooldownRoutine(float attackCooldown)
     {
         yield return new WaitForSeconds(attackCooldown);
         canAttack = true;
+    }
+
+    IEnumerator SpecialAbilityCooldownRoutine(float specialAbilityCooldown)
+    {
+        yield return new WaitForSeconds(specialAbilityCooldown);
+        canUseSpecial = true;
     }
 
 
@@ -107,7 +137,6 @@ public interface IWeapon
     float AttackRange { get; set; } // Property to get and set attack range
     float AttackCooldown { get; set; } // Property to get and set attack cooldown
     void Attack();
-    void SpecialAbility();
 }
 
 public interface IReloadable
@@ -118,4 +147,10 @@ public interface IReloadable
     float AmmoPerShot { get; set; }
     void Reload(int amount = 0, bool ReloadsFully = false, float ReloadSpeed = 0);
     void DeductAmmo();
+}
+
+public interface ISpecialAbility
+{
+    void SpecialAbility();
+    float specialCooldown { get; set; } // Property to get and set special ability cooldown
 }

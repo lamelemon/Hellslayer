@@ -7,14 +7,18 @@ public class RPG : MonoBehaviour
     [SerializeField] private PlayerInputManager getInput;
     [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private Transform rocketSpawnPoint;
-    [SerializeField] private float rocketSpeed = 50f;
+    [SerializeField] private float rocketSpeed = 60f;
     [SerializeField] private Transform playerCamera;
+
+    [SerializeField] private float fireCooldown = 3f; // Cooldown in seconds
+    private float lastFireTime = -Mathf.Infinity;
 
     void Update()
     {
-        if (getInput.AttackInput.WasPressedThisFrame())
+        if (getInput.AttackInput.WasPressedThisFrame() && Time.time >= lastFireTime + fireCooldown)
         {
             FireRocket();
+            lastFireTime = Time.time;
         }
     }
 
@@ -22,7 +26,6 @@ public class RPG : MonoBehaviour
     {
         Debug.Log("Rocket Launched");
 
-        // Raycast from player camera to find target point
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         Vector3 targetPoint;
         Transform lockOnTarget = null;
@@ -31,7 +34,6 @@ public class RPG : MonoBehaviour
         {
             targetPoint = hit.point;
 
-            // Look for enemy tag on the root of the hit object
             Transform rootTarget = hit.collider.transform.root;
             if (rootTarget.CompareTag("Enemy"))
             {
@@ -43,11 +45,9 @@ public class RPG : MonoBehaviour
             targetPoint = playerCamera.position + playerCamera.forward * 100f;
         }
 
-        // Calculate direction from rocket spawn point to target point
         Vector3 direction = (targetPoint - rocketSpawnPoint.position).normalized;
         rocketSpawnPoint.rotation = Quaternion.LookRotation(direction);
 
-        // Instantiate rocket and set velocity
         GameObject rocketInstance = Instantiate(rocketPrefab, rocketSpawnPoint.position, rocketSpawnPoint.rotation);
 
         Rigidbody rb = rocketInstance.GetComponent<Rigidbody>();
@@ -58,7 +58,6 @@ public class RPG : MonoBehaviour
             rb.linearVelocity = direction * rocketSpeed;
         }
 
-        // Assign lock-on target to rocket
         Rocket rocketScript = rocketInstance.GetComponent<Rocket>();
         if (rocketScript != null && lockOnTarget != null)
         {

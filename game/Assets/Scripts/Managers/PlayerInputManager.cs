@@ -13,7 +13,7 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction MouseInput { get; private set; }
     public InputAction AttackInput { get; private set; }
     public InputAction PickupInput { get; private set; }
-    public InputAction DropInput { get; private set; } 
+    public InputAction DropInput { get; private set; }
     public InputAction SlideInput { get; private set; }
     public InputAction SpecialInput { get; private set; }
     public InputAction ReloadInput { get; private set; }
@@ -32,7 +32,7 @@ public class PlayerInputManager : MonoBehaviour
         MouseInput = InputSystem.actions.FindAction("MouseInput");
         AttackInput = InputSystem.actions.FindAction("AttackInput");
         PickupInput = InputSystem.actions.FindAction("PickupInput");
-        DropInput = InputSystem.actions.FindAction("DropInput"); 
+        DropInput = InputSystem.actions.FindAction("DropInput");
         SlideInput = InputSystem.actions.FindAction("SlideInput");
         SpecialInput = InputSystem.actions.FindAction("SpecialInput");
         ReloadInput = InputSystem.actions.FindAction("ReloadInput");    
@@ -44,7 +44,7 @@ public class PlayerInputManager : MonoBehaviour
         MouseValue = MouseInput.ReadValue<Vector2>();
     }
 
-    private void OnEnable()
+    public void OnEnable()
     {
         ItemSlot1Input.Enable();
         ItemSlot2Input.Enable();
@@ -62,7 +62,7 @@ public class PlayerInputManager : MonoBehaviour
         ReloadInput.Enable();
     }
 
-    private void OnDisable()
+    public void OnDisable()
     {
         ItemSlot1Input.Disable();
         ItemSlot2Input.Disable();
@@ -74,7 +74,23 @@ public class PlayerInputManager : MonoBehaviour
         MouseInput.Disable();
         AttackInput.Disable();
         PickupInput.Disable();
-        DropInput.Disable(); 
+        DropInput.Disable();
+        SlideInput.Disable();
+        SpecialInput.Disable();
+    }
+
+        public void DisableExptMenu()
+    {
+        ItemSlot1Input.Disable();
+        ItemSlot2Input.Disable();
+        MoveInput.Disable();
+        JumpInput.Disable();
+        SprintInput.Disable();
+        CrouchInput.Disable();
+        MouseInput.Disable();
+        AttackInput.Disable();
+        PickupInput.Disable();
+        DropInput.Disable();
         SlideInput.Disable();
         SpecialInput.Disable();
         ReloadInput.Disable();

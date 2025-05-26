@@ -110,7 +110,7 @@ MonoBehaviour:
   lifetime: 10
   turnSpeed: 7
   rocketSpeed: 10
-  explosionRadius: 5
+  explosionRadius: 3
   damageValue: 20
   enemyLayer:
     serializedVersion: 2
