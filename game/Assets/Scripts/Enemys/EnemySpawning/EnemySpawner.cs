@@ -1,18 +1,31 @@
 using UnityEngine;
 using System.Collections;
+// <summary>
+// EnemySpawner is responsible for spawning enemies in waves with increasing difficulty.
 
+// !!! need make more wawe like you can use player score to start wave
 public class EnemySpawner : MonoBehaviour
 {
     public GameObject EnemyPrefab;
+    public GameObject SecondEnemyPrefab;
 
-    [Header("Zero Wave")]
+    [Header("Wave settings")]
     [SerializeField] private int waveEnemyCount = 1;
-    [SerializeField] private float EnemyMinSpawnDelay = 0.5f;
-    [SerializeField] private float EnemyMaxSpawnDelay = 2.0f;
-    [SerializeField] private int waveEnemyCounStep = 1;
+    [SerializeField] private float EnemyMinSpawnDelay = 0.1f;
+    [SerializeField] private float EnemyMaxSpawnDelay = 0.3f;
+    [SerializeField] private int waveEnemyCounStepAdd = 1;
     [SerializeField] private float WaveStartDelay = 5f;
-    [SerializeField] private float WaveStartDelayStepAdd = 3f;
-    [SerializeField] private float SpawnRadius = 15f;
+    [SerializeField] private float SpawnRadius = 30f;
+    [Header("Wave Difficulty Settings")]
+    [SerializeField] private int BabyWaveCount = 20;
+    [SerializeField] private float WaveStartDelayStepAdd = 6f; // Delay between waves increases by this amount each time
+    [SerializeField] private float WaveStartDelayStepSub = 1f;
+
+    [Header("References")]
+    [SerializeField] private PlayerScore PlayerScore;
+
+    private int currentWave = 0;
+    private int CurrentPlayerScore = 0; // reward score for spiky is 5 and Bird is 10
 
     private bool WaveCanStart = true;
     private bool shouldIncreaseDifficulty = true;
@@ -20,22 +33,37 @@ public class EnemySpawner : MonoBehaviour
 
     private void DifficultyIncrease()
     {
-        waveEnemyCount += waveEnemyCounStep; // Increase enemy count
-        WaveStartDelay += WaveStartDelayStepAdd; // Increase delay between waves
+        waveEnemyCount += waveEnemyCounStepAdd; // Increase enemy count
+        if (currentWave < BabyWaveCount)
+        {
+            WaveStartDelay += WaveStartDelayStepAdd; // Increase delay between waves
+        }
+        else
+        {
+            WaveStartDelay -= WaveStartDelayStepSub; // Decrease delay between waves
+        }
     }
 
     void Update()
     {
-        if (WaveCanStart)
+        CurrentPlayerScore = PlayerScore.CurrentScore;
+        //Debug.Log($"Current all Player Score: {PlayerScore.SumScore}");
+        /*Debug.Log($"Current Player Score: {CurrentPlayerScore}");
+        Debug.Log($"Current Wave: {currentWave}");
+        Debug.Log($"Needed scpre to start wave: {(waveEnemyCount -1) * 5}");*/
+        if (CurrentPlayerScore >= 5 * (waveEnemyCount -1)) // has minimal score to start wave. Like start wave if has minimal rewards score from enemies
         {
-            WaveCanStart = false;
-            StartCoroutine(SpawnWave());
-            isWaitingForNextWave = false;
-        }
-        else if (!isWaitingForNextWave)
-        {
-            StartCoroutine(StartWave());
-            isWaitingForNextWave = true;
+            if (WaveCanStart)
+            {
+                WaveCanStart = false;
+                StartCoroutine(SpawnWave());
+                isWaitingForNextWave = false;
+            }
+            else if (!isWaitingForNextWave)
+            {
+                StartCoroutine(StartWave());
+                isWaitingForNextWave = true;
+            }
         }
     }
 
@@ -48,11 +76,19 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(Vector3 position)
     {
-        Instantiate(EnemyPrefab, position, Quaternion.identity);
+        if (Random.Range(1, 10) > 3) // 70% chance to spawn the first enemy type
+            Instantiate(EnemyPrefab, position, Quaternion.identity);
+        else // 30% chance to spawn the second enemy type
+        {
+            Instantiate(SecondEnemyPrefab, position, Quaternion.identity);
+        }
     }
 
     private IEnumerator SpawnWave()
     {
+        currentWave += 1;
+        PlayerScore.ResetScore();
+
         for (int i = 0; i < waveEnemyCount; i++)
         {
             SpawnEnemy(GetRandomSpawnPosition());

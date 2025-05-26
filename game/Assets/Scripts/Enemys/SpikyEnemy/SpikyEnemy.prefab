@@ -87,7 +87,7 @@ MonoBehaviour:
   groundDrag: 0.003
   Mass: 2
   PathFindingUpdateTime: 0.2
-  WatchRange: 30
+  WatchRange: 40
   GroundCollider: {fileID: 5924831557794767751}
   Animator: {fileID: 4411119557136769027}
   Visuals: {fileID: 2932174494635146227}
@@ -147,8 +147,11 @@ MonoBehaviour:
   SpikyDieSoundPitchMin: 0.85
   SpikyDieSoundPitchMax: 1
   hp_system: {fileID: 6940898973721108248}
+  playerScore: {fileID: 0}
+  Player: {fileID: 0}
   keep_active_object: {fileID: 7078615166593609253}
   keep_active_script: {fileID: 6940898973721108248}
+  RewardScoreOnDeath: 5
 --- !u!1 &2513198102177192175
 GameObject:
   m_ObjectHideFlags: 0
@@ -658,6 +661,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_hp: 30
   target: {fileID: 506255732185183988}
+  damageMultiplier: 1
   hp_bar: {fileID: 4106915671126861083}
 --- !u!114 &7421922285607388238
 MonoBehaviour:
