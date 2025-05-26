@@ -26,7 +26,7 @@ public class Rocket : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.useGravity = false;
+            // rb.useGravity = false;
             rb.linearVelocity = transform.forward * rocketSpeed;
         }
 
