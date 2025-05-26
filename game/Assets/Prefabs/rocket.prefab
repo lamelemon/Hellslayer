@@ -114,7 +114,7 @@ MonoBehaviour:
   damageValue: 20
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2048
   explosionEffectPrefab: {fileID: 1007127540951276732, guid: 3ace37360f306cb4aac03640550fa9ef, type: 3}
 --- !u!54 &5139012048670441356
 Rigidbody:
