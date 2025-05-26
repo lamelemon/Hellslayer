@@ -4,7 +4,7 @@ public class SpikySound : MonoBehaviour
 {
     [Header("Sound Pitch Ranges")]
     [Range(0.01f, 20.0f)] public float SpikyHitSoundPitchMin = 0.80f;
-    [Range(0.01f, 20.0f)] public float SpikyHitSoundPitchMax = 0.82f;
+    [Range(0.01f, 20.0f)] public float SpikyHitSoundPitchMax = 0.80f;
     [Range(0.01f, 20.0f)] public float SpikyDieSoundPitchMin = 0.85f;
     [Range(0.01f, 20.0f)] public float SpikyDieSoundPitchMax = 1.0f;
 
