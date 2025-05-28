@@ -3492,9 +3492,9 @@ MonoBehaviour:
   fireInterval: 4
   fireballSpeed: 18
   enemyPrefab: {fileID: 1028601723386704583, guid: 8f7ca3a6e48618c4081c4e353faff22a, type: 3}
-  spawnInterval: 25
-  enemiesPerSpawn: 5
-  spawnRadius: 10
+  spawnInterval: 15
+  enemiesPerSpawn: 3
+  spawnRadius: 15
 --- !u!4 &1167582000 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
@@ -5866,7 +5866,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1770657796}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6204f7f4e1ce66d4ebded0d89a76c406, type: 3}
   m_Name: 
@@ -7157,6 +7157,14 @@ PrefabInstance:
     - target: {fileID: 1028601723386704583, guid: 8f7ca3a6e48618c4081c4e353faff22a, type: 3}
       propertyPath: m_Name
       value: bird
+      objectReference: {fileID: 0}
+    - target: {fileID: 1997603295637288202, guid: 8f7ca3a6e48618c4081c4e353faff22a, type: 3}
+      propertyPath: maxHealth
+      value: 81
+      objectReference: {fileID: 0}
+    - target: {fileID: 5623234705829389199, guid: 8f7ca3a6e48618c4081c4e353faff22a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8690438773805881618, guid: 8f7ca3a6e48618c4081c4e353faff22a, type: 3}
       propertyPath: m_LocalPosition.x
