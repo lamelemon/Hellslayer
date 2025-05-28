@@ -101,8 +101,9 @@ public class combat_controller : MonoBehaviour
         // Check if the player is holding an item with the ISpecialAbility interface
         if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent<ISpecialAbility>(out var specialAbilityItem))
         {
+            canUseSpecial = false;
             specialAbilityItem.SpecialAbility();
-            StartCoroutine(SpecialAbilityCooldownRoutine(specialAbilityItem.specialCooldown));
+            StartCoroutine(SpecialAbilityCooldownRoutine(specialAbilityItem.SpecialCooldown));
         }
     }
 
@@ -152,5 +153,5 @@ public interface IReloadable
 public interface ISpecialAbility
 {
     void SpecialAbility();
-    float specialCooldown { get; set; } // Property to get and set special ability cooldown
+    float SpecialCooldown { get; set; } // Property to get and set special ability cooldown
 }

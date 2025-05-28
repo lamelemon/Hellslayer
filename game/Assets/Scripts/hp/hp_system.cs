@@ -52,7 +52,7 @@ public class hp_system : MonoBehaviour
         }
     }
 
-    public IEnumerator TakeDotDamage(int amount, int ticks, float interval)
+    public IEnumerator TakeDotDamage(int amount, int ticks, float interval = 1f)
     {
         for (int i = 0; i < ticks; i++)
         {

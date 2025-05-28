@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -29,6 +30,15 @@ public class EnemyHealth : MonoBehaviour
             Die();
         }
     }
+
+    public IEnumerator TakeDotDamage(int amount, int ticks, float interval = 1f)
+    {
+        for (int i = 0; i < ticks; i++)
+        {
+            yield return new WaitForSeconds(interval);
+            TakeDamage(amount);
+        }
+    }  
 
     // Method to handle enemy death
     private void Die()
