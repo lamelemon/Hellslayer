@@ -1053,7 +1053,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422893842}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
   m_Name: 
@@ -2430,6 +2430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_hp: 100
   target: {fileID: 0}
+  damageMultiplier: 1
   hp_bar: {fileID: 1939205005}
 --- !u!54 &862227835
 Rigidbody:
@@ -6983,6 +6984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d60718090bfd166459ce64b832e91424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  specialDuration: 6
+  specialAbilityRadius: 5
+  maxSpecialAbilityHits: 3
 --- !u!65 &2044940840
 BoxCollider:
   m_ObjectHideFlags: 0

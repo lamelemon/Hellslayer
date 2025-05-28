@@ -15,7 +15,7 @@ public class Katana : MonoBehaviour, IWeapon, ISpecialAbility
     public float specialAbilityRadius = 5f;
     public int maxSpecialAbilityHits = 3;
     public float specialCooldown { get; set; } = 10f; // Cooldown time for the special ability
-    private List<Collider> hitEnemies; // Array to store enemies hit by the special ability
+    private List<GameObject> hitEnemies = new(); // Array to store enemies hit by the special ability
 
     public void SpecialAbility()
     {
@@ -26,20 +26,30 @@ public class Katana : MonoBehaviour, IWeapon, ISpecialAbility
 
     private void SpecialAbilityAttack(hp_system enemyHp)
     {
-        hitEnemies.Add(enemyHp.GetComponent<Collider>()); // Add the hit enemy to the array
+        if (hitEnemies.Count >= maxSpecialAbilityHits)
+        {
+            hitEnemies.Clear(); // Clear the hit enemies list if max hits reached
+            return;
+        }
+
+        if (!hitEnemies.Contains(enemyHp.gameObject))
+        {
+            hitEnemies.Add(enemyHp.gameObject); // Add the enemy to the hit enemies list
+        }
+        
         enemyHp.take_damage(Damage);
         StartCoroutine(enemyHp.TakeDotDamage(6, 2, 1f));
-        Collider[] enemiesHit = Physics.OverlapSphere(enemyHp.transform.position, specialAbilityRadius, LayerMask.GetMask("enemy_1", "enemyLayer", "Player"));
+        Collider[] enemiesHit = Physics.OverlapSphere(enemyHp.transform.position, specialAbilityRadius, LayerMask.GetMask("enemy_1", "enemyLayer"));
 
         foreach (Collider enemy in enemiesHit)
         {
-            if (hitEnemies.Contains(enemy)) continue; // Skip the original hit enemy
+            if (hitEnemies.Contains(enemy.gameObject)) continue; // Skip the original hit enemy
 
-            else if (hitEnemies.Count >= maxSpecialAbilityHits) break; // Stop if max hits reached
-
-            else if (enemy.TryGetComponent(out hp_system enemyHpSystem))
+            else if (enemy.gameObject.TryGetComponent(out hp_system hitEnemyHpSystem))
             {
-                SpecialAbilityAttack(enemyHpSystem); // Call the special ability attack method
+                print("hit enemy: " + enemy.gameObject.name);
+                SpecialAbilityAttack(hitEnemyHpSystem); // Call the special ability attack method
+                break;
             }
         }
     }
@@ -49,7 +59,7 @@ public class Katana : MonoBehaviour, IWeapon, ISpecialAbility
         // Implement the attack logic here
         Debug.Log("Katana attack performed!");
         // Perform a raycast to check for enemies in range
-        if (Physics.SphereCast(transform.position, AttackRange, GameObject.FindGameObjectWithTag("playerCamera").transform.forward, out RaycastHit hit, AttackRange, LayerMask.GetMask("enemy_1", "enemyLayer", "Player")) && hit.collider.TryGetComponent(out hp_system enemyHp))
+        if (Physics.SphereCast(transform.position, AttackRange, GameObject.FindGameObjectWithTag("playerCamera").transform.forward, out RaycastHit hit, AttackRange, LayerMask.GetMask("enemy_1", "enemyLayer")) && hit.collider.gameObject.TryGetComponent(out hp_system enemyHp))
         {
             if (isUsingSpecial)
             {

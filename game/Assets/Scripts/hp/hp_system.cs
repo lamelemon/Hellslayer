@@ -14,7 +14,7 @@ public class hp_system : MonoBehaviour
     public int max_hp = 100;
     public GameObject target; // reference to the main object
     public int current_hp { get; private set; } = 0;
-    public float damageMultiplier = 1f; // Damage multiplier for the character
+    public int damageMultiplier = 1; // Damage multiplier for the character
     //public Animator anim;
 
     public hp_bar_ui hp_bar; // reference to hp_bar_ui script
@@ -34,6 +34,7 @@ public class hp_system : MonoBehaviour
     }
     public void take_damage(int amount)  // void is a function that does not return anything
     {
+        amount *= damageMultiplier;
         current_hp -= amount;
         hp_bar.hp_bar_set(current_hp);
 
