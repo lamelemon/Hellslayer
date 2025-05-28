@@ -15,6 +15,7 @@ TagManager:
   - rpg
   - rocket
   - Enemy
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -28,7 +29,7 @@ TagManager:
   - Projectile
   - Loot
   - enemyLayer
-  - 
+  - Boss
   - 
   - 
   - 

@@ -45,10 +45,6 @@ public class hp_system : MonoBehaviour
             {
                 lootDropping.DropLoot(); // Call the DropLoot method from the LootDropping script
             }
-            else if (target.CompareTag("spiky")) // if target has spiky tag
-            {
-                return; // dont destroy/hide on this script
-            }
             else
             {
                 target.SetActive(false); // Deactivate the player object 
