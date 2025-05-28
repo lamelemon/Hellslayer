@@ -16,6 +16,7 @@ TagManager:
   - rocket
   - Enemy
   - Boss
+  - bird
   layers:
   - Default
   - TransparentFX

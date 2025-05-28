@@ -24,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerScore PlayerScore;
 
-    private int currentWave = 0;
+    [HideInInspector] public int currentWave = 0;
     private int CurrentPlayerScore = 0; // reward score for spiky is 5 and Bird is 10
 
     [HideInInspector] public bool WaveCanStart = true;

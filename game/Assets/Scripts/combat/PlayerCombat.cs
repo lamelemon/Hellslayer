@@ -126,7 +126,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 reloadableItem.DeductAmmo();
             }
-            StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown));
+            StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown)); // make maybe difrrent cooldown?
         }
     }
 
@@ -140,6 +140,12 @@ public class PlayerCombat : MonoBehaviour
             if (hpSystem != null)
             {
                 hpSystem.take_damage(Damage);
+            }
+
+            EnemyHealth enemyHealth = enemy.GetComponentInChildren<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(Damage);
             }
 
             Rigidbody targetRigidbody = enemy.GetComponent<Rigidbody>();

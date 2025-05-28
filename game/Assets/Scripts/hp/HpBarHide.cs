@@ -4,20 +4,20 @@ using UnityEngine.UI;
 
 public class HpBarHide : MonoBehaviour
 {
-    private hp_system hpSystem;
+    private EnemyHealth EnemyHealth;
     public UnityEngine.UI.Image Fill;
     public UnityEngine.UI.Image Border;
 
     void Start()
     {
-        hpSystem = GetComponent<hp_system>();
+        EnemyHealth = GetComponent<EnemyHealth>();
     }
 
     void Update()
     {
-        if (hpSystem != null)
+        if (EnemyHealth != null)
         {
-            if (hpSystem.max_hp != hpSystem.current_hp)
+            if (EnemyHealth.maxHealth != EnemyHealth.currentHealth)
             {
                 Fill.enabled = true;
                 Border.enabled = true;

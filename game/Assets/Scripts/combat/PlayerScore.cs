@@ -25,7 +25,7 @@ public class PlayerScore : MonoBehaviour
     public void SetScore(int amount)
     {
         CurrentScore = amount;
-        SumScore += amount; // optional, depends on your logic
+        //SumScore += amount; // optional, depends on your logic
     }
 }
 

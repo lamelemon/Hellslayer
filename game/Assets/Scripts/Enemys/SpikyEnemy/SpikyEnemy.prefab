@@ -126,7 +126,7 @@ MonoBehaviour:
   knockbackCollider: {fileID: 3097331650391344614}
   defaultKnockbackForce: 1
   canKnockbackAllRbs: 0
-  targetTag: spiky
+  targetTag: Enemy
   targetTagKnockbackForce: 3
   secondTargetTag: Player
   secondTargetTagKnockbackForce: 4
@@ -146,11 +146,11 @@ MonoBehaviour:
   SpikyHitSoundPitchMax: 0.8
   SpikyDieSoundPitchMin: 0.85
   SpikyDieSoundPitchMax: 1
-  hp_system: {fileID: 6940898973721108248}
+  EnemyHealth: {fileID: 2997247767233376174}
   playerScore: {fileID: 0}
   Player: {fileID: 0}
   keep_active_object: {fileID: 7078615166593609253}
-  keep_active_script: {fileID: 6940898973721108248}
+  keep_active_script: {fileID: 2850702125646710160}
   RewardScoreOnDeath: 5
 --- !u!1 &2513198102177192175
 GameObject:
@@ -547,7 +547,7 @@ GameObject:
   - component: {fileID: 3097331650391344614}
   m_Layer: 0
   m_Name: KnockbackCollision
-  m_TagString: spiky
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -600,7 +600,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3460758364534846960}
   - component: {fileID: 856930633257552513}
-  - component: {fileID: 6940898973721108248}
+  - component: {fileID: 2997247767233376174}
   - component: {fileID: 7421922285607388238}
   m_Layer: 11
   m_Name: HurtCollision
@@ -647,7 +647,7 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6940898973721108248
+--- !u!114 &2997247767233376174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -656,13 +656,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7078615166593609253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6204f7f4e1ce66d4ebded0d89a76c406, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ada1608027399c418621ba22dbb3e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_hp: 30
-  target: {fileID: 506255732185183988}
-  damageMultiplier: 1
-  hp_bar: {fileID: 4106915671126861083}
+  maxHealth: 30
+  currentHealth: 30
+  hpBarUI: {fileID: 4106915671126861083}
 --- !u!114 &7421922285607388238
 MonoBehaviour:
   m_ObjectHideFlags: 0
