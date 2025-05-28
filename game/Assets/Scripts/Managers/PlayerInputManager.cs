@@ -16,6 +16,7 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction DropInput { get; private set; }
     public InputAction SlideInput { get; private set; }
     public InputAction SpecialInput { get; private set; }
+    public InputAction ReloadInput { get; private set; }
     public Vector2 MoveValue { get; private set; }
     public Vector2 MouseValue { get; private set; }
 
@@ -34,6 +35,7 @@ public class PlayerInputManager : MonoBehaviour
         DropInput = InputSystem.actions.FindAction("DropInput");
         SlideInput = InputSystem.actions.FindAction("SlideInput");
         SpecialInput = InputSystem.actions.FindAction("SpecialInput");
+        ReloadInput = InputSystem.actions.FindAction("ReloadInput");    
     }
 
     private void Update()
@@ -57,6 +59,7 @@ public class PlayerInputManager : MonoBehaviour
         DropInput.Enable();
         SlideInput.Enable();
         SpecialInput.Enable();
+        ReloadInput.Enable();
     }
 
     public void OnDisable()
@@ -90,5 +93,6 @@ public class PlayerInputManager : MonoBehaviour
         DropInput.Disable();
         SlideInput.Disable();
         SpecialInput.Disable();
+        ReloadInput.Disable();
     }
 }

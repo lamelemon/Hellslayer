@@ -27,16 +27,16 @@ public class PlayerHitSound : MonoBehaviour
         {
             if (hp_system.current_hp > 0)
             {
-                SpikyHitSoundPlay();
+                HitSoundPlay();
             }
 
             LastHp = hp_system.current_hp;
         }
     }
 
-    public void SpikyHitSoundPlay()
+    public void HitSoundPlay()
     {
         float pitch = Random.Range(PlayerHitSoundPitchMin, PlayerHitSoundPitchMax);
-        audio_manager.Instance.PlaySFX("SpikyHit", pitch);
+        audio_manager.Instance.PlaySFX("PlayerHit", pitch);
     }
 }

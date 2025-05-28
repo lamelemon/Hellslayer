@@ -11,47 +11,63 @@ public class ItemSlotHandler : MonoBehaviour
 
     private void Start()
     {
+        // Initialize the player's hand with the currently active slot
         UpdateHand();
     }
 
     private void Update()
     {
+        // Update the currently held item in PlayerInteraction based on the active slot
         if (itemSlots[activeSlot] != null)
         {
-            PlayerInteraction.currentlyHeldItem = itemSlots[activeSlot]; // Update the currently held item in PlayerInteraction
+            PlayerInteraction.currentlyHeldItem = itemSlots[activeSlot];
         }
         else
         {
-            PlayerInteraction.currentlyHeldItem = null; // Clear the currently held item if the slot is empty
+            PlayerInteraction.currentlyHeldItem = null; // Clear the held item if the slot is empty
         }
     }
-    /// <summary>
 
     public void PickUpItem(TestItem newItem)
     {
-        // Check if the active slot is empty
+        int slotToFill = -1;
+
+        // Determine which slot to fill
         if (itemSlots[activeSlot] == null)
         {
-            itemSlots[activeSlot] = newItem;
+            slotToFill = activeSlot; // Fill the active slot if it's empty
         }
-        // If the active slot is full, check the other slot
         else if (itemSlots[1 - activeSlot] == null)
         {
-            itemSlots[1 - activeSlot] = newItem;
+            slotToFill = 1 - activeSlot; // Fill the other slot if it's empty
         }
-        // If both slots are full, drop the item in the active slot and replace it
         else
         {
+            // If both slots are full, drop the currently held item
             PlayerInteraction.DropItem();
             DropItem();
-            itemSlots[activeSlot] = newItem;
+            slotToFill = activeSlot; // Replace the item in the active slot
         }
 
-        // Update the item's transform for both slots
+        // Assign the new item to the determined slot
+        itemSlots[slotToFill] = newItem;
+
+        // Update the item's position and rotation
         UpdateItemTransform(newItem);
 
+        // Update the UI to reflect the new item
         UpdateSlotIcons();
-        UpdateHand();
+
+        // Update the player's hand if the new item is in the active slot
+        if (slotToFill == activeSlot)
+        {
+            UpdateHand();
+        }
+        else
+        {
+            // Ensure the ammo UI is updated for the inactive slot
+            UpdateAmmoForInactiveSlot(slotToFill);
+        }
     }
 
     // Helper method to set the item's position and rotation
@@ -71,18 +87,44 @@ public class ItemSlotHandler : MonoBehaviour
         }
     }
 
-    private void UpdateSlotIcons()
+    public void UpdateSlotIcons()
     {
-        itemSlotManager.UpdateSlotIcon(1, itemSlots[0]?.itemIcon);
-        itemSlotManager.UpdateSlotIcon(2, itemSlots[1]?.itemIcon);
+        for (int i = 0; i < itemSlots.Length; i++)
+        {
+            TestItem item = itemSlots[i];
+            if (item != null)
+            {
+                // Check if the item is a Laser Desert Eagle
+                LaserDesertEagle laserWeapon = item.GetComponent<LaserDesertEagle>();
+                if (laserWeapon != null)
+                {
+                    // Update the slot icon with ammo information
+                    itemSlotManager.UpdateSlotIcon(
+                        i + 1,
+                        item.itemIcon, // Pass the item's icon (Sprite)
+                        $"{laserWeapon.CurrentAmmo}/{laserWeapon.MaxAmmo}" // Pass the ammo text
+                    );
+                }
+                else
+                {
+                    // Update the slot icon without ammo information
+                    itemSlotManager.UpdateSlotIcon(i + 1, item.itemIcon, null);
+                }
+            }
+            else
+            {
+                // Clear the slot icon if no item is present
+                itemSlotManager.UpdateSlotIcon(i + 1, null, null);
+            }
+        }
     }
 
     public void SwitchSlot(int slotNumber)
     {
         if (slotNumber < 1 || slotNumber > 2) return;
 
-        activeSlot = slotNumber - 1;
-        itemSlotManager.HighlightSlot(slotNumber);
+        activeSlot = slotNumber - 1; // Convert slot number (1 or 2) to index (0 or 1)
+        itemSlotManager.HighlightSlot(slotNumber); // Highlight the selected slot in the UI
 
         // Update the item's transform for the active slot
         if (itemSlots[activeSlot] != null)
@@ -90,27 +132,36 @@ public class ItemSlotHandler : MonoBehaviour
             UpdateItemTransform(itemSlots[activeSlot]);
         }
 
+        // Update the player's hand to reflect the active slot
         UpdateHand();
     }
 
     private void UpdateHand()
     {
-        // Hide the current weapon
+        // Hide the current weapon and disable its script/UI
         if (currentWeapon != null)
         {
-            currentWeapon.SetActive(false); // Hide the current weapon
+            PlayerInteraction.DisableWeaponScript(currentWeapon);
+            currentWeapon.SetActive(false);
         }
 
         // If the active slot is empty, use fists (no weapon)
         if (itemSlots[activeSlot] == null)
         {
             UseFists();
+            currentWeapon = null;
         }
         else
         {
             // Equip the weapon in the active slot
             EquipWeapon(itemSlots[activeSlot]);
+            currentWeapon = itemSlots[activeSlot].gameObject;
+            currentWeapon.SetActive(true);
+            PlayerInteraction.EnableWeaponScript(currentWeapon);
         }
+
+        // Update slot icons to reflect the current ammo
+        UpdateSlotIcons();
     }
 
     private void EquipWeapon(TestItem item)
@@ -144,6 +195,9 @@ public class ItemSlotHandler : MonoBehaviour
         }
 
         currentWeapon = item.gameObject; // Update the current weapon reference
+
+        // Update the slot icons to reflect the current ammo
+        UpdateSlotIcons();
     }
 
     private void UseFists()
@@ -164,5 +218,23 @@ public class ItemSlotHandler : MonoBehaviour
 
         UpdateSlotIcons();
         UpdateHand();
+    }
+
+    // Helper method to update ammo for the inactive slot
+    private void UpdateAmmoForInactiveSlot(int slotIndex)
+    {
+        TestItem item = itemSlots[slotIndex];
+        if (item == null) return;
+
+        LaserDesertEagle laserWeapon = item.GetComponent<LaserDesertEagle>();
+        if (laserWeapon != null)
+        {
+            // Update the ammo UI for the inactive slot
+            itemSlotManager.UpdateSlotIcon(
+                slotIndex + 1,
+                item.itemIcon,
+                $"{laserWeapon.CurrentAmmo}/{laserWeapon.MaxAmmo}"
+            );
+        }
     }
 }

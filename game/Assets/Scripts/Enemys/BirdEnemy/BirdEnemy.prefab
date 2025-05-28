@@ -230,7 +230,7 @@ GameObject:
   - component: {fileID: 1106597685134200047}
   - component: {fileID: 528696503132878473}
   - component: {fileID: 5463850827733156864}
-  - component: {fileID: 4131050064183907384}
+  - component: {fileID: 2273221849838227837}
   m_Layer: 11
   m_Name: BirdEnemy
   m_TagString: spiky
@@ -349,7 +349,7 @@ MonoBehaviour:
   targetTagKnockbackForce: 3
   secondTargetTag: Player
   secondTargetTagKnockbackForce: 4
---- !u!114 &4131050064183907384
+--- !u!114 &2273221849838227837
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -358,11 +358,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 4201418575173332405}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dab2172a4d6ae064994e41d2717e8884, type: 3}
+  m_Script: {fileID: 11500000, guid: 155e963520ed0534b8d4432de9917242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpikyHitSoundPitchMin: 0.8
-  SpikyHitSoundPitchMax: 0.82
+  SpikyHitSoundPitchMax: 0.8
   SpikyDieSoundPitchMin: 0.85
   SpikyDieSoundPitchMax: 1
   hp_system: {fileID: 5322210771649448148}
@@ -907,7 +907,7 @@ PrefabInstance:
     - target: {fileID: 999433135698343443, guid: 861033128fa34dd44a65ae9d868bb0b3, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 80a55d44026a4024c9abceb27f9b1f12, type: 2}
+      objectReference: {fileID: 2100000, guid: 5bf4c4beceeac404688afae7b899c9ec, type: 2}
     - target: {fileID: 5866666021909216657, guid: 861033128fa34dd44a65ae9d868bb0b3, type: 3}
       propertyPath: m_Controller
       value: 

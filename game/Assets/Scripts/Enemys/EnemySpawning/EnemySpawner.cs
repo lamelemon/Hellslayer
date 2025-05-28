@@ -17,7 +17,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float WaveStartDelay = 5f;
     [SerializeField] private float SpawnRadius = 30f;
     [Header("Wave Difficulty Settings")]
-    [SerializeField] private int BabyWaveCount = 20;
+    [SerializeField] private int BabyWaveCount = 15;
     [SerializeField] private float WaveStartDelayStepAdd = 6f; // Delay between waves increases by this amount each time
     [SerializeField] private float WaveStartDelayStepSub = 1f;
 
@@ -27,19 +27,22 @@ public class EnemySpawner : MonoBehaviour
     private int currentWave = 0;
     private int CurrentPlayerScore = 0; // reward score for spiky is 5 and Bird is 10
 
-    private bool WaveCanStart = true;
+    [HideInInspector] public bool WaveCanStart = true;
     private bool shouldIncreaseDifficulty = true;
     private bool isWaitingForNextWave = false;
 
+    public float waveCountdownTimer { get; private set; } = 0f;
+    public bool isWaveCountdownRunning { get; private set; } = false;
     private void DifficultyIncrease()
     {
-        waveEnemyCount += waveEnemyCounStepAdd; // Increase enemy count
         if (currentWave < BabyWaveCount)
         {
+            waveEnemyCount += waveEnemyCounStepAdd; // Increase enemy count
             WaveStartDelay += WaveStartDelayStepAdd; // Increase delay between waves
         }
         else
         {
+            waveEnemyCount += waveEnemyCounStepAdd + waveEnemyCounStepAdd; // Increase enemy count by 2x
             WaveStartDelay -= WaveStartDelayStepSub; // Decrease delay between waves
         }
     }
@@ -69,7 +72,18 @@ public class EnemySpawner : MonoBehaviour
 
     private IEnumerator StartWave()
     {
-        yield return new WaitForSeconds(WaveStartDelay);
+        waveCountdownTimer = WaveStartDelay;
+        isWaveCountdownRunning = true;
+
+        while (waveCountdownTimer > 0f)
+        {
+            waveCountdownTimer -= Time.deltaTime;
+            yield return null;
+        }
+
+        waveCountdownTimer = 0f;
+        isWaveCountdownRunning = false;
+
         WaveCanStart = true;
         shouldIncreaseDifficulty = true;
     }
