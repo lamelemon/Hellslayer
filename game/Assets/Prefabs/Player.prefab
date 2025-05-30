@@ -1694,7 +1694,6 @@ MonoBehaviour:
   GetInput: {fileID: 8388610088663736076}
   playerCamera: {fileID: 994690402357340263}
   model: {fileID: 1572636646786415464}
-  staminaSystem: {fileID: 0}
 --- !u!114 &8388610088663736076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1748,7 +1747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max_hp: 100
   target: {fileID: 0}
-  current_hp: 0
+  damageMultiplier: 1
   hp_bar: {fileID: 0}
 --- !u!114 &8274800726058482997
 MonoBehaviour:
@@ -1780,13 +1779,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 7802264861891492589}
   getInput: {fileID: 8388610088663736076}
+  playerItemInteraction: {fileID: 0}
   animator: {fileID: 3208849900685951384}
   attackPoint: {fileID: 7704785477889590392}
   attackRange: 1.5
   attackCooldown: 0.3
-  enemyLayers:
+  enemyLayer:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 0
 --- !u!114 &5770614011559607420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1820,6 +1820,11 @@ MonoBehaviour:
     m_Flags: 0
   getInput: {fileID: 8388610088663736076}
   handPosition: {fileID: 7116032252180301356}
+  itemSlotHandler: {fileID: 0}
+  crimson_sword: crimson_sword
+  katana: katana
+  rpg: rpg
+  currentlyHeldItem: {fileID: 0}
 --- !u!114 &6062583076625201211
 MonoBehaviour:
   m_ObjectHideFlags: 0

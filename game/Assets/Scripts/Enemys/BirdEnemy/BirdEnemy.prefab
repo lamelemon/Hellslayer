@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 6403803610603704963}
   m_Layer: 0
   m_Name: KnockbackCollision
-  m_TagString: spiky
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -140,11 +140,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4414142163555259885}
   - component: {fileID: 3402796373639497032}
-  - component: {fileID: 5322210771649448148}
+  - component: {fileID: 4782484250610358085}
   - component: {fileID: 8789101696805215327}
   m_Layer: 11
   m_Name: HurtCollision
-  m_TagString: Untagged
+  m_TagString: bird
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -187,7 +187,7 @@ CapsuleCollider:
   m_Height: 0.53
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5322210771649448148
+--- !u!114 &4782484250610358085
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -196,13 +196,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4139096194688067429}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6204f7f4e1ce66d4ebded0d89a76c406, type: 3}
+  m_Script: {fileID: 11500000, guid: 3ada1608027399c418621ba22dbb3e03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max_hp: 15
-  target: {fileID: 4201418575173332405}
-  damageMultiplier: 1
-  hp_bar: {fileID: 6234094647727815379}
+  maxHealth: 18
+  currentHealth: 0
+  hpBarUI: {fileID: 6234094647727815379}
 --- !u!114 &8789101696805215327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +232,7 @@ GameObject:
   - component: {fileID: 2273221849838227837}
   m_Layer: 11
   m_Name: BirdEnemy
-  m_TagString: spiky
+  m_TagString: bird
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -345,7 +344,7 @@ MonoBehaviour:
   knockbackCollider: {fileID: 6403803610603704963}
   defaultKnockbackForce: 1
   canKnockbackAllRbs: 0
-  targetTag: spiky
+  targetTag: Enemy
   targetTagKnockbackForce: 3
   secondTargetTag: Player
   secondTargetTagKnockbackForce: 4
@@ -365,11 +364,11 @@ MonoBehaviour:
   SpikyHitSoundPitchMax: 0.8
   SpikyDieSoundPitchMin: 0.85
   SpikyDieSoundPitchMax: 1
-  hp_system: {fileID: 5322210771649448148}
+  EnemyHealth: {fileID: 4782484250610358085}
   playerScore: {fileID: 0}
   Player: {fileID: 0}
   keep_active_object: {fileID: 4139096194688067429}
-  keep_active_script: {fileID: 5322210771649448148}
+  keep_active_script: {fileID: 2273221849838227837}
   RewardScoreOnDeath: 10
 --- !u!1 &5489124727339672388
 GameObject:

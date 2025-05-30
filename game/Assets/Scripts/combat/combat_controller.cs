@@ -131,27 +131,3 @@ public class combat_controller : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 }
-
-public interface IWeapon
-{
-    int Damage { get; set; } // Property to get and set damage
-    float AttackRange { get; set; } // Property to get and set attack range
-    float AttackCooldown { get; set; } // Property to get and set attack cooldown
-    void Attack();
-}
-
-public interface IReloadable
-{
-    bool ReloadsFully { get; set; }
-    int ReloadAmount { get; set; }
-    float ReloadSpeed { get; set; }
-    float AmmoPerShot { get; set; }
-    void Reload(int amount = 0, bool ReloadsFully = false, float ReloadSpeed = 0);
-    void DeductAmmo();
-}
-
-public interface ISpecialAbility
-{
-    void SpecialAbility();
-    float SpecialCooldown { get; set; } // Property to get and set special ability cooldown
-}

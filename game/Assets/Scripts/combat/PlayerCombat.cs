@@ -26,6 +26,7 @@ public class PlayerCombat : MonoBehaviour
     private bool canAttack = true;
     private bool HasAttackedOneTime = false;
     private bool IsAttacking = false;
+    private bool IsUsingSpecial = false;
 
     [Header("Default First Attack Settings")]
     public int DefaultFirstAttackDamage = 8;
@@ -68,6 +69,7 @@ public class PlayerCombat : MonoBehaviour
     private void InputsValuesReader()
     {
         IsAttacking = AttackAction.WasPressedThisFrame() && !PauseMenu.isPaused && canAttack;
+        IsUsingSpecial = playerInput.Player.SpecialInput.WasPressedThisFrame() && !PauseMenu.isPaused;
     }
 
     private void Update()
@@ -85,6 +87,11 @@ public class PlayerCombat : MonoBehaviour
                 canAttack = false;
                 ComboSelection();
             }
+        }
+
+        if (IsUsingSpecial)
+        {
+            WeaponSpecialAbility();
         }
     }
 
@@ -126,7 +133,7 @@ public class PlayerCombat : MonoBehaviour
             {
                 reloadableItem.DeductAmmo();
             }
-            StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown));
+            StartCoroutine(AttackCooldownRoutine(heldItem.AttackCooldown)); // make maybe difrrent cooldown?
         }
     }
 
@@ -140,6 +147,12 @@ public class PlayerCombat : MonoBehaviour
             if (hpSystem != null)
             {
                 hpSystem.take_damage(Damage);
+            }
+
+            EnemyHealth enemyHealth = enemy.GetComponentInChildren<EnemyHealth>();
+            if (enemyHealth != null)
+            {
+                enemyHealth.TakeDamage(Damage);
             }
 
             Rigidbody targetRigidbody = enemy.GetComponent<Rigidbody>();
@@ -157,6 +170,18 @@ public class PlayerCombat : MonoBehaviour
         StartCoroutine(DefaultAttackCooldownRoutine(DefaultAttackCooldown));
     }
 
+    private void WeaponSpecialAbility()
+    {
+        if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent(out ISpecialAbility specialAbility))
+        {
+            specialAbility.SpecialAbility();
+            StartCoroutine(SpecialAbilityCooldownRoutine(specialAbility.SpecialCooldown));
+        }
+        else
+        {
+            Debug.LogWarning("No weapon with a special ability equipped.");
+        }
+    }
 
     private IEnumerator AttackCooldownRoutine(float attackCooldown)
     {
@@ -169,10 +194,40 @@ public class PlayerCombat : MonoBehaviour
         yield return new WaitForSeconds(DefaultAttackCooldown);
         canAttack = true;
     }
+
+    private IEnumerator SpecialAbilityCooldownRoutine(float specialAbilityCooldown)
+    {
+        yield return new WaitForSeconds(specialAbilityCooldown);
+        canAttack = true;
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.matrix = Matrix4x4.TRS(AttackPoint.position, AttackPoint.rotation, Vector3.one);
         Gizmos.DrawWireCube(Vector3.zero, CombatBox * 2);
     }
+}
+
+public interface IWeapon
+{
+    int Damage { get; set; } // Property to get and set damage
+    float AttackRange { get; set; } // Property to get and set attack range
+    float AttackCooldown { get; set; } // Property to get and set attack cooldown
+    void Attack();
+}
+
+public interface IReloadable
+{
+    bool ReloadsFully { get; set; }
+    int ReloadAmount { get; set; }
+    float ReloadSpeed { get; set; }
+    float AmmoPerShot { get; set; }
+    void Reload(int amount = 0, bool ReloadsFully = false, float ReloadSpeed = 0);
+    void DeductAmmo();
+}
+
+public interface ISpecialAbility
+{
+    void SpecialAbility();
+    float SpecialCooldown { get; set; } // Property to get and set special ability cooldown
 }
