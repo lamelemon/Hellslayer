@@ -7,10 +7,12 @@ public class EnemyHealth : MonoBehaviour
     public int maxHealth = 50; // Maximum health of the enemy
     public int currentHealth;
     private hp_bar_ui hpBarUI;
+    private LootDropping lootDropping; // Reference to the LootDropping script
 
     private void Awake()
     {
-        hpBarUI = GetComponentInChildren<hp_bar_ui>(); // Get the hp_bar_ui component from children
+        hpBarUI = transform.parent.GetComponentInChildren<hp_bar_ui>(); // Get the hp_bar_ui component from children
+        lootDropping = GetComponentInParent<LootDropping>();
     }
 
     private void Start()

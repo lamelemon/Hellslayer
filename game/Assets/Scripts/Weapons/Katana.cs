@@ -34,7 +34,7 @@ public class Katana : MonoBehaviour, IWeapon, ISpecialAbility
         }
 
         try {hitEnemies.Append(enemy);} // Add the enemy to the hit enemies list  
-        catch { return; }
+        catch { return; } // If the list is full, return
 
         if (enemy.TryGetComponent(out hp_system enemyHp))
         {
