@@ -23,6 +23,10 @@ public class PlayerCam : MonoBehaviour // This is part of the player finite Stat
 
     private void Update()
     {
+        if(PauseMenu.isPaused) // Check if the game is paused
+        {
+            return; // Skip camera rotation if the game is paused
+        }
         // Get mouse input using the new Input System
         float mouseX = mouse.delta.x.ReadValue() * Time.fixedDeltaTime * sensX;
         float mouseY = mouse.delta.y.ReadValue() * Time.fixedDeltaTime * sensY;
