@@ -5,7 +5,7 @@ using TMPro;
 public class PlayerScoreUi : MonoBehaviour
 {
     [Header("Wave UI Settings")]
-    public string ScoreTextFormat = "Player Score "; // Format for displaying the wave number
+    public string ScoreTextFormat = "Player Score: "; // Format for displaying the wave number
     public TextMeshProUGUI ScoreText;
 
     public PlayerScore PlayerScore; // Drag in the inspector

@@ -9,7 +9,7 @@ public class BirdSound : MonoBehaviour
     [Range(0.01f, 20.0f)] public float SpikyDieSoundPitchMax = 1.0f;
 
     [Header("References")]
-    public hp_system hp_system;
+    public EnemyHealth EnemyHealth;
     [HideInInspector] public PlayerScore playerScore;
     [HideInInspector] public GameObject Player; // Assign in inspector if needed
 
@@ -24,7 +24,7 @@ public class BirdSound : MonoBehaviour
 
     void Awake()
     {
-        lastHp = hp_system.current_hp;
+        lastHp = EnemyHealth.currentHealth;
 
         if (playerScore == null)
         {
@@ -40,24 +40,24 @@ public class BirdSound : MonoBehaviour
     {
         if (firstUpdate)
         {
-            lastHp = hp_system.current_hp;
+            lastHp = EnemyHealth.currentHealth;
             firstUpdate = false;
             return;
         }
 
-        if (lastHp != hp_system.current_hp)
+        if (lastHp != EnemyHealth.currentHealth)
         {
-            if (hp_system.current_hp <= 0 && dieOnce)
+            if (EnemyHealth.currentHealth <= 0 && dieOnce)
             {
                 dieOnce = false;
                 StartCoroutine(DieSequence());
             }
-            else if (hp_system.current_hp > 0)
+            else if (EnemyHealth.currentHealth > 0)
             {
                 PlayHitSound();
             }
 
-            lastHp = hp_system.current_hp;
+            lastHp = EnemyHealth.currentHealth;
         }
     }
 
