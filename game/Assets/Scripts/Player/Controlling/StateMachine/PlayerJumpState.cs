@@ -18,13 +18,13 @@ public class PlayerJumpState : PlayerState // This is part of the player finite 
 
     public override void UpdateState()
     {
-        if (player.IsGrounded)
+        if (player.IsGrounded && player.GetInput.MoveValue.magnitude > 0.1f)
         {
-            if (player.isSprinting && player.moveInput.magnitude > 0.1f)
+            if (player.isSprinting)
             {
                 stateMachine.ChangeState(new PlayerSprintState(player, stateMachine));
             }
-            else if (player.moveInput.magnitude > 0.1f)
+            else
             {
                 stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
             }

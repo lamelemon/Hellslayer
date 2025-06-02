@@ -6,19 +6,15 @@ public class PlayerCam : MonoBehaviour // This is part of the player finite Stat
     public float sensX;
     public float sensY;
     public Transform orientation;
-
     float xRotation;
     float yRotation;
-    private Mouse mouse;
+    [SerializeField] private PlayerInputManager GetInput;
 
     private void Start()
     {
         // Lock the cursor
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-
-        // Initialize the mouse input from the Input System
-        mouse = Mouse.current;
     }
 
     private void Update()
@@ -28,11 +24,10 @@ public class PlayerCam : MonoBehaviour // This is part of the player finite Stat
             return; // Skip camera rotation if the game is paused
         }
         // Get mouse input using the new Input System
-        float mouseX = mouse.delta.x.ReadValue() * Time.fixedDeltaTime * sensX;
-        float mouseY = mouse.delta.y.ReadValue() * Time.fixedDeltaTime * sensY;
+        Vector2 mouse = new(GetInput.MouseValue.y * sensX * Time.fixedDeltaTime, GetInput.MouseValue.x * sensY * Time.fixedDeltaTime);
 
-        yRotation += mouseX;
-        xRotation -= mouseY;
+        yRotation += mouse.y;
+        xRotation -= mouse.x;
 
         xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Limit vertical rotation (up/down)
 

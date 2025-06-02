@@ -126,7 +126,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void WeapondAttack()
     {
-        if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent<IWeapon>(out var heldItem))
+        if (playerItemInteraction.currentlyHeldItem != null && playerItemInteraction.currentlyHeldItem.TryGetComponent(out IWeapon heldItem))
         {
             heldItem.Attack();
             if (playerItemInteraction.currentlyHeldItem.TryGetComponent<IReloadable>(out var reloadableItem))
@@ -143,8 +143,7 @@ public class PlayerCombat : MonoBehaviour
 
         foreach (Collider enemy in hitEnemies)
         {
-            hp_system hpSystem = enemy.GetComponent<hp_system>();
-            if (hpSystem != null)
+            if (enemy.TryGetComponent(out hp_system hpSystem))
             {
                 hpSystem.take_damage(Damage);
             }

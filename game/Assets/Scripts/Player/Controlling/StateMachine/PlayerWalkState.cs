@@ -13,11 +13,11 @@ public class PlayerWalkState : PlayerState // This is part of the player finite 
     }
     public override void UpdateState()
     {
-        if (player.isSprinting && player.moveInput.magnitude > 0.1f)
+        if (player.isSprinting && player.GetInput.MoveValue.magnitude > 0.1f)
         {
             stateMachine.ChangeState(new PlayerSprintState(player, stateMachine));
         }
-        else if (player.moveInput.magnitude <= 0.1f)
+        else if (player.GetInput.MoveValue.magnitude <= 0.1f)
         {
             stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
         }
@@ -26,7 +26,7 @@ public class PlayerWalkState : PlayerState // This is part of the player finite 
     public override void FixedUpdateState()
     {
         // Calculate movement direction
-        Vector3 moveDirection = player.orientation.forward * player.moveInput.y + player.orientation.right * player.moveInput.x;
+        Vector3 moveDirection = player.orientation.forward * player.GetInput.MoveValue.y + player.orientation.right * player.GetInput.MoveValue.x;
         moveDirection.Normalize();
 
         // Get current horizontal velocity

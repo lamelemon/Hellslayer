@@ -10,7 +10,6 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction JumpInput { get; private set; }
     public InputAction SprintInput { get; private set; }
     public InputAction CrouchInput { get; private set; }
-    public InputAction MouseInput { get; private set; }
     public InputAction AttackInput { get; private set; }
     public InputAction PickupInput { get; private set; }
     public InputAction DropInput { get; private set; }
@@ -19,29 +18,30 @@ public class PlayerInputManager : MonoBehaviour
     public InputAction ReloadInput { get; private set; }
     public Vector2 MoveValue { get; private set; }
     public Vector2 MouseValue { get; private set; }
+    public Mouse mouse { get; private set; }
 
-    private void Awake()
+    void Awake()
     {
-        ItemSlot1Input = InputSystem.actions.FindAction("ItemSlot1Input");
-        ItemSlot2Input = InputSystem.actions.FindAction("ItemSlot2Input");
-        MoveInput = InputSystem.actions.FindAction("MovementInput");
-        MenuInput = InputSystem.actions.FindAction("MenuInput");
-        JumpInput = InputSystem.actions.FindAction("JumpInput");
-        SprintInput = InputSystem.actions.FindAction("SprintInput");
-        CrouchInput = InputSystem.actions.FindAction("CrouchInput");
-        MouseInput = InputSystem.actions.FindAction("MouseInput");
-        AttackInput = InputSystem.actions.FindAction("AttackInput");
-        PickupInput = InputSystem.actions.FindAction("PickupInput");
-        DropInput = InputSystem.actions.FindAction("DropInput");
-        SlideInput = InputSystem.actions.FindAction("SlideInput");
-        SpecialInput = InputSystem.actions.FindAction("SpecialInput");
-        ReloadInput = InputSystem.actions.FindAction("ReloadInput");    
+        ItemSlot1Input = FindAction("ItemSlot1Input");
+        ItemSlot2Input = FindAction("ItemSlot2Input");
+        MoveInput = FindAction("MovementInput");
+        MenuInput = FindAction("MenuInput");
+        JumpInput = FindAction("JumpInput");
+        SprintInput = FindAction("SprintInput");
+        CrouchInput = FindAction("CrouchInput");
+        AttackInput = FindAction("AttackInput");
+        PickupInput = FindAction("PickupInput");
+        DropInput = FindAction("DropInput");
+        SlideInput = FindAction("SlideInput");
+        SpecialInput = FindAction("SpecialInput");
+        ReloadInput = FindAction("ReloadInput");
+        mouse = Mouse.current;
     }
 
     private void Update()
     {
         MoveValue = MoveInput.ReadValue<Vector2>();
-        MouseValue = MouseInput.ReadValue<Vector2>();
+        MouseValue = mouse.delta.ReadValue();
     }
 
     public void OnEnable()
@@ -53,7 +53,6 @@ public class PlayerInputManager : MonoBehaviour
         JumpInput.Enable();
         SprintInput.Enable();
         CrouchInput.Enable();
-        MouseInput.Enable();
         AttackInput.Enable();
         PickupInput.Enable();
         DropInput.Enable();
@@ -71,7 +70,6 @@ public class PlayerInputManager : MonoBehaviour
         JumpInput.Disable();
         SprintInput.Disable();
         CrouchInput.Disable();
-        MouseInput.Disable();
         AttackInput.Disable();
         PickupInput.Disable();
         DropInput.Disable();
@@ -79,7 +77,7 @@ public class PlayerInputManager : MonoBehaviour
         SpecialInput.Disable();
     }
 
-        public void DisableExptMenu()
+    public void DisableExptMenu()
     {
         ItemSlot1Input.Disable();
         ItemSlot2Input.Disable();
@@ -87,12 +85,19 @@ public class PlayerInputManager : MonoBehaviour
         JumpInput.Disable();
         SprintInput.Disable();
         CrouchInput.Disable();
-        MouseInput.Disable();
         AttackInput.Disable();
         PickupInput.Disable();
         DropInput.Disable();
         SlideInput.Disable();
         SpecialInput.Disable();
         ReloadInput.Disable();
+    }
+    
+    private InputAction FindAction(string actionName)
+    {
+        var action = InputSystem.actions.FindAction(actionName);
+        if (action == null)
+            Debug.LogWarning($"Input action '{actionName}' not found.");
+        return action;
     }
 }

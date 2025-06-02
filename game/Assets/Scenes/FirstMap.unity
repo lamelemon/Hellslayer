@@ -9320,6 +9320,7 @@ MonoBehaviour:
   sensX: 5
   sensY: 5
   orientation: {fileID: 89427192}
+  GetInput: {fileID: 1547689028}
 --- !u!114 &1088197264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10201,10 +10202,10 @@ MonoBehaviour:
   GroundCollider: {fileID: 979761626}
   isSprinting: 0
   rb: {fileID: 0}
-  moveInput: {x: 0, y: 0}
   isJumping: 0
   readyToJump: 1
   ZeroToOneMaxSpeed: 0
+  GetInput: {fileID: 0}
 --- !u!114 &1547689030
 MonoBehaviour:
   m_ObjectHideFlags: 0

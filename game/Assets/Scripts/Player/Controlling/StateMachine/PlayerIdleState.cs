@@ -16,7 +16,7 @@ public class PlayerIdleState : PlayerState // This is part of the player finite 
         {
             stateMachine.ChangeState(new PlayerJumpState(player, stateMachine));
         }
-        else if (player.moveInput.magnitude > 0.1f)
+        else if (player.GetInput.MoveValue.magnitude > 0.1f)
         {
             stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
         }

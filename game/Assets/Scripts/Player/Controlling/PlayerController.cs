@@ -283,7 +283,7 @@ public class PlayerController : MonoBehaviour
     private void Mantle()
     {
         // Calculate the mantle position based on player dimensions and orientation
-        mantlePosition = transform.position + (playerStandingHeight / 2 - playerHitbox.radius) * Vector3.up + Quaternion.Euler(0, rb.transform.eulerAngles.y, 0) * (playerHitbox.radius * 2 * Vector3.forward);
+        Vector3 mantlePosition = transform.position + (playerStandingHeight / 2 - playerHitbox.radius) * Vector3.up + Quaternion.Euler(0, rb.transform.eulerAngles.y, 0) * (playerHitbox.radius * 2 * Vector3.forward);
 
         // Check for a ledge and if the player fits on the ledge
         if (GetInput.JumpInput.WasPressedThisFrame() && Physics.Raycast(mantlePosition + Vector3.up * playerStandingHeight / 2, Vector3.down, out RaycastHit hit, (playerStandingHeight + playerHitbox.height) / 2, layerMask) && Physics.OverlapCapsuleNonAlloc(mantlePosition + playerHitbox.radius * Vector3.up, mantlePosition + (playerStandingHeight + playerHitbox.radius) * Vector3.up, playerHitbox.radius, mantleResults, layerMask) == 0)
