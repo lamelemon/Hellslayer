@@ -8,6 +8,8 @@ public class EnemySpawner : MonoBehaviour
 {
     public GameObject EnemyPrefab;
     public GameObject SecondEnemyPrefab;
+    public GameObject BossEnemyPrefab; // Optional: Add a boss enemy prefab if needed
+    public GameObject[] EnemyPrefabs; // Array to hold different enemy prefabs
 
     [Header("Wave settings")]
     [SerializeField] private int waveEnemyCount = 1;
@@ -90,11 +92,29 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(Vector3 position)
     {
-        if (Random.Range(1, 10) > 3) // 70% chance to spawn the first enemy type
+        if (currentWave == 10) // Example condition for spawning a boss enemy
+        {
+            Instantiate(BossEnemyPrefab, position, Quaternion.identity);
+            return;
+        }
+        else if (Random.Range(1, 10) > 3) // 70% chance to spawn the first enemy type
             Instantiate(EnemyPrefab, position, Quaternion.identity);
         else // 30% chance to spawn the second enemy type
         {
             Instantiate(SecondEnemyPrefab, position, Quaternion.identity);
+        }
+    }
+
+    private void PickRandomEnemyPrefab()
+    {
+        if (EnemyPrefabs.Length > 0)
+        {
+            int randomIndex = Random.Range(0, EnemyPrefabs.Length);
+            EnemyPrefab = EnemyPrefabs[randomIndex];
+        }
+        else
+        {
+            Debug.LogWarning("No enemy prefabs assigned in the EnemySpawner.");
         }
     }
 

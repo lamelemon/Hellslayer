@@ -8,6 +8,8 @@ public class EnemyHealth : MonoBehaviour
     public int currentHealth;
     public hp_bar_ui hpBarUI;
     private LootDropping lootDropping; // Reference to the LootDropping script
+    public bool endGameOnDeath = false; // Flag to end the game on death
+    private GameObject pausemenu;
 
     private void Awake()
     {
@@ -38,6 +40,7 @@ public class EnemyHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+
             Die();
         }
     }
@@ -55,6 +58,8 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         //Debug.Log($"{gameObject.name} has died.");
+
+        if (endGameOnDeath) PauseMenu.MainMenu(); // If endGameOnDeath is true, call the MainMenu method from PauseMenu
 
         if (gameObject.CompareTag("spiky") || gameObject.CompareTag("bird")) // check if its spiky or brid enemy because they have own destroy logic
         {

@@ -2,29 +2,13 @@ using UnityEngine;
 
 public class PlayerSprintState : PlayerState // This is part of the player finite StateMachine
 {
-    public PlayerSprintState(PlayerMovement player, PlayerStateMachine stateMachine) 
+    public PlayerSprintState(PlayerMovement player, PlayerStateMachine stateMachine)
         : base(player, stateMachine) { }
 
     public override void EnterState()
     {
         //Debug.Log("Entering Run State");
         // Any logic you want to trigger when entering the run state, like setting animations, etc.
-    }
-    public override void UpdateState()
-    {
-        if (player.isJumping && player.IsGrounded && player.readyToJump) // not nesesary but trying make smoother transition to ujmp state
-        {
-            stateMachine.ChangeState(new PlayerJumpState(player, stateMachine));
-        }
-
-        else if (player.GetInput.MoveValue.magnitude <= 0.1f)
-        {
-            stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
-        }
-        else if (!player.isSprinting)
-        {
-            stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
-        }
     }
 
     public override void FixedUpdateState()
@@ -46,5 +30,10 @@ public class PlayerSprintState : PlayerState // This is part of the player finit
             Vector3 clampedVelocity = horizontalVelocity.normalized * player.sprintMaxSpeed;
             player.rb.linearVelocity = new Vector3(clampedVelocity.x, player.rb.linearVelocity.y, clampedVelocity.z);
         }
+    }
+
+    public override bool CanExitState()
+    {
+        return base.CanExitState();
     }
 }

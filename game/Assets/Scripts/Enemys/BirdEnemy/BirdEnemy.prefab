@@ -230,6 +230,7 @@ GameObject:
   - component: {fileID: 528696503132878473}
   - component: {fileID: 5463850827733156864}
   - component: {fileID: 2273221849838227837}
+  - component: {fileID: 1553922094120062631}
   m_Layer: 11
   m_Name: BirdEnemy
   m_TagString: bird
@@ -370,6 +371,34 @@ MonoBehaviour:
   keep_active_object: {fileID: 4139096194688067429}
   keep_active_script: {fileID: 2273221849838227837}
   RewardScoreOnDeath: 10
+--- !u!114 &1553922094120062631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4201418575173332405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf87cc1500459594eb24e7341849de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootItems:
+  - itemPrefab: {fileID: 5015511114484725374, guid: 038b0e9871d84d141b55e88a68af7ede, type: 3}
+    weight: 10
+    dropAmountRange: {x: 0, y: 1}
+    isStackable: 0
+    isGuaranteed: 0
+  - itemPrefab: {fileID: 5018631146773496834, guid: 903b3b8b030b39e419c192bf8f7e3c9c, type: 3}
+    weight: 15
+    dropAmountRange: {x: 0, y: 0}
+    isStackable: 0
+    isGuaranteed: 0
+  - itemPrefab: {fileID: 0}
+    weight: 75
+    dropAmountRange: {x: 0, y: 0}
+    isStackable: 0
+    isGuaranteed: 0
 --- !u!1 &5489124727339672388
 GameObject:
   m_ObjectHideFlags: 0

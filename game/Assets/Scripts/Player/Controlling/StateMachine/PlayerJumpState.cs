@@ -2,33 +2,27 @@ using UnityEngine;
 
 public class PlayerJumpState : PlayerState // This is part of the player finite StateMachine
 {
-    public PlayerJumpState(PlayerMovement player, PlayerStateMachine stateMachine) 
+    public PlayerJumpState(PlayerMovement player, PlayerStateMachine stateMachine)
         : base(player, stateMachine) { }
 
     public override void EnterState()
     {
-        if (Time.time >= player.lastJumpTime + player.jumpCooldown)
+        if (player.IsGrounded && Time.time >= player.lastJumpTime + player.jumpCooldown)
         {
             player.readyToJump = false;
             Jump();
             player.lastJumpTime = Time.time; // Record the time of the jump
             //Debug.Log("Entering Jump State");
         }
+
+        else if (!player.IsGrounded)
+        {
+            Mantle();
+        }
     }
 
     public override void UpdateState()
     {
-        if (player.IsGrounded && player.GetInput.MoveValue.magnitude > 0.1f)
-        {
-            if (player.isSprinting)
-            {
-                stateMachine.ChangeState(new PlayerSprintState(player, stateMachine));
-            }
-            else
-            {
-                stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
-            }
-        }
     }
     private void Jump()
     {
@@ -52,4 +46,25 @@ public class PlayerJumpState : PlayerState // This is part of the player finite 
         // Play jump sound effect
         audio_manager.Instance.PlaySFX("PlayerJump", JumpRandomPitch);
     }
+
+    private void Mantle()
+    {
+        // Calculate the mantle position based on player dimensions and orientation
+        Vector3 mantlePosition = player.transform.position + (player.standingHeight - player.playerHitbox.bounds.extents.y) * Vector3.up + Quaternion.Euler(0, player.rb.transform.eulerAngles.y, 0) * (player.playerHitboxRadius * 2 * Vector3.forward);
+        Debug.Log(mantlePosition);
+        // Check for a ledge and if the player fits on the ledge
+        if (Physics.Raycast(mantlePosition + Vector3.up * player.standingHeight / 2, Vector3.down, out RaycastHit hit, player.standingHeight, player.rb.excludeLayers) && Physics.OverlapCapsule(mantlePosition, mantlePosition + player.standingHeight * Vector3.up, player.playerHitboxRadius, player.rb.excludeLayers).Length == 0)
+        {
+            Debug.Log("Mantling");
+
+            // Move the player to the ledge position
+            player.transform.position = hit.point + Vector3.up * player.playerHitbox.bounds.extents.y;
+        }
+    }
+
+    public override bool CanExitState()
+    {
+        return base.CanExitState();
+    }
+
 }

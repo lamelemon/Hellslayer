@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class PlayerCrouchState : PlayerState
 {
@@ -15,22 +16,6 @@ public class PlayerCrouchState : PlayerState
     {
         player.rb.MovePosition(player.transform.position + (player.standingHeight - player.crouchHeight) / 2 * Vector3.up); // Move the player to the standing position
         player.playerHitbox.height = player.standingHeight; // Reset the player's height to stand height
-    }
-
-    public override void UpdateState()
-    {
-        if (!player.GetInput.CrouchInput.IsPressed() && CanUnCrouch())
-        {
-            if (player.GetInput.MoveValue.magnitude <= 0.1f)
-            {
-                stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
-            }
-            else if (player.GetInput.MoveValue.magnitude > 0.1f && !player.isJumping)
-            {
-                stateMachine.ChangeState(new PlayerWalkState(player, stateMachine));
-            }
-            else stateMachine.ChangeState(new PlayerIdleState(player, stateMachine));
-        }
     }
 
     public override void FixedUpdateState()
@@ -55,10 +40,10 @@ public class PlayerCrouchState : PlayerState
         }
     }
 
-    private bool CanUnCrouch()
+    public bool CanUnCrouch()
     {
-        Collider[] overlapResults = Physics.OverlapCapsule(player.transform.position - (player.playerHitbox.height / 2 - player.playerHitbox.radius) * Vector3.up, player.transform.position + (player.standingHeight - player.playerHitbox.height / 2) * Vector3.up, player.playerHitbox.radius, player.layerMask);
-        Bounds playerHitboxBounds = new(player.transform.position + (player.standingHeight - player.playerHitbox.height) / 2 * Vector3.up, new(player.playerHitbox.radius , player.standingHeight, player.playerHitbox.radius));
+        Collider[] overlapResults = Physics.OverlapCapsule(player.transform.position - (player.playerHitbox.height / 2 - player.playerHitbox.radius) * Vector3.up, player.transform.position + (player.standingHeight - player.playerHitbox.height / 2) * Vector3.up, player.playerHitbox.radius, player.rb.excludeLayers);
+        Bounds playerHitboxBounds = new(player.transform.position + (player.standingHeight - player.playerHitbox.height) / 2 * Vector3.up, new(player.playerHitbox.radius, player.standingHeight, player.playerHitbox.radius));
 
         foreach (Collider collision in overlapResults)
         {
@@ -69,5 +54,10 @@ public class PlayerCrouchState : PlayerState
         }
 
         return true;
+    }
+    
+    public override bool CanExitState()
+    {
+        return CanUnCrouch();
     }
 }

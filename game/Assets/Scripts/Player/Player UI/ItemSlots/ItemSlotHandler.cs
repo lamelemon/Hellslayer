@@ -5,12 +5,14 @@ public class ItemSlotHandler : MonoBehaviour
     [SerializeField] private Transform handPosition; // Reference to the player's hand position
     [SerializeField] private ItemSlotManager itemSlotManager; // Reference to the ItemSlotManager
     [SerializeField] private PlayerInteraction PlayerInteraction; // Reference to the PlayerItemInteraction script
+    [SerializeField] private GameObject arms;
     private TestItem[] itemSlots = new TestItem[2]; // Array to store items in slots
     private GameObject currentWeapon; // Reference to the currently visible weapon
     private int activeSlot = 0; // Currently active slot
 
     private void Start()
     {
+        arms.SetActive(true); // Ensure arms are visible at the start
         // Initialize the player's hand with the currently active slot
         UpdateHand();
     }
@@ -20,10 +22,12 @@ public class ItemSlotHandler : MonoBehaviour
         // Update the currently held item in PlayerInteraction based on the active slot
         if (itemSlots[activeSlot] != null)
         {
+            arms.SetActive(false); // Hide arms when holding an item
             PlayerInteraction.currentlyHeldItem = itemSlots[activeSlot];
         }
         else
         {
+            arms.SetActive(true); // Show arms when not holding an item
             PlayerInteraction.currentlyHeldItem = null; // Clear the held item if the slot is empty
         }
     }

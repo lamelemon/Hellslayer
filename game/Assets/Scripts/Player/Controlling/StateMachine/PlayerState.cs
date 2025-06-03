@@ -2,6 +2,7 @@ public abstract class PlayerState // This is part of the player finite StateMach
 {
     protected PlayerMovement player;
     protected PlayerStateMachine stateMachine;
+    public bool canExitState { get; set; } = true; // This is a flag to check if the state can be exited
 
     public PlayerState(PlayerMovement player, PlayerStateMachine stateMachine)
     {
@@ -13,4 +14,5 @@ public abstract class PlayerState // This is part of the player finite StateMach
     public virtual void ExitState() { }
     public virtual void UpdateState() { }
     public virtual void FixedUpdateState() { }
+    public virtual bool CanExitState() { return canExitState; }
 }

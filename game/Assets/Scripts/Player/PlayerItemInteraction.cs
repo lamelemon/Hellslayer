@@ -15,6 +15,7 @@ public class PlayerInteraction : MonoBehaviour
     [SerializeField] private string crimson_sword = "crimson_sword";
     [SerializeField] private string katana = "katana";
     [SerializeField] private string rpg = "rpg";
+    [SerializeField] private GameObject arms;
 
     public TestItem currentlyHeldItem;
 
@@ -42,6 +43,7 @@ public class PlayerInteraction : MonoBehaviour
 
                 if (getInput.PickupInput.WasPressedThisFrame())
                 {
+                    
                     itemSlotHandler.PickUpItem(item);
                     item.PickupInput();
                 }

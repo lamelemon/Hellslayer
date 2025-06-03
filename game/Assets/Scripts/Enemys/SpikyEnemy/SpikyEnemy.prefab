@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8151533721735551808}
   - component: {fileID: 7262100369627143634}
   - component: {fileID: 2850702125646710160}
+  - component: {fileID: -6839427648138667187}
   m_Layer: 11
   m_Name: SpikyEnemy
   m_TagString: spiky
@@ -152,6 +153,34 @@ MonoBehaviour:
   keep_active_object: {fileID: 7078615166593609253}
   keep_active_script: {fileID: 2850702125646710160}
   RewardScoreOnDeath: 5
+--- !u!114 &-6839427648138667187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 506255732185183988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf87cc1500459594eb24e7341849de84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lootItems:
+  - itemPrefab: {fileID: 6140791147193655318, guid: c6e5bc76143571a4cb06a5b5bfa3acc6, type: 3}
+    weight: 10
+    dropAmountRange: {x: 1, y: 1}
+    isStackable: 0
+    isGuaranteed: 0
+  - itemPrefab: {fileID: 0}
+    weight: 90
+    dropAmountRange: {x: 0, y: 0}
+    isStackable: 0
+    isGuaranteed: 0
+  - itemPrefab: {fileID: 654195958267558510, guid: 3dd838c2967afc84a966e6fecc578caf, type: 3}
+    weight: 20
+    dropAmountRange: {x: 1, y: 1}
+    isStackable: 0
+    isGuaranteed: 0
 --- !u!1 &2513198102177192175
 GameObject:
   m_ObjectHideFlags: 0

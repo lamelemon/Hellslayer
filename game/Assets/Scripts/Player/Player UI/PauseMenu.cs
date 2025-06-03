@@ -67,7 +67,7 @@ public class PauseMenu : MonoBehaviour
         Cursor.visible = true;
     }
 
-    public void MainMenu()
+    public static void MainMenu()
     {
         SceneTracker.lastScene = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene("Main_Menu"); // Load the main menu scene

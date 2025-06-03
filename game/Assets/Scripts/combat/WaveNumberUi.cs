@@ -15,7 +15,7 @@ public class WaveNumberUi : MonoBehaviour
     void Awake()
     {
         if (EnemySpawner == null)
-            EnemySpawner = FindObjectOfType<EnemySpawner>(); // fallback if not assigned
+            EnemySpawner = FindFirstObjectByType<EnemySpawner>(); // fallback if not assigned
     }
 
     void Update()
