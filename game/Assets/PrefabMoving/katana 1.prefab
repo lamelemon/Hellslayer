@@ -154,8 +154,8 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 0
-  ItemRotation: {x: 0.45451945, y: 0.5416752, z: 0.45451945, w: 0.5416752}
-  ItemPosition: {x: 0, y: 0.268, z: 1.451}
+  ItemRotation: {x: -0.12808831, y: 0.89447016, z: -0.19248357, w: -0.38270968}
+  ItemPosition: {x: -0.0012, y: 0.007, z: -0.0056}
   handPosition: {fileID: 0}
 --- !u!65 &8904596772665208568
 BoxCollider:

@@ -202,6 +202,7 @@ MonoBehaviour:
   maxHealth: 18
   currentHealth: 0
   hpBarUI: {fileID: 6234094647727815379}
+  endGameOnDeath: 0
 --- !u!114 &8789101696805215327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -389,8 +390,8 @@ MonoBehaviour:
     dropAmountRange: {x: 0, y: 1}
     isStackable: 0
     isGuaranteed: 0
-  - itemPrefab: {fileID: 5018631146773496834, guid: 903b3b8b030b39e419c192bf8f7e3c9c, type: 3}
-    weight: 15
+  - itemPrefab: {fileID: 0}
+    weight: 44785
     dropAmountRange: {x: 0, y: 0}
     isStackable: 0
     isGuaranteed: 0

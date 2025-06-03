@@ -17,6 +17,12 @@ public class LootDropping : MonoBehaviour
         if (lootItems != null && lootItems.Length > 0)
         {
             GameObject[] droppedItems = LootItem.GetLoot(lootItems, transform.position); // Get the loot items
+
+            if (droppedItems == null || droppedItems.Length == 0)
+            {
+                Destroy(gameObject); // Deactivate the enemy object
+                return; // Exit if no loot items are available
+            }
             foreach (GameObject item in droppedItems)
             {
                 item.GetComponent<Rigidbody>().isKinematic = true; // Set all rigidbodies to kinematic
@@ -147,6 +153,17 @@ public class LootItem
 
     public static GameObject[] GetLoot(LootItem[] lootItems, Vector3 position)
     {
+        bool noLoot = true;
+        foreach (LootItem item in lootItems)
+        {
+            if (item != null || item.itemPrefab != null)
+            {
+                noLoot = false; // If any item is not null, set noLoot to false
+                break; // No need to check further, we have at least one valid item
+            }
+        }
+        if (noLoot) return null; // If all items are null, return null
+        
         List<LootItem> loot = new();
 
         loot.AddRange(GetGuaranteedLoot(lootItems));

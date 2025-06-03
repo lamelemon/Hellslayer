@@ -10,6 +10,8 @@ public class EnemyHealth : MonoBehaviour
     private LootDropping lootDropping; // Reference to the LootDropping script
     public bool endGameOnDeath = false; // Flag to end the game on death
     private GameObject pausemenu;
+    public PlayerScore playerScore; // Reference to the PlayerScore script
+    public int RewardScoreOnDeath = 5; // Score to reward the player on enemy death
 
     private void Awake()
     {
@@ -23,6 +25,8 @@ public class EnemyHealth : MonoBehaviour
             }
         }
         lootDropping = GetComponentInParent<LootDropping>();
+
+        playerScore = FindObjectOfType<PlayerScore>(); // Find the PlayerScore component in the scene
     }
 
     private void Start()
@@ -58,16 +62,18 @@ public class EnemyHealth : MonoBehaviour
     private void Die()
     {
         //Debug.Log($"{gameObject.name} has died.");
+        playerScore.AddScore(RewardScoreOnDeath);
 
         if (endGameOnDeath) PauseMenu.MainMenu(); // If endGameOnDeath is true, call the MainMenu method from PauseMenu
 
-        if (gameObject.CompareTag("spiky") || gameObject.CompareTag("bird")) // check if its spiky or brid enemy because they have own destroy logic
+        if (lootDropping != null && lootDropping.lootItems.Length > 0) // Check if loot items are available
         {
-            return; // Do nothing
+            lootDropping.DropLoot(); // Call the DropLoot method from the LootDropping script
+            return;
         }
         else
         {
-            Destroy(gameObject); // Destroy the enemy object
+            Destroy(transform.parent.gameObject); // Destroy the enemy object
         }
     }
 

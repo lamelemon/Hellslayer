@@ -106,6 +106,7 @@ public class BirdSound : MonoBehaviour
     {
         if (playerScore != null)
         {
+            print("Adding score to player: " + RewardScoreOnDeath);
             playerScore.AddScore(RewardScoreOnDeath);
         }
         else
