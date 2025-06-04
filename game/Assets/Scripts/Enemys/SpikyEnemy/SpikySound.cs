@@ -64,6 +64,8 @@ public class SpikySound : MonoBehaviour
     System.Collections.IEnumerator DieSequence()
     {
         AddScoreToPlayer();
+        DisableAllChildren(gameObject);
+        DisableOtherScripts();
 
         float pitch = Random.Range(SpikyDieSoundPitchMin, SpikyDieSoundPitchMax);
         audio_manager.Instance.PlaySFX("SpikyDie", pitch);

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3191129934761846154}
   - component: {fileID: 5229514555476003251}
   - component: {fileID: 1698924826595776621}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 787233860885948972}
   - component: {fileID: 4690813106250043584}
   - component: {fileID: 2724479995835713472}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: healt_bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,9 +159,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 1
   m_MinValue: 0
-  m_MaxValue: 1000
+  m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 1000
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -188,7 +188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4404389061711863572}
   - component: {fileID: 5154133076319365984}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: canva (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -232,7 +232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8372568378558151233}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: FireballSpawnPos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 5743571992996277223}
   - component: {fileID: 1151563584041526633}
   - component: {fileID: 2188918073563835035}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 4245730911583071079}
   - component: {fileID: 8662046649758393061}
   - component: {fileID: 3915810103000990708}
-  - component: {fileID: 9002751798172319503}
   m_Layer: 11
   m_Name: Hitbox
   m_TagString: Untagged
@@ -438,22 +437,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 8777139954052135742, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
---- !u!114 &9002751798172319503
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4893977574708685231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ada1608027399c418621ba22dbb3e03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 1000
-  currentHealth: 0
-  hpBarUI: {fileID: 2724479995835713472}
-  endGameOnDeath: 1
 --- !u!1 &7062079825757185092
 GameObject:
   m_ObjectHideFlags: 0
@@ -466,7 +449,7 @@ GameObject:
   - component: {fileID: 3836853013639079963}
   - component: {fileID: 3049783359017458031}
   - component: {fileID: 3475124468180246950}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: hp_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,7 +609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
       propertyPath: m_Layer
-      value: 11
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
       propertyPath: m_TagString
@@ -651,6 +634,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1822860382529350658}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8690814797715970779}
   m_SourcePrefab: {fileID: 100100000, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}
 --- !u!1 &2539885512271882513 stripped
 GameObject:
@@ -673,9 +659,7 @@ MonoBehaviour:
   firePoint: {fileID: 8372568378558151233}
   fireInterval: 4
   fireballSpeed: 18
-  enemyPrefabs:
-  - {fileID: 4201418575173332405, guid: bb2e541f622aac544b02d1e7e13cb2de, type: 3}
-  - {fileID: 506255732185183988, guid: 7203a95dd816e0c4898148c5699e89ba, type: 3}
+  enemyPrefabs: []
   spawnInterval: 15
   enemiesPerSpawn: 3
   spawnRadius: 15
@@ -701,11 +685,27 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8690814797715970779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2539885512271882513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ada1608027399c418621ba22dbb3e03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 1000
+  currentHealth: 0
+  hpBarUI: {fileID: 2724479995835713472}
+  endGameOnDeath: 1
 --- !u!4 &2915144826218361771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bd7dab4f1356bf54e91ef6fcfa1f5423, type: 3}

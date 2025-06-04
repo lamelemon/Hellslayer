@@ -92,7 +92,17 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(Vector3 position)
     {
-        Instantiate(EnemyPrefabs[Random.Range(0, EnemyPrefabs.Length)], position, Quaternion.identity);
+        if (currentWave == 10) // Example condition for spawning a boss enemy
+        {
+            Instantiate(BossEnemyPrefab, position, Quaternion.identity);
+            return;
+        }
+        else if (Random.Range(1, 10) > 3) // 70% chance to spawn the first enemy type
+            Instantiate(EnemyPrefab, position, Quaternion.identity);
+        else // 30% chance to spawn the second enemy type
+        {
+            Instantiate(SecondEnemyPrefab, position, Quaternion.identity);
+        }
     }
 
     private void PickRandomEnemyPrefab()
@@ -113,14 +123,10 @@ public class EnemySpawner : MonoBehaviour
         currentWave += 1;
         PlayerScore.ResetScore();
 
-        if (currentWave == 10) Instantiate(BossEnemyPrefab, GetRandomSpawnPosition(), Quaternion.identity);
-        else
+        for (int i = 0; i < waveEnemyCount; i++)
         {
-            for (int i = 0; i < waveEnemyCount; i++)
-            {
-                SpawnEnemy(GetRandomSpawnPosition());
-                yield return new WaitForSeconds(GetRandomSpawnDelay());
-            }
+            SpawnEnemy(GetRandomSpawnPosition());
+            yield return new WaitForSeconds(GetRandomSpawnDelay());
         }
         // Increase difficulty after the wave ends
         if (shouldIncreaseDifficulty)
