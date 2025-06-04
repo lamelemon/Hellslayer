@@ -91,14 +91,7 @@ public class PlayerMovement : MonoBehaviour // Part of the player finite StateMa
         GroundDrag(); // Apply drag when grounded
         InputsValuesReader(); // Read input values
 
-        // Handle state transitions based on input and conditions
-
-        if (!isCrouching && isSliding && new Vector2(rb.linearVelocity.x, rb.linearVelocity.z).magnitude >= sprintMaxSpeed)
-        {
-            stateMachine.ChangeState(new PlayerSlidingState(this, stateMachine));
-        }
-
-        else if (isJumping && readyToJump)
+        if (isJumping && readyToJump)
         {
             stateMachine.ChangeState(new PlayerJumpState(this, stateMachine));
         }

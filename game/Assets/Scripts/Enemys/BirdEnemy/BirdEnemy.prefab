@@ -202,6 +202,7 @@ MonoBehaviour:
   maxHealth: 18
   currentHealth: 0
   hpBarUI: {fileID: 6234094647727815379}
+  endGameOnDeath: 0
 --- !u!114 &8789101696805215327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,18 +385,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootItems:
-  - itemPrefab: {fileID: 5015511114484725374, guid: 038b0e9871d84d141b55e88a68af7ede, type: 3}
-    weight: 10
-    dropAmountRange: {x: 0, y: 1}
-    isStackable: 0
-    isGuaranteed: 0
-  - itemPrefab: {fileID: 5018631146773496834, guid: 903b3b8b030b39e419c192bf8f7e3c9c, type: 3}
+  - itemPrefab: {fileID: 8496250179804429182, guid: 92fa4bd7b51ed16458901b4fff7af9a7, type: 3}
     weight: 15
     dropAmountRange: {x: 0, y: 0}
     isStackable: 0
     isGuaranteed: 0
   - itemPrefab: {fileID: 0}
-    weight: 75
+    weight: 85
     dropAmountRange: {x: 0, y: 0}
     isStackable: 0
     isGuaranteed: 0

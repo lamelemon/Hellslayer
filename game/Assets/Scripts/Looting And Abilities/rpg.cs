@@ -4,14 +4,21 @@ public class RPG : MonoBehaviour
 {
     public string itemName = "rpg";
 
-    [SerializeField] private PlayerInputManager getInput;
+    public PlayerInputManager getInput;
     [SerializeField] private GameObject rocketPrefab;
     [SerializeField] private Transform rocketSpawnPoint;
     [SerializeField] private float rocketSpeed = 60f;
-    [SerializeField] private Transform playerCamera;
+    public Transform playerCamera;
 
     [SerializeField] private float fireCooldown = 3f; // Cooldown in seconds
     private float lastFireTime = -Mathf.Infinity;
+
+    void Awake()
+    {
+        getInput = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputManager>();
+        rocketSpawnPoint = GameObject.FindGameObjectWithTag("AttackPoint").transform;
+        playerCamera = GameObject.FindGameObjectWithTag("playerCamera").transform;
+    }
 
     void Update()
     {

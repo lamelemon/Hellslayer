@@ -32,7 +32,14 @@ public class LaserDesertEagle : MonoBehaviour
     public int CurrentAmmo => currentAmmo;
     public int MaxAmmo => maxAmmo;
 
-    void Awake() => currentAmmo = maxAmmo;
+    void Awake()
+    {
+        currentAmmo = maxAmmo;
+        playerCamera = GameObject.FindGameObjectWithTag("playerCamera").GetComponent<Camera>();
+        getInput = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInputManager>();
+        itemSlotHandler = GameObject.FindGameObjectWithTag("ItemSlotHandler").GetComponent<ItemSlotHandler>();
+
+    }
 
     void Start() => laserLine.enabled = false;
 
